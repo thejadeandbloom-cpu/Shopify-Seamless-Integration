@@ -18,3 +18,21 @@ expertMode = true
 [postMerge]
 path = "scripts/post-merge.sh"
 timeoutMs = 20000
+
+[[ports]]
+localPort = 3000
+externalPort = 3001
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 80
+
+[userenv]
+
+[userenv.shared]
+VITE_SHOPIFY_STORE_DOMAIN = "thejadeandbloom.myshopify.com"
+VITE_SHOPIFY_STOREFRONT_TOKEN = "atkn_f9335146e3defe43e0f93b13cc22eda93bc217361fe7274018a8e8e7354dcaf6"
