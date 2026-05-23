@@ -560,7 +560,6 @@ function InstagramReels() {
                 className="instagram-media w-full !min-w-0 !max-w-full"
                 data-instgrm-permalink={url}
                 data-instgrm-version="14"
-                data-instgrm-captioned
                 style={{
                   background: "#FFF",
                   border: 0,
