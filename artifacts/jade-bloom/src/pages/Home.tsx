@@ -388,7 +388,7 @@ export default function Home() {
       {/* Trust signals bar */}
       <div className="bg-[#F9F7F5] border-b border-[#EBEBEB] py-3 overflow-x-auto">
         <div className="flex gap-8 min-w-max px-16 text-[11px] tracking-[.1em] text-[#484848]">
-          {["Cruelty-Free", "Paraben-Free", "pH Balanced (4.5–5.5)", "COD Available", "Dispatch in 24 hrs", "Dermatologist Tested"].map((t) => (
+          {["Cruelty-Free", "Paraben-Free", "pH Balanced (4.5–5.5)", "COD Available", "Dispatch in 24 hrs", "Science-Backed Formulas"].map((t) => (
             <span key={t} className="whitespace-nowrap">
               <b className="text-[#C65D3B]">✓</b> {t}
             </span>
