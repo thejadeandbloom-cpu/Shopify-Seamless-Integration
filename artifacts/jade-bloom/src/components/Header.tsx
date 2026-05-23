@@ -8,12 +8,14 @@ interface HeaderProps {
 }
 
 export default function Header({ minimal = false }: HeaderProps) {
-  const [scrolled,    setScrolled]    = useState(false);
-  const [drawerOpen,  setDrawerOpen]  = useState(false);
-  const [userDropOpen, setUserDropOpen] = useState(false);
+  const [scrolled,         setScrolled]         = useState(false);
+  const [drawerOpen,       setDrawerOpen]       = useState(false);
+  const [userDropOpenMob,  setUserDropOpenMob]  = useState(false);
+  const [userDropOpenDesk, setUserDropOpenDesk] = useState(false);
   const { totalQuantity, setIsCartOpen } = useCart();
   const { customer, logout, isLoggedIn } = useCustomerAuth();
-  const dropRef = useRef<HTMLDivElement>(null);
+  const dropRefMob  = useRef<HTMLDivElement>(null);
+  const dropRefDesk = useRef<HTMLDivElement>(null);
 
   const isHome = window.location.pathname === "/" ||
     window.location.pathname === (import.meta.env.BASE_PATH ?? "/");
@@ -29,12 +31,11 @@ export default function Header({ minimal = false }: HeaderProps) {
     return () => { document.body.style.overflow = ""; };
   }, [drawerOpen]);
 
-  // Close dropdown when clicking outside
+  // Close each dropdown when clicking outside its own container
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (dropRef.current && !dropRef.current.contains(e.target as Node)) {
-        setUserDropOpen(false);
-      }
+      if (dropRefMob.current  && !dropRefMob.current.contains(e.target as Node))  setUserDropOpenMob(false);
+      if (dropRefDesk.current && !dropRefDesk.current.contains(e.target as Node)) setUserDropOpenDesk(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -74,11 +75,15 @@ export default function Header({ minimal = false }: HeaderProps) {
     : "";
 
   const UserSection = ({ mobile = false }: { mobile?: boolean }) => {
+    const dropRef    = mobile ? dropRefMob  : dropRefDesk;
+    const dropOpen   = mobile ? userDropOpenMob  : userDropOpenDesk;
+    const setDropOpen = mobile ? setUserDropOpenMob : setUserDropOpenDesk;
+
     if (isLoggedIn) {
       return (
         <div className="relative" ref={dropRef}>
           <button
-            onClick={() => setUserDropOpen((v) => !v)}
+            onClick={() => setDropOpen((v) => !v)}
             className={`flex items-center gap-[6px] px-3 rounded-sm hover:bg-[#F2EDE8] transition-colors group ${mobile ? "h-10" : "h-9"}`}
             aria-label="My account"
           >
@@ -94,7 +99,7 @@ export default function Header({ minimal = false }: HeaderProps) {
             )}
           </button>
 
-          {userDropOpen && (
+          {dropOpen && (
             <div className="absolute right-0 top-full mt-1 w-[200px] bg-white border border-[#EBEBEB] rounded-[8px] shadow-lg z-[500] overflow-hidden">
               <div className="px-4 py-3 border-b border-[#EBEBEB]">
                 <div className="text-[9px] tracking-[.2em] uppercase text-[#969696] font-semibold">Signed in as</div>
@@ -103,13 +108,13 @@ export default function Header({ minimal = false }: HeaderProps) {
               <a
                 href="/my-orders"
                 className="flex items-center gap-3 px-4 py-[11px] text-[12px] font-semibold text-[#0D0D0D] hover:bg-[#F9F7F5] transition-colors"
-                onClick={() => setUserDropOpen(false)}
+                onClick={() => setDropOpen(false)}
               >
                 <Star size={13} strokeWidth={1.8} className="text-[#C65D3B]" />
                 My Reviews
               </a>
               <button
-                onClick={() => { logout(); setUserDropOpen(false); }}
+                onClick={() => { logout(); setDropOpen(false); }}
                 className="flex items-center gap-3 w-full px-4 py-[11px] text-[12px] font-semibold text-[#969696] hover:bg-[#F9F7F5] hover:text-red-500 transition-colors border-t border-[#EBEBEB]"
               >
                 <LogOut size={13} strokeWidth={1.8} />
