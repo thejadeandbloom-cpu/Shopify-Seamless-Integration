@@ -153,9 +153,30 @@ const FORMULATION = [
 ];
 
 const RESULTS = [
-  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_000000008f707207b881a98a418432b8.png?v=1779354251", caption: "Week 0 → Week 4 → Week 8", tag: "Vitamin C Serum", source: "WhatsApp · 47 members" },
-  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_0000000054987207a7784b6ae3988a34.png?v=1779354261", caption: "Dark spots fade. Glow returns.", tag: "Face Wash + Serum", source: "Instagram DM · Unfiltered" },
-  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_00000000937c7207adbdbe1b7cf19d8e.png?v=1779354284", caption: "Clearer skin. No irritation.", tag: "Complete Routine", source: "Real feedback · Verified" },
+  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_000000008f707207b881a98a418432b8.png?v=1779354251" },
+  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_0000000054987207a7784b6ae3988a34.png?v=1779354261" },
+  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_00000000937c7207adbdbe1b7cf19d8e.png?v=1779354284" },
+];
+
+const WHATSAPP_REVIEWS = [
+  {
+    img: "/review-kavya.png",
+    name: "Kavya M.",
+    product: "14% Vitamin C Serum",
+    quote: "My skin looks brighter, clearer and so much more even. It's now a must-have in my routine. 100% recommend if you want that natural glow!",
+  },
+  {
+    img: "/review-pooja.png",
+    name: "Pooja R.",
+    product: "Kojic Acid + Vitamin C Moisturizer",
+    quote: "After using this moisturizer consistently, the difference is real! My skin looks brighter, more even and so much healthier now.",
+  },
+  {
+    img: "/review-anon.png",
+    name: "Verified Customer",
+    product: "14% Vitamin C Serum",
+    quote: "My skin looks brighter, clearer and so much more even. 100% recommend if you want that natural, healthy glow!",
+  },
 ];
 
 const REVIEWS: { product: string; rating: string; count: number; id: string; reviews: { stars: number; title?: string; text: string; name: string; city: string }[] }[] = [
@@ -557,16 +578,50 @@ export default function Home() {
               8–12 weeks. Consistent use. Real Indian skin.
             </p>
           </RevealDiv>
-          <div className="flex gap-6 overflow-x-auto pb-4" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
+
+          {/* Before/after photos — no overlay */}
+          <div className="flex gap-6 overflow-x-auto pb-4 mb-16" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
             {RESULTS.map((r, i) => (
-              <RevealDiv key={i} delay={i * 80} className="flex-none w-[320px] h-[420px] rounded-[4px] overflow-hidden relative bg-[#F2EDE8]">
-                <img src={r.img} alt={r.caption} className="w-full h-full object-cover" />
-                <div className="absolute bottom-0 left-0 right-0 text-white text-center p-6" style={{ background: "linear-gradient(to top, rgba(0,0,0,.8), transparent)" }}>
-                  <span className="block text-[10px] tracking-[.12em] uppercase text-white/70 mb-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#25D366] mr-1" />{r.source}
-                  </span>
-                  <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[14px] leading-[1.5] mb-3">{r.caption}</p>
-                  <span className="inline-block bg-[#C65D3B] text-white px-3 py-1 rounded-[2px] text-[9px] tracking-[.1em] uppercase font-semibold">{r.tag}</span>
+              <RevealDiv key={i} delay={i * 80} className="flex-none w-[320px] h-[420px] rounded-[4px] overflow-hidden bg-[#F2EDE8]">
+                <img src={r.img} alt="Before and after result" className="w-full h-full object-cover" />
+              </RevealDiv>
+            ))}
+          </div>
+
+          {/* WhatsApp screenshots */}
+          <RevealDiv className="mb-8">
+            <div className="flex items-center gap-3 mb-8">
+              <span className="inline-flex items-center gap-2 bg-[#F9F7F5] border border-[#EBEBEB] rounded-full px-4 py-2 text-[11px] font-semibold text-[#484848]">
+                <span className="inline-block w-2 h-2 rounded-full bg-[#25D366]" />
+                Real WhatsApp feedback — unfiltered
+              </span>
+            </div>
+          </RevealDiv>
+
+          <div className="flex gap-6 overflow-x-auto pb-4" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
+            {WHATSAPP_REVIEWS.map((r, i) => (
+              <RevealDiv key={i} delay={i * 80} className="flex-none w-[300px] bg-[#F9F7F5] rounded-[8px] border border-[#EBEBEB] overflow-hidden flex flex-col">
+                {/* Screenshot image */}
+                <div className="w-full overflow-hidden bg-[#1a1a2e]" style={{ maxHeight: 400 }}>
+                  <img
+                    src={r.img}
+                    alt={`WhatsApp review from ${r.name}`}
+                    className="w-full object-cover object-top"
+                    style={{ maxHeight: 400 }}
+                  />
+                </div>
+                {/* Attribution strip */}
+                <div className="px-4 py-4 border-t border-[#EBEBEB] bg-white flex-1 flex flex-col justify-between">
+                  <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[13px] leading-[1.6] text-[#484848] mb-3 italic">
+                    "{r.quote}"
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="block text-[12px] font-semibold text-[#0D0D0D]">{r.name}</span>
+                      <span className="block text-[10px] text-[#C65D3B] font-medium mt-[2px]">{r.product}</span>
+                    </div>
+                    <span className="text-[10px] tracking-[.08em] uppercase text-[#969696] font-medium">Verified</span>
+                  </div>
                 </div>
               </RevealDiv>
             ))}
