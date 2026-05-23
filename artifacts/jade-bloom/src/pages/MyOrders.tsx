@@ -21,55 +21,101 @@ type MyReview = {
   visibleAfter: string;
 };
 
+type Step = "email" | "otp" | "dashboard";
+
 function StatusBadge({ review }: { review: MyReview }) {
   const now = new Date();
-  const isLive = review.isApproved && new Date(review.visibleAfter) <= now;
-  const isPending = !review.isApproved;
+  const isLive      = review.isApproved && new Date(review.visibleAfter) <= now;
   const isScheduled = review.isApproved && new Date(review.visibleAfter) > now;
-  const daysLeft = Math.ceil((new Date(review.visibleAfter).getTime() - now.getTime()) / 864e5);
+  const daysLeft    = Math.ceil((new Date(review.visibleAfter).getTime() - now.getTime()) / 864e5);
 
   if (isLive)      return <span className="text-[10px] bg-green-50 text-green-700 border border-green-200 px-2 py-[3px] rounded-full font-semibold">✓ Live on website</span>;
-  if (isPending)   return <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-[3px] rounded-full font-semibold">⏳ Awaiting approval</span>;
   if (isScheduled) return <span className="text-[10px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-[3px] rounded-full font-semibold">🕐 Goes live in {daysLeft}d</span>;
-  return null;
+  return <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-[3px] rounded-full font-semibold">⏳ Awaiting approval</span>;
 }
 
-export default function MyOrders() {
-  const params = new URLSearchParams(window.location.search);
-  const [email,      setEmail]      = useState(params.get("email") ?? "");
-  const [submitted,  setSubmitted]  = useState(!!params.get("email"));
-  const [loading,    setLoading]    = useState(!!params.get("email"));
-  const [reviews,    setReviews]    = useState<MyReview[]>([]);
-  const [error,      setError]      = useState("");
+function StarRow({ rating }: { rating: number }) {
+  return (
+    <span className="text-[#C8902A] text-[15px] tracking-[1px]">
+      {"★".repeat(rating)}{"☆".repeat(5 - rating)}
+    </span>
+  );
+}
 
-  const lookup = async (e?: React.FormEvent) => {
+const inp = "w-full border border-[#EBEBEB] rounded-[4px] px-4 py-[11px] text-[13px] text-[#0D0D0D] placeholder:text-[#ABABAB] focus:outline-none focus:border-[#C65D3B] transition-colors bg-white";
+
+export default function MyOrders() {
+  const [step,     setStep]     = useState<Step>("email");
+  const [email,    setEmail]    = useState("");
+  const [otp,      setOtp]      = useState("");
+  const [reviews,  setReviews]  = useState<MyReview[]>([]);
+  const [loading,  setLoading]  = useState(false);
+  const [error,    setError]    = useState("");
+  const [resendCD, setResendCD] = useState(0); // countdown seconds
+
+  // Countdown timer for resend button
+  useEffect(() => {
+    if (resendCD <= 0) return;
+    const t = setTimeout(() => setResendCD((c) => c - 1), 1000);
+    return () => clearTimeout(t);
+  }, [resendCD]);
+
+  // Step 1 — send OTP
+  const sendOtp = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!email.trim()) return;
     setLoading(true);
     setError("");
-    setSubmitted(true);
     try {
-      const res = await fetch(`${API_BASE}/my-reviews?email=${encodeURIComponent(email.trim())}`);
-      if (!res.ok) throw new Error("Failed to fetch");
-      const data = await res.json() as MyReview[];
-      setReviews(data);
-    } catch {
-      setError("Could not load your reviews. Please try again.");
+      const res = await fetch(`${API_BASE}/auth/send-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json() as { error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Failed to send code");
+      setStep("otp");
+      setResendCD(60);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (params.get("email")) lookup();
-  }, []);
+  // Step 2 — verify OTP
+  const verifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otp.trim()) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${API_BASE}/auth/verify-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), code: otp.trim() }),
+      });
+      const data = await res.json() as { error?: string; token?: string };
+      if (!res.ok) throw new Error(data.error ?? "Invalid code");
 
-  const reviewedProducts = new Set(reviews.map((r) => r.productLabel));
+      // Fetch reviews now that we're verified
+      const rRes = await fetch(`${API_BASE}/my-reviews?email=${encodeURIComponent(email.trim())}`);
+      const rData = await rRes.json() as MyReview[];
+      setReviews(Array.isArray(rData) ? rData : []);
+      setStep("dashboard");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Verification failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const reviewedProducts  = new Set(reviews.map((r) => r.productLabel));
   const unreviewedProducts = PRODUCTS.filter((p) => !reviewedProducts.has(p.label));
 
   return (
     <div className="min-h-screen bg-[#F9F7F5]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-      <div className="max-w-[600px] mx-auto px-5 py-12">
+      <div className="max-w-[540px] mx-auto px-5 py-12">
 
         {/* Brand nav */}
         <a href="/" className="inline-flex items-center gap-2 mb-10 group">
@@ -78,55 +124,127 @@ export default function MyOrders() {
           <span className="text-[12px] text-[#969696] group-hover:text-[#C65D3B] transition-colors">← Back to store</span>
         </a>
 
-        <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">My Reviews</div>
-        <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Your order history</h1>
-        <p className="text-[13px] text-[#696969] leading-[1.6] mb-8">
-          Enter the email you used to place your order to see your reviews and write new ones. No password needed.
-        </p>
+        {/* ── STEP 1: Enter email ── */}
+        {step === "email" && (
+          <>
+            <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">My Account</div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Your reviews</h1>
+            <p className="text-[13px] text-[#696969] leading-[1.65] mb-8">
+              Enter your email to see the reviews you've written and leave new ones. We'll send a 6-digit code — no password needed.
+            </p>
 
-        {/* Email lookup form */}
-        <form onSubmit={lookup} className="flex gap-3 mb-8">
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => { setEmail(e.target.value); setSubmitted(false); }}
-            placeholder="Email used for your order"
-            className="flex-1 border border-[#EBEBEB] rounded-[4px] px-4 py-[11px] text-[13px] text-[#0D0D0D] placeholder:text-[#ABABAB] focus:outline-none focus:border-[#C65D3B] transition-colors bg-white"
-            required
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="px-5 py-[11px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.14em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60 whitespace-nowrap"
-          >
-            {loading ? "Looking up…" : "Look up"}
-          </button>
-        </form>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-[6px] px-4 py-3 text-[13px] text-red-600 mb-6">{error}</div>
+            <form onSubmit={sendOtp} className="bg-white border border-[#EBEBEB] rounded-[10px] p-6 shadow-sm">
+              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">
+                Your email address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com"
+                className={`${inp} mb-4`}
+                required
+                autoFocus
+              />
+              {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60"
+              >
+                {loading ? "Sending…" : "Send login code"}
+              </button>
+              <p className="text-[10px] text-[#ABABAB] text-center mt-3">We'll send a one-time 6-digit code to this address.</p>
+            </form>
+          </>
         )}
 
-        {submitted && !loading && (
+        {/* ── STEP 2: Enter OTP ── */}
+        {step === "otp" && (
           <>
-            {/* Reviews already written */}
+            <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">Check your inbox</div>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Enter your code</h1>
+            <p className="text-[13px] text-[#696969] leading-[1.65] mb-8">
+              We sent a 6-digit code to <strong className="text-[#0D0D0D]">{email}</strong>. It expires in 10 minutes.
+            </p>
+
+            <form onSubmit={verifyOtp} className="bg-white border border-[#EBEBEB] rounded-[10px] p-6 shadow-sm">
+              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">
+                6-digit code
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]{6}"
+                maxLength={6}
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                placeholder="123456"
+                className={`${inp} mb-4 text-center text-[22px] font-bold tracking-[.25em]`}
+                required
+                autoFocus
+              />
+              {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>}
+              <button
+                type="submit"
+                disabled={loading || otp.length < 6}
+                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60 mb-3"
+              >
+                {loading ? "Verifying…" : "Verify & continue"}
+              </button>
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  onClick={() => { setStep("email"); setOtp(""); setError(""); }}
+                  className="text-[11px] text-[#969696] hover:text-[#C65D3B] transition-colors"
+                >
+                  ← Change email
+                </button>
+                <button
+                  type="button"
+                  onClick={() => sendOtp()}
+                  disabled={resendCD > 0 || loading}
+                  className="text-[11px] font-semibold text-[#C65D3B] disabled:text-[#969696] disabled:cursor-not-allowed hover:underline transition-colors"
+                >
+                  {resendCD > 0 ? `Resend in ${resendCD}s` : "Resend code"}
+                </button>
+              </div>
+            </form>
+          </>
+        )}
+
+        {/* ── STEP 3: Dashboard ── */}
+        {step === "dashboard" && (
+          <>
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">Logged in as</div>
+                <div className="text-[15px] font-semibold text-[#0D0D0D]">{email}</div>
+              </div>
+              <button
+                onClick={() => { setStep("email"); setEmail(""); setOtp(""); setReviews([]); setError(""); }}
+                className="text-[11px] font-semibold text-[#969696] hover:text-[#C65D3B] transition-colors border border-[#EBEBEB] px-3 py-2 rounded-[4px] hover:border-[#C65D3B]"
+              >
+                Log out
+              </button>
+            </div>
+
+            {/* Reviews written */}
             {reviews.length > 0 && (
-              <div className="mb-8">
-                <div className="text-[10px] tracking-[.2em] uppercase text-[#484848] font-semibold mb-3">Your reviews ({reviews.length})</div>
+              <div className="mb-7">
+                <div className="text-[10px] tracking-[.2em] uppercase text-[#484848] font-semibold mb-3">
+                  Your reviews ({reviews.length})
+                </div>
                 <div className="space-y-3">
                   {reviews.map((r) => (
-                    <div key={r.id} className="bg-white border border-[#EBEBEB] rounded-[8px] p-5">
-                      <div className="flex items-start justify-between gap-3 mb-2">
-                        <div>
-                          <span className="text-[11px] bg-[#FFF5F2] text-[#C65D3B] border border-[#F2D4C8] px-2 py-[2px] rounded-full font-semibold">{r.productLabel}</span>
-                        </div>
+                    <div key={r.id} className="bg-white border border-[#EBEBEB] rounded-[8px] p-5 shadow-sm">
+                      <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
+                        <span className="text-[11px] bg-[#FFF5F2] text-[#C65D3B] border border-[#F2D4C8] px-2 py-[2px] rounded-full font-semibold">{r.productLabel}</span>
                         <StatusBadge review={r} />
                       </div>
-                      <div className="text-[#C8902A] text-[14px] tracking-[1px] mb-2">
-                        {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
-                      </div>
-                      {r.title && <p className="text-[13px] font-semibold text-[#0D0D0D] mb-1">{r.title}</p>}
-                      <p className="text-[13px] text-[#484848] leading-[1.65]">"{r.body}"</p>
+                      <StarRow rating={r.rating} />
+                      {r.title && <p className="text-[13px] font-semibold text-[#0D0D0D] mt-2 mb-1">{r.title}</p>}
+                      <p className="text-[13px] text-[#484848] leading-[1.65] mt-1">"{r.body}"</p>
                       <p className="text-[10px] text-[#969696] mt-3">
                         Submitted {new Date(r.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
                       </p>
@@ -140,17 +258,17 @@ export default function MyOrders() {
             {unreviewedProducts.length > 0 && (
               <div>
                 <div className="text-[10px] tracking-[.2em] uppercase text-[#484848] font-semibold mb-3">
-                  {reviews.length > 0 ? "Other products you can review" : "Write your first review"}
+                  {reviews.length > 0 ? "Write more reviews" : "Share your experience"}
                 </div>
                 <div className="space-y-2">
                   {unreviewedProducts.map((p) => (
                     <a
                       key={p.handle}
                       href={`/write-review?product=${p.handle}&email=${encodeURIComponent(email)}`}
-                      className="flex items-center justify-between bg-white border border-[#EBEBEB] hover:border-[#C65D3B] rounded-[8px] px-5 py-4 transition-colors group"
+                      className="flex items-center justify-between bg-white border border-[#EBEBEB] hover:border-[#C65D3B] rounded-[8px] px-5 py-4 transition-colors group shadow-sm"
                     >
                       <span className="text-[13px] font-semibold text-[#0D0D0D] group-hover:text-[#C65D3B] transition-colors">{p.label}</span>
-                      <span className="text-[11px] font-bold text-[#C65D3B] tracking-[.08em] uppercase flex items-center gap-1">
+                      <span className="text-[11px] font-bold text-[#C65D3B] tracking-[.06em] uppercase flex items-center gap-1">
                         Write a review
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       </span>
@@ -162,14 +280,8 @@ export default function MyOrders() {
 
             {reviews.length === 0 && unreviewedProducts.length === 0 && (
               <div className="bg-white border border-[#EBEBEB] rounded-[8px] py-12 text-center text-[14px] text-[#969696]">
-                No data found for this email.
+                Nothing yet — start by writing your first review below.
               </div>
-            )}
-
-            {reviews.length === 0 && !loading && unreviewedProducts.length === PRODUCTS.length && (
-              <p className="text-[12px] text-[#969696] text-center -mt-6 mb-6">
-                No reviews found for this email — but you can still write one for any product you've purchased.
-              </p>
             )}
           </>
         )}
