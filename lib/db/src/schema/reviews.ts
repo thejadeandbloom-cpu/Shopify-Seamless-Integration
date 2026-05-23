@@ -11,8 +11,10 @@ export const reviewsTable = pgTable("reviews", {
   rating: integer("rating").notNull(),
   title: text("title").notNull().default(""),
   body: text("body").notNull(),
+  imageUrl: text("image_url").notNull().default(""),
   isApproved: boolean("is_approved").notNull().default(false),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   visibleAfter: timestamp("visible_after", { withTimezone: true }).notNull(),
 });
 

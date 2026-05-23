@@ -1,21 +1,24 @@
 import { useState, useEffect } from "react";
+import { useCustomerAuth } from "@/context/CustomerAuthContext";
 
 const BASE_URL = import.meta.env.BASE_URL ?? "/";
 const API_BASE = `${BASE_URL}api`.replace(/\/+/g, "/");
 
 const PRODUCTS = [
-  { handle: "green-tea-face-wash",      label: "Green Tea Face Wash" },
-  { handle: "14-vitamin-c-serum",       label: "Vitamin C Serum" },
-  { handle: "brightening-moisturiser",  label: "Kojic Acid Moisturizer" },
-  { handle: "fluid-sunscreen-spf-50",   label: "Fluid Sunscreen" },
+  { handle: "green-tea-face-wash",      label: "Green Tea Face Wash",     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/products/green-tea.jpg" },
+  { handle: "14-vitamin-c-serum",       label: "Vitamin C Serum",          img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/products/vitamin-c.jpg" },
+  { handle: "brightening-moisturiser",  label: "Kojic Acid Moisturizer",   img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/products/moisturiser.jpg" },
+  { handle: "fluid-sunscreen-spf-50",   label: "Fluid Sunscreen SPF 50",   img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/products/sunscreen.jpg" },
 ];
 
 type MyReview = {
   id: number;
+  productHandle: string;
   productLabel: string;
   rating: number;
   title: string;
   body: string;
+  imageUrl: string;
   isApproved: boolean;
   createdAt: string;
   visibleAfter: string;
@@ -29,14 +32,14 @@ function StatusBadge({ review }: { review: MyReview }) {
   const isScheduled = review.isApproved && new Date(review.visibleAfter) > now;
   const daysLeft    = Math.ceil((new Date(review.visibleAfter).getTime() - now.getTime()) / 864e5);
 
-  if (isLive)      return <span className="text-[10px] bg-green-50 text-green-700 border border-green-200 px-2 py-[3px] rounded-full font-semibold">✓ Live on website</span>;
-  if (isScheduled) return <span className="text-[10px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-[3px] rounded-full font-semibold">🕐 Goes live in {daysLeft}d</span>;
-  return <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-[3px] rounded-full font-semibold">⏳ Awaiting approval</span>;
+  if (isLive)      return <span className="text-[10px] bg-green-50 text-green-700 border border-green-200 px-2 py-[3px] rounded-full font-semibold">✓ Live</span>;
+  if (isScheduled) return <span className="text-[10px] bg-blue-50 text-blue-700 border border-blue-200 px-2 py-[3px] rounded-full font-semibold">Goes live in {daysLeft}d</span>;
+  return <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-[3px] rounded-full font-semibold">Awaiting approval</span>;
 }
 
 function StarRow({ rating }: { rating: number }) {
   return (
-    <span className="text-[#C8902A] text-[15px] tracking-[1px]">
+    <span className="text-[#C8902A] text-[14px] tracking-[1px]">
       {"★".repeat(rating)}{"☆".repeat(5 - rating)}
     </span>
   );
@@ -45,27 +48,41 @@ function StarRow({ rating }: { rating: number }) {
 const inp = "w-full border border-[#EBEBEB] rounded-[4px] px-4 py-[11px] text-[13px] text-[#0D0D0D] placeholder:text-[#ABABAB] focus:outline-none focus:border-[#C65D3B] transition-colors bg-white";
 
 export default function MyOrders() {
-  const [step,     setStep]     = useState<Step>("email");
-  const [email,    setEmail]    = useState("");
+  const { customer, login, logout } = useCustomerAuth();
+
+  const [step,     setStep]     = useState<Step>(() => customer ? "dashboard" : "email");
+  const [email,    setEmail]    = useState(customer?.email ?? "");
   const [otp,      setOtp]      = useState("");
   const [reviews,  setReviews]  = useState<MyReview[]>([]);
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState("");
-  const [resendCD, setResendCD] = useState(0); // countdown seconds
+  const [resendCD, setResendCD] = useState(0);
 
-  // Countdown timer for resend button
+  // Load reviews when already logged in
+  useEffect(() => {
+    if (customer && step === "dashboard") {
+      fetchReviews(customer.email);
+    }
+  }, []);
+
   useEffect(() => {
     if (resendCD <= 0) return;
     const t = setTimeout(() => setResendCD((c) => c - 1), 1000);
     return () => clearTimeout(t);
   }, [resendCD]);
 
-  // Step 1 — send OTP
+  const fetchReviews = async (emailAddr: string) => {
+    try {
+      const res = await fetch(`${API_BASE}/my-reviews?email=${encodeURIComponent(emailAddr)}`);
+      const data = await res.json() as MyReview[];
+      setReviews(Array.isArray(data) ? data : []);
+    } catch { /* silent */ }
+  };
+
   const sendOtp = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!email.trim()) return;
-    setLoading(true);
-    setError("");
+    setLoading(true); setError("");
     try {
       const res = await fetch(`${API_BASE}/auth/send-otp`, {
         method: "POST",
@@ -83,25 +100,22 @@ export default function MyOrders() {
     }
   };
 
-  // Step 2 — verify OTP
   const verifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp.trim()) return;
-    setLoading(true);
-    setError("");
+    setLoading(true); setError("");
     try {
       const res = await fetch(`${API_BASE}/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), code: otp.trim() }),
       });
-      const data = await res.json() as { error?: string; token?: string };
+      const data = await res.json() as { error?: string; token?: string; email?: string };
       if (!res.ok) throw new Error(data.error ?? "Invalid code");
 
-      // Fetch reviews now that we're verified
-      const rRes = await fetch(`${API_BASE}/my-reviews?email=${encodeURIComponent(email.trim())}`);
-      const rData = await rRes.json() as MyReview[];
-      setReviews(Array.isArray(rData) ? rData : []);
+      const verifiedEmail = data.email ?? email.trim();
+      login(verifiedEmail, data.token ?? "");
+      await fetchReviews(verifiedEmail);
       setStep("dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed");
@@ -110,48 +124,36 @@ export default function MyOrders() {
     }
   };
 
-  const reviewedProducts  = new Set(reviews.map((r) => r.productLabel));
-  const unreviewedProducts = PRODUCTS.filter((p) => !reviewedProducts.has(p.label));
+  const handleLogout = () => {
+    logout();
+    setStep("email");
+    setEmail(""); setOtp(""); setReviews([]); setError("");
+  };
+
+  const reviewedHandles = new Set(reviews.map((r) => r.productHandle));
+  const unreviewedProducts = PRODUCTS.filter((p) => !reviewedHandles.has(p.handle));
+  const reviewedProducts   = PRODUCTS.filter((p) =>  reviewedHandles.has(p.handle));
+  const activeEmail = customer?.email ?? email;
 
   return (
     <div className="min-h-screen bg-[#F9F7F5]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-      <div className="max-w-[540px] mx-auto px-5 py-12">
-
-        {/* Brand nav */}
-        <a href="/" className="inline-flex items-center gap-2 mb-10 group">
-          <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[10px] tracking-[.22em] uppercase text-[#C65D3B] font-semibold">Jade and Bloom</span>
-          <span className="text-[#EBEBEB]">·</span>
-          <span className="text-[12px] text-[#969696] group-hover:text-[#C65D3B] transition-colors">← Back to store</span>
-        </a>
+      <div className="max-w-[600px] mx-auto px-5 py-10">
 
         {/* ── STEP 1: Enter email ── */}
         {step === "email" && (
           <>
             <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">My Account</div>
-            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Your reviews</h1>
+            <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Sign in</h1>
             <p className="text-[13px] text-[#696969] leading-[1.65] mb-8">
-              Enter your email to see the reviews you've written and leave new ones. We'll send a 6-digit code — no password needed.
+              Enter your email to see your reviews and write new ones. We'll send a 6-digit code — no password needed.
             </p>
-
             <form onSubmit={sendOtp} className="bg-white border border-[#EBEBEB] rounded-[10px] p-6 shadow-sm">
-              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">
-                Your email address
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@email.com"
-                className={`${inp} mb-4`}
-                required
-                autoFocus
-              />
+              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">Your email address</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com" className={`${inp} mb-4`} required autoFocus />
               {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>}
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60"
-              >
+              <button type="submit" disabled={loading}
+                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60">
                 {loading ? "Sending…" : "Send login code"}
               </button>
               <p className="text-[10px] text-[#ABABAB] text-center mt-3">We'll send a one-time 6-digit code to this address.</p>
@@ -167,45 +169,23 @@ export default function MyOrders() {
             <p className="text-[13px] text-[#696969] leading-[1.65] mb-8">
               We sent a 6-digit code to <strong className="text-[#0D0D0D]">{email}</strong>. It expires in 10 minutes.
             </p>
-
             <form onSubmit={verifyOtp} className="bg-white border border-[#EBEBEB] rounded-[10px] p-6 shadow-sm">
-              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">
-                6-digit code
-              </label>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]{6}"
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                placeholder="123456"
-                className={`${inp} mb-4 text-center text-[22px] font-bold tracking-[.25em]`}
-                required
-                autoFocus
-              />
+              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">6-digit code</label>
+              <input type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6}
+                value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                placeholder="123456" className={`${inp} mb-4 text-center text-[22px] font-bold tracking-[.25em]`} required autoFocus />
               {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>}
-              <button
-                type="submit"
-                disabled={loading || otp.length < 6}
-                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60 mb-3"
-              >
+              <button type="submit" disabled={loading || otp.length < 6}
+                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60 mb-3">
                 {loading ? "Verifying…" : "Verify & continue"}
               </button>
               <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => { setStep("email"); setOtp(""); setError(""); }}
-                  className="text-[11px] text-[#969696] hover:text-[#C65D3B] transition-colors"
-                >
+                <button type="button" onClick={() => { setStep("email"); setOtp(""); setError(""); }}
+                  className="text-[11px] text-[#969696] hover:text-[#C65D3B] transition-colors">
                   ← Change email
                 </button>
-                <button
-                  type="button"
-                  onClick={() => sendOtp()}
-                  disabled={resendCD > 0 || loading}
-                  className="text-[11px] font-semibold text-[#C65D3B] disabled:text-[#969696] disabled:cursor-not-allowed hover:underline transition-colors"
-                >
+                <button type="button" onClick={() => sendOtp()} disabled={resendCD > 0 || loading}
+                  className="text-[11px] font-semibold text-[#C65D3B] disabled:text-[#969696] disabled:cursor-not-allowed hover:underline transition-colors">
                   {resendCD > 0 ? `Resend in ${resendCD}s` : "Resend code"}
                 </button>
               </div>
@@ -216,59 +196,87 @@ export default function MyOrders() {
         {/* ── STEP 3: Dashboard ── */}
         {step === "dashboard" && (
           <>
-            <div className="flex items-center justify-between mb-6">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
               <div>
-                <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">Logged in as</div>
-                <div className="text-[15px] font-semibold text-[#0D0D0D]">{email}</div>
+                <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-[2px]">My Account</div>
+                <div className="text-[17px] font-semibold text-[#0D0D0D]">{activeEmail}</div>
               </div>
-              <button
-                onClick={() => { setStep("email"); setEmail(""); setOtp(""); setReviews([]); setError(""); }}
-                className="text-[11px] font-semibold text-[#969696] hover:text-[#C65D3B] transition-colors border border-[#EBEBEB] px-3 py-2 rounded-[4px] hover:border-[#C65D3B]"
-              >
-                Log out
+              <button onClick={handleLogout}
+                className="text-[11px] font-semibold text-[#969696] hover:text-red-500 transition-colors border border-[#EBEBEB] px-3 py-2 rounded-[4px] hover:border-red-300">
+                Sign out
               </button>
             </div>
 
-            {/* Reviews written */}
-            {reviews.length > 0 && (
-              <div className="mb-7">
+            {/* ── Reviews Written ── */}
+            {reviews.length === 0 ? (
+              <div className="bg-white border border-[#EBEBEB] rounded-[10px] p-8 text-center mb-6 shadow-sm">
+                <div className="w-12 h-12 rounded-full bg-[#FFF5F2] flex items-center justify-center mx-auto mb-4">
+                  <span className="text-[20px]">✍️</span>
+                </div>
+                <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[20px] text-[#0D0D0D] mb-2">
+                  No reviews yet
+                </h2>
+                <p className="text-[13px] text-[#696969] leading-[1.65] max-w-[340px] mx-auto">
+                  You haven't written any reviews yet. If you've purchased from us, share your experience below — your honest feedback helps other customers.
+                </p>
+              </div>
+            ) : (
+              <div className="mb-8">
                 <div className="text-[10px] tracking-[.2em] uppercase text-[#484848] font-semibold mb-3">
-                  Your reviews ({reviews.length})
+                  Your Reviews ({reviews.length})
                 </div>
                 <div className="space-y-3">
                   {reviews.map((r) => (
-                    <div key={r.id} className="bg-white border border-[#EBEBEB] rounded-[8px] p-5 shadow-sm">
-                      <div className="flex items-start justify-between gap-3 mb-2 flex-wrap">
-                        <span className="text-[11px] bg-[#FFF5F2] text-[#C65D3B] border border-[#F2D4C8] px-2 py-[2px] rounded-full font-semibold">{r.productLabel}</span>
+                    <div key={r.id} className="bg-white border border-[#EBEBEB] rounded-[10px] p-5 shadow-sm">
+                      <div className="flex items-start justify-between gap-3 mb-3 flex-wrap">
+                        <span className="text-[11px] bg-[#FFF5F2] text-[#C65D3B] border border-[#F2D4C8] px-2 py-[2px] rounded-full font-semibold">
+                          {r.productLabel}
+                        </span>
                         <StatusBadge review={r} />
                       </div>
                       <StarRow rating={r.rating} />
                       {r.title && <p className="text-[13px] font-semibold text-[#0D0D0D] mt-2 mb-1">{r.title}</p>}
                       <p className="text-[13px] text-[#484848] leading-[1.65] mt-1">"{r.body}"</p>
-                      <p className="text-[10px] text-[#969696] mt-3">
-                        Submitted {new Date(r.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
-                      </p>
+                      {r.imageUrl && (
+                        <img src={r.imageUrl} alt="Review photo" className="mt-3 rounded-[6px] max-h-[160px] object-cover" />
+                      )}
+                      <div className="flex items-center justify-between mt-4">
+                        <p className="text-[10px] text-[#969696]">
+                          Submitted {new Date(r.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })}
+                        </p>
+                        <a
+                          href={`/write-review?reviewId=${r.id}&email=${encodeURIComponent(activeEmail)}`}
+                          className="text-[11px] font-semibold text-[#C65D3B] hover:underline flex items-center gap-1"
+                        >
+                          Edit review
+                          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* Products not yet reviewed */}
+            {/* ── Products available to review ── */}
             {unreviewedProducts.length > 0 && (
-              <div>
+              <div className="mb-6">
                 <div className="text-[10px] tracking-[.2em] uppercase text-[#484848] font-semibold mb-3">
                   {reviews.length > 0 ? "Write more reviews" : "Share your experience"}
+                </div>
+                <div className="bg-[#FFF9F7] border border-[#F2D4C8] rounded-[8px] px-4 py-3 mb-4 text-[12px] text-[#C65D3B]">
+                  You'll need your order number from the confirmation email to submit a verified review.
                 </div>
                 <div className="space-y-2">
                   {unreviewedProducts.map((p) => (
                     <a
                       key={p.handle}
-                      href={`/write-review?product=${p.handle}&email=${encodeURIComponent(email)}`}
-                      className="flex items-center justify-between bg-white border border-[#EBEBEB] hover:border-[#C65D3B] rounded-[8px] px-5 py-4 transition-colors group shadow-sm"
+                      href={`/write-review?product=${p.handle}&email=${encodeURIComponent(activeEmail)}`}
+                      className="flex items-center justify-between bg-white border border-[#EBEBEB] hover:border-[#C65D3B] rounded-[10px] px-5 py-4 transition-colors group shadow-sm"
                     >
                       <span className="text-[13px] font-semibold text-[#0D0D0D] group-hover:text-[#C65D3B] transition-colors">{p.label}</span>
-                      <span className="text-[11px] font-bold text-[#C65D3B] tracking-[.06em] uppercase flex items-center gap-1">
+                      <span className="text-[11px] font-bold text-[#C65D3B] tracking-[.06em] uppercase flex items-center gap-1 flex-shrink-0">
                         Write a review
                         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
                       </span>
@@ -278,11 +286,21 @@ export default function MyOrders() {
               </div>
             )}
 
-            {reviews.length === 0 && unreviewedProducts.length === 0 && (
-              <div className="bg-white border border-[#EBEBEB] rounded-[8px] py-12 text-center text-[14px] text-[#969696]">
-                Nothing yet — start by writing your first review below.
+            {/* ── All products reviewed ── */}
+            {reviewedProducts.length === PRODUCTS.length && (
+              <div className="bg-green-50 border border-green-200 rounded-[10px] p-5 text-center">
+                <p className="text-[13px] text-green-800 font-semibold">You've reviewed all our products — thank you! 🎉</p>
               </div>
             )}
+
+            {/* ── CTA: go back to store ── */}
+            <div className="mt-8 pt-6 border-t border-[#EBEBEB] flex items-center justify-between">
+              <a href="/" className="text-[12px] font-semibold text-[#C65D3B] hover:underline flex items-center gap-1">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M9.5 6H2.5M5.5 3L2.5 6l3 3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Back to store
+              </a>
+              <span className="text-[11px] text-[#969696]">Jade and Bloom</span>
+            </div>
           </>
         )}
       </div>

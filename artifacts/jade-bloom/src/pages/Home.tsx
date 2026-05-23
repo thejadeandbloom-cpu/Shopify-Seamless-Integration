@@ -791,9 +791,11 @@ export default function Home() {
           muted
           playsInline
           loop
+          crossOrigin="anonymous"
           onEnded={handleVideoEnd}
           poster="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760"
           className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: "center 20%" }}
         >
           <source src={HERO_VIDEOS[activeVideo]} type="video/mp4" />
         </video>

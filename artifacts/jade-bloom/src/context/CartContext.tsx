@@ -33,6 +33,14 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
+function getLoggedInDiscount(): string | null {
+  try {
+    const stored = localStorage.getItem('jb_customer');
+    if (stored) return 'FIRST10';
+  } catch { /* ignore */ }
+  return null;
+}
+
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartId, setCartId] = useState<string | null>(null);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
@@ -91,23 +99,39 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems(parsedItems);
   };
 
+  // Creates a new cart and automatically applies FIRST10 if customer is logged in
+  const createFreshCart = async (): Promise<string> => {
+    const cart = await cartCreate();
+    const id = cart.id;
+    setCartId(id);
+    localStorage.setItem('jb_cartId', id);
+    updateCartState(cart);
+
+    const discount = getLoggedInDiscount();
+    if (discount) {
+      try {
+        const discountedCart = await cartDiscountCodesUpdate(id, [discount]);
+        updateCartState(discountedCart);
+      } catch { /* silently skip */ }
+    }
+    return id;
+  };
+
   const addToCart = async (variantId: string, quantity = 1) => {
     setIsLoading(true);
     try {
       let currentCartId = cartId;
       if (!currentCartId) {
-        const cart = await cartCreate();
-        currentCartId = cart.id;
-        setCartId(currentCartId);
-        localStorage.setItem('jb_cartId', currentCartId!);
+        currentCartId = await createFreshCart();
       }
-      
       const updatedCart = await cartLinesAdd(currentCartId!, variantId, quantity);
       updateCartState(updatedCart);
       setIsCartOpen(true);
       toast({
         title: "Added to bag",
-        description: "Your item has been added to the bag.",
+        description: getLoggedInDiscount()
+          ? "FIRST10 discount applied at checkout."
+          : "Your item has been added.",
       });
     } catch (e) {
       toast({
@@ -125,30 +149,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     try {
       let currentCartId = cartId;
       if (!currentCartId) {
-        const cart = await cartCreate();
-        currentCartId = cart.id;
-        setCartId(currentCartId);
-        localStorage.setItem('jb_cartId', currentCartId!);
+        currentCartId = await createFreshCart();
       }
       const updatedCart = await cartLinesAddBulk(currentCartId!, variantIds);
       updateCartState(updatedCart);
+
+      // Use the passed code, or fall back to logged-in discount
+      const codeToApply = discountCode ?? getLoggedInDiscount();
       let discountApplied = false;
-      if (discountCode) {
+      if (codeToApply) {
         try {
-          const discountedCart = await cartDiscountCodesUpdate(currentCartId!, [discountCode]);
+          const discountedCart = await cartDiscountCodesUpdate(currentCartId!, [codeToApply]);
           updateCartState(discountedCart);
           discountApplied = true;
-        } catch {
-          // Discount update failed — cart items still added successfully
-        }
+        } catch { /* silently skip */ }
       }
+
       setIsCartOpen(true);
       toast({
         title: "Full routine added!",
-        description: discountCode
+        description: codeToApply
           ? discountApplied
-            ? `All 4 products added. Code ${discountCode} applied at checkout.`
-            : "All 4 products added. Apply code at checkout for your discount."
+            ? `All 4 products added. Code ${codeToApply} applied at checkout.`
+            : "All 4 products added. Apply your discount code at checkout."
           : "All 4 products added to your bag.",
       });
     } catch (e) {

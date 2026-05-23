@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
+import { CustomerAuthProvider } from "@/context/CustomerAuthContext";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import LeadCapturePopup from "@/components/LeadCapturePopup";
@@ -15,15 +16,29 @@ const queryClient = new QueryClient();
 
 function Router() {
   const path = window.location.pathname;
+
   if (path === "/admin/refunds" || path.endsWith("/admin/refunds")) {
     return <AdminRefunds />;
   }
+
   if (path === "/write-review" || path.endsWith("/write-review")) {
-    return <WriteReview />;
+    return (
+      <>
+        <Header minimal />
+        <WriteReview />
+      </>
+    );
   }
+
   if (path === "/my-orders" || path.endsWith("/my-orders")) {
-    return <MyOrders />;
+    return (
+      <>
+        <Header minimal />
+        <MyOrders />
+      </>
+    );
   }
+
   return (
     <>
       <Header />
@@ -41,10 +56,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <CartProvider>
-          <Router />
-          <Toaster />
-        </CartProvider>
+        <CustomerAuthProvider>
+          <CartProvider>
+            <Router />
+            <Toaster />
+          </CartProvider>
+        </CustomerAuthProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
