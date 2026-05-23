@@ -655,11 +655,14 @@ export default function Home() {
           </div>
 
           {/* Masonry grid */}
+          {(() => {
+            const filtered = ALL_REVIEWS.filter((r) => reviewFilter === "All" || r.product === reviewFilter);
+            return <>
           <div
             className="columns-1 sm:columns-2 lg:columns-3 gap-4"
             style={{ columnGap: "1rem" }}
           >
-            {ALL_REVIEWS.filter((r) => reviewFilter === "All" || r.product === reviewFilter).map((r, i) => (
+            {filtered.map((r, i) => (
               <RevealDiv
                 key={i}
                 delay={Math.min(i * 40, 300)}
@@ -689,11 +692,14 @@ export default function Home() {
             ))}
           </div>
 
-          <RevealDiv className="text-center mt-8">
+          <div className="text-center mt-8">
             <p className="text-[11px] text-[#969696] tracking-[.08em]">
-              Showing 32 of 203 verified reviews
+              Showing {filtered.length} of 203 verified reviews
+              {reviewFilter !== "All" && ` for ${reviewFilter}`}
             </p>
-          </RevealDiv>
+          </div>
+          </>;
+          })()}
         </div>
       </section>
 
