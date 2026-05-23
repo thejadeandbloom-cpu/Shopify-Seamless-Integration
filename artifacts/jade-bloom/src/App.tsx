@@ -5,19 +5,32 @@ import { CartProvider } from "@/context/CartContext";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import Home from "@/pages/Home";
+import AdminRefunds from "@/pages/AdminRefunds";
 
 const queryClient = new QueryClient();
+
+function Router() {
+  const path = window.location.pathname;
+  if (path === "/admin/refunds" || path.endsWith("/admin/refunds")) {
+    return <AdminRefunds />;
+  }
+  return (
+    <>
+      <Header />
+      <CartDrawer />
+      <main>
+        <Home />
+      </main>
+    </>
+  );
+}
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <CartProvider>
-          <Header />
-          <CartDrawer />
-          <main>
-            <Home />
-          </main>
+          <Router />
           <Toaster />
         </CartProvider>
       </TooltipProvider>
