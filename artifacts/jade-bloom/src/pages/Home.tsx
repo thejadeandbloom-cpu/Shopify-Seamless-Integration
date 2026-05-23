@@ -358,15 +358,31 @@ function StatCounter({ target, label }: { target: string; label: string }) {
   );
 }
 
+const HERO_VIDEOS = [
+  "https://cdn.shopify.com/videos/c/o/v/26704123898c46a39606a0d21192a096.mp4",
+  "https://cdn.shopify.com/videos/c/o/v/f0c39613219c4f19aa4d4f6dcb98fb88.mp4",
+];
+
 export default function Home() {
   const [stickyVisible, setStickyVisible] = useState(false);
   const [activeConcern, setActiveConcern] = useState<string | null>(null);
+  const [activeVideo, setActiveVideo] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     const onScroll = () => setStickyVisible(window.scrollY > 200);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.load();
+    v.play().catch(() => {});
+  }, [activeVideo]);
+
+  const handleVideoEnd = () => setActiveVideo((prev) => (prev + 1) % HERO_VIDEOS.length);
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const [reviewFilter, setReviewFilter] = useState("All");
@@ -406,107 +422,84 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Hero — split layout: headline left, products right */}
+      {/* Hero — full-bleed video */}
       <section
-        className="w-full overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #FAF8F4 0%, #F4EDE5 100%)" }}
+        className="relative w-full overflow-hidden"
+        style={{ height: "clamp(520px, 88vh, 780px)" }}
         data-testid="hero"
       >
-        <div className="max-w-[1200px] mx-auto px-5 md:px-12 flex flex-col md:flex-row items-center gap-6 md:gap-16 pt-10 pb-8 md:py-20">
+        {/* Video */}
+        <video
+          ref={videoRef}
+          key={activeVideo}
+          autoPlay
+          muted
+          playsInline
+          onEnded={handleVideoEnd}
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src={HERO_VIDEOS[activeVideo]} type="video/mp4" />
+        </video>
 
-          {/* Left — text */}
-          <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-1">
-            {/* Social proof */}
-            <div className="flex items-center gap-[6px] mb-4">
-              <span className="text-[#C8902A] text-[12px] tracking-[2px]">★★★★★</span>
-              <span className="text-[10px] tracking-[.18em] uppercase text-[#696969] font-semibold">50+ women tested</span>
-            </div>
+        {/* Gradient overlay — stronger at bottom for text legibility */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.10) 40%, rgba(0,0,0,0.72) 100%)" }}
+        />
 
-            <h1
-              style={{ fontFamily: "'Playfair Display', serif" }}
-              className="text-[clamp(34px,6vw,68px)] leading-[1.15] font-normal text-[#0D0D0D] mb-4"
-            >
-              Your Dark Spots<br />
-              Don't Stand{" "}
-              <em className="italic" style={{ color: "#C65D3B" }}>a Chance.</em>
-            </h1>
-
-            <p
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              className="text-[14px] md:text-[16px] leading-[1.65] text-[#555] mb-6 max-w-[420px]"
-            >
-              14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or your money back.
-            </p>
-
-            <div className="flex gap-3 flex-wrap justify-center md:justify-start mb-5">
-              <button
-                onClick={() => scrollTo("products")}
-                className="bg-[#0D0D0D] text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-[#C65D3B] transition-colors duration-200"
-                data-testid="hero-cta-primary"
-              >
-                Start Your Routine
-              </button>
-              <button
-                onClick={() => scrollTo("concerns")}
-                className="border border-[#0D0D0D]/40 text-[#0D0D0D] px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:border-[#0D0D0D] transition-colors duration-200"
-                data-testid="hero-cta-secondary"
-              >
-                Shop by Concern
-              </button>
-            </div>
-
-            <div className="flex flex-wrap gap-x-5 gap-y-1 justify-center md:justify-start">
-              {["Free shipping", "Ships in 24 hrs", "COD available", "Easy returns"].map((t) => (
-                <span key={t} className="text-[10px] text-[#888] font-medium flex items-center gap-1">
-                  <span className="text-[#C65D3B] font-bold">✓</span> {t}
-                </span>
-              ))}
-            </div>
+        {/* Content */}
+        <div className="absolute inset-0 flex flex-col justify-end px-6 pb-10 md:pb-14 md:px-16 max-w-[680px]">
+          {/* Social proof */}
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-[#F5C842] text-[13px] tracking-[2px]">★★★★★</span>
+            <span className="text-[10px] tracking-[.2em] uppercase text-white/80 font-semibold">50+ women tested</span>
           </div>
 
-          {/* Right — asymmetric editorial layout: hero product large, 3 small */}
-          <div className="flex-shrink-0 w-full md:w-auto order-2 md:order-2">
-            <div className="flex gap-2 max-w-[400px] mx-auto md:mx-0 md:w-[380px]" style={{ height: "clamp(280px, 70vw, 420px)" }}>
+          <h1
+            style={{ fontFamily: "'Playfair Display', serif" }}
+            className="text-[clamp(34px,6vw,66px)] leading-[1.12] font-normal text-white mb-4"
+          >
+            Your Dark Spots<br />
+            Don't Stand{" "}
+            <em className="italic" style={{ color: "#FFD580" }}>a Chance.</em>
+          </h1>
 
-              {/* Featured product — serum (index 1) */}
-              <button
-                onClick={() => scrollTo("products")}
-                className="flex-[2] rounded-[12px] overflow-hidden relative group"
-                style={{ background: PRODUCTS[1].imgBg }}
-              >
-                <img
-                  src={PRODUCTS[1].img}
-                  alt={PRODUCTS[1].name}
-                  className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent pt-6 pb-3 px-3">
-                  <div className="text-[8px] text-white/70 tracking-[.1em] uppercase mb-[2px]">Dark Spots · Dullness</div>
-                  <p className="text-white text-[11px] font-semibold leading-tight">14% Vitamin C Serum</p>
-                  <p className="text-white/80 text-[9px] mt-[2px]">₹618</p>
-                </div>
-              </button>
+          <p className="text-[14px] leading-[1.6] text-white/85 mb-7 max-w-[400px]">
+            14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or your money back.
+          </p>
 
-              {/* Column of 3 smaller products */}
-              <div className="flex-1 flex flex-col gap-2">
-                {[PRODUCTS[0], PRODUCTS[2], PRODUCTS[3]].map((p) => (
-                  <button
-                    key={p.handle}
-                    onClick={() => scrollTo("products")}
-                    className="flex-1 rounded-[10px] overflow-hidden relative group"
-                    style={{ background: p.imgBg }}
-                  >
-                    <img
-                      src={p.img}
-                      alt={p.name}
-                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </button>
-                ))}
-              </div>
-
-            </div>
+          <div className="flex gap-3 flex-wrap mb-6">
+            <button
+              onClick={() => scrollTo("products")}
+              className="bg-white text-[#0D0D0D] px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-[#F2EDE8] transition-colors duration-200"
+              data-testid="hero-cta-primary"
+            >
+              Start Your Routine
+            </button>
+            <button
+              onClick={() => scrollTo("concerns")}
+              className="border border-white/70 text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-white/10 transition-colors duration-200"
+              data-testid="hero-cta-secondary"
+            >
+              Shop by Concern
+            </button>
           </div>
 
+          {/* Video dots */}
+          <div className="flex items-center gap-2">
+            {HERO_VIDEOS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveVideo(i)}
+                className="transition-all duration-300 rounded-full"
+                style={{
+                  width: i === activeVideo ? 20 : 6,
+                  height: 6,
+                  background: i === activeVideo ? "#fff" : "rgba(255,255,255,0.45)",
+                }}
+              />
+            ))}
+          </div>
         </div>
       </section>
 
