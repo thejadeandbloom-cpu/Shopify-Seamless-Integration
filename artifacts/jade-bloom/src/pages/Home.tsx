@@ -258,8 +258,8 @@ function ProductCard({ product, index }: { product: typeof PRODUCTS[0]; index: n
   };
 
   return (
-    <RevealDiv delay={index * 80} className="flex-none w-[300px] bg-white rounded-[4px] border border-[#EBEBEB] overflow-hidden flex flex-col">
-      <div className="h-[340px] bg-[#F2EDE8] border-b border-[#EBEBEB] flex items-center justify-center overflow-hidden">
+    <RevealDiv delay={index * 80} className="bg-white rounded-[4px] border border-[#EBEBEB] overflow-hidden flex flex-col">
+      <div className="h-[200px] md:h-[320px] bg-[#F2EDE8] border-b border-[#EBEBEB] flex items-center justify-center overflow-hidden">
         <img
           src={product.img}
           alt={product.name}
@@ -267,7 +267,7 @@ function ProductCard({ product, index }: { product: typeof PRODUCTS[0]; index: n
           data-testid={`product-img-${product.handle}`}
         />
       </div>
-      <div className="p-5 flex-1 flex flex-col">
+      <div className="p-3 md:p-5 flex-1 flex flex-col">
         <div className="text-[8.5px] tracking-[.2em] uppercase text-[#C65D3B] font-semibold mb-2">{product.tag}</div>
         <div className="text-[11px] font-semibold text-[#C65D3B] mb-3 bg-[#FFF9F5] px-2 py-1 rounded inline-block w-fit">{product.badge}</div>
         <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[13px] tracking-[.04em] text-[#0D0D0D] leading-snug mb-2 font-medium">
@@ -426,7 +426,7 @@ export default function Home() {
       </section>
 
       {/* Products */}
-      <section id="products" className="bg-[#F9F7F5] px-8 md:px-16 py-20">
+      <section id="products" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
           <RevealDiv className="mb-12">
             <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">The Collection</div>
@@ -437,14 +437,14 @@ export default function Home() {
               Formulated together. Used in order. Designed for Indian skin.
             </p>
           </RevealDiv>
-          <div className="flex gap-6 overflow-x-auto pb-4" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
             {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} />)}
           </div>
         </div>
       </section>
 
       {/* Concerns → Bundle Modal */}
-      <section id="concerns" className="bg-white px-8 md:px-16 py-20">
+      <section id="concerns" className="bg-white px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
           <RevealDiv className="mb-4">
             <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Shop by Concern</div>
@@ -465,15 +465,15 @@ export default function Home() {
             </div>
           </RevealDiv>
 
-          <div className="flex gap-6 overflow-x-auto pb-4 md:grid md:grid-cols-4 md:overflow-visible" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
             {CONCERNS.map((c, i) => (
-              <RevealDiv key={c.name} delay={i * 80} className="flex-none w-[260px] md:w-auto">
+              <RevealDiv key={c.name} delay={i * 80} className="">
                 <button
                   onClick={() => setActiveConcern(c.name)}
                   className="w-full text-left group block bg-[#F9F7F5] rounded-[4px] border border-[#EBEBEB] overflow-hidden hover:border-[#C65D3B] hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#C65D3B] focus:ring-offset-2"
                   data-testid={`concern-card-${i}`}
                 >
-                  <div className="w-full h-[200px] bg-[#F2EDE8] overflow-hidden">
+                  <div className="w-full h-[130px] md:h-[200px] bg-[#F2EDE8] overflow-hidden">
                     <img
                       src={c.img}
                       alt={c.name}
@@ -500,7 +500,7 @@ export default function Home() {
       </section>
 
       {/* Formulation Science */}
-      <section className="bg-[#F9F7F5] px-8 md:px-16 py-20">
+      <section className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
           <RevealDiv className="text-center mb-16">
             <div className="text-[11px] tracking-[.22em] uppercase text-[#C65D3B] font-semibold mb-3">Formulation Science</div>
@@ -576,12 +576,12 @@ export default function Home() {
       </section>
 
       {/* How to Use */}
-      <section id="routine" className="bg-[#F9F7F5] px-8 md:px-16 py-20">
+      <section id="routine" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
         <HowToUse />
       </section>
 
       {/* Real Results */}
-      <section className="bg-white px-8 md:px-16 py-20">
+      <section className="bg-white px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
           <RevealDiv className="mb-12">
             <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Real Results</div>
@@ -596,7 +596,7 @@ export default function Home() {
           {/* Before/after photos — no overlay */}
           <div className="flex gap-6 overflow-x-auto pb-4 mb-16" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
             {RESULTS.map((r, i) => (
-              <RevealDiv key={i} delay={i * 80} className="flex-none w-[320px] h-[420px] rounded-[4px] overflow-hidden bg-[#F2EDE8]">
+              <RevealDiv key={i} delay={i * 80} className="flex-none w-[260px] md:w-[320px] h-[340px] md:h-[420px] rounded-[4px] overflow-hidden bg-[#F2EDE8]">
                 <img src={r.img} alt="Before and after result" className="w-full h-full object-cover" />
               </RevealDiv>
             ))}
@@ -644,10 +644,10 @@ export default function Home() {
       </section>
 
       {/* Story */}
-      <section id="story" className="bg-[#F9F7F5] px-8 md:px-16 py-20">
+      <section id="story" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
           <RevealDiv className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="h-[400px] bg-[#F2EDE8] rounded-[4px] overflow-hidden">
+            <div className="h-[220px] md:h-[400px] bg-[#F2EDE8] rounded-[4px] overflow-hidden">
               <img
                 src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_66ba1ae5-d6eb-45c9-90dd-d830e002454d.png?v=1779168929"
                 alt="Our Story"
@@ -683,7 +683,7 @@ export default function Home() {
       </div>
 
       {/* Reviews */}
-      <section id="reviews" className="bg-[#F9F7F5] px-8 md:px-16 py-20">
+      <section id="reviews" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
           <RevealDiv className="mb-12">
             <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Customer Reviews</div>
@@ -721,7 +721,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="bg-white px-8 md:px-16 py-20">
+      <section id="faq" className="bg-white px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[780px] mx-auto">
           <RevealDiv className="mb-12">
             <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">FAQ</div>

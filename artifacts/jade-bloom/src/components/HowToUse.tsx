@@ -67,7 +67,7 @@ type Step = typeof AM_STEPS[0];
 function StepCard({ s, index }: { s: Step; index: number }) {
   return (
     <div
-      className="flex gap-5 items-start"
+      className="flex gap-3 md:gap-5 items-start"
       style={{
         opacity: 0,
         transform: "translateY(16px)",
@@ -89,7 +89,7 @@ function StepCard({ s, index }: { s: Step; index: number }) {
       </div>
 
       {/* Content */}
-      <div className="pb-8 flex-1">
+      <div className="pb-6 md:pb-8 flex-1">
         <div className="flex items-center gap-3 mb-1">
           <span
             className="text-[9px] tracking-[.2em] uppercase font-bold px-2 py-[3px] rounded-full text-white"
