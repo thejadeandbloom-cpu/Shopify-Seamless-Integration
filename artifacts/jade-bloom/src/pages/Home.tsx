@@ -271,8 +271,8 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
         className="relative w-full overflow-hidden"
         style={{ background: product.imgBg, aspectRatio: "4/5" }}
       >
-        {/* Skin concern tag — top left */}
-        <div className="absolute top-2 left-2 z-10 text-[7.5px] tracking-[.12em] uppercase font-bold text-[#484848] bg-white/85 backdrop-blur-sm px-[6px] py-[3px] rounded-full leading-none">
+        {/* Skin concern tag — top left, capped so it never overlaps the rating */}
+        <div className="absolute top-2 left-2 z-10 max-w-[calc(100%-68px)] truncate text-[7.5px] tracking-[.12em] uppercase font-bold text-[#484848] bg-white/85 backdrop-blur-sm px-[6px] py-[3px] rounded-full leading-none">
           {product.tag}
         </div>
         {/* Star rating — top right */}
