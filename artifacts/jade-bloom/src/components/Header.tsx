@@ -147,25 +147,28 @@ export default function Header({ minimal = false }: HeaderProps) {
       >
         {/* ── MOBILE layout ── */}
         <div className="flex md:hidden items-center h-full px-3">
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="relative flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors"
-            data-testid="cart-button"
-          >
-            <ShoppingBag size={20} strokeWidth={1.5} className="text-[#0D0D0D]" />
-            {totalQuantity > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
-                {totalQuantity}
-              </span>
-            )}
-          </button>
-
-          <div className="flex-1 flex justify-center">
+          {/* Logo — left */}
+          <div className="flex-1">
             <a href="/"><Logo /></a>
           </div>
 
+          {/* Right side: user + cart + hamburger */}
           <div className="flex items-center gap-1">
             <UserSection mobile />
+
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors"
+              data-testid="cart-button"
+            >
+              <ShoppingBag size={20} strokeWidth={1.5} className="text-[#0D0D0D]" />
+              {totalQuantity > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
+                  {totalQuantity}
+                </span>
+              )}
+            </button>
+
             {!minimal && (
               <button
                 onClick={() => setDrawerOpen(true)}
