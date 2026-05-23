@@ -54,7 +54,6 @@ const INGREDIENTS = [
 ];
 
 const FEATURES = [
-  { label: "Fragrance-Free", sub: "No irritants" },
   { label: "pH Balanced (4.5–5.5)", sub: "Barrier-safe" },
   { label: "30-Day Guarantee", sub: "Full refund if it doesn't work" },
   { label: "Built for Indian Skin", sub: "Melanin-rich · Indian climate" },

@@ -225,7 +225,7 @@ export default function ConcernBundleModal({ concern, onClose }: ConcernBundleMo
             )}
           </button>
           <p className="text-center text-[10px] text-[#969696] mt-3">
-            Bundle discount applied at checkout · 30-day money-back guarantee
+            Bundle discount applied at checkout
           </p>
         </div>
       </div>

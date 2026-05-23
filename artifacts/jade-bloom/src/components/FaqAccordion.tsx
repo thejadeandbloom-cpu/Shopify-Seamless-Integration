@@ -24,7 +24,7 @@ const FAQS = [
   },
   {
     q: "Are your products free from harmful ingredients?",
-    a: "Yes. All products are cruelty-free, paraben-free, and free from harsh sulfates and artificial fragrances. We use actives at clinically effective concentrations, not just for marketing.",
+    a: "Yes. All products are cruelty-free, paraben-free, and free from harsh sulfates. We use actives at clinically effective concentrations, not just for marketing.",
   },
   {
     q: "What is your return and refund policy?",
