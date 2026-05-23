@@ -129,7 +129,7 @@ export default function Header() {
               </button>
             ))}
             <a
-              href="https://www.amazon.in/s?k=jade+and+bloom"
+              href="https://www.amazon.in/stores/JADEANDBLOOM/page/DB179800-10AB-4ECF-9C42-8A930E2E1531?lp_asin=B0FNCM9LFR&ref_=ast_bln&store_ref=bl_ast_dp_brandlogo_sto"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full text-left px-6 py-[14px] text-[13px] tracking-[.12em] uppercase text-[#0D0D0D] font-medium border-b border-[#EBEBEB] hover:bg-[#F2EDE8] transition-colors"
