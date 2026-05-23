@@ -749,11 +749,28 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden">
-      {/* Announcement — first order offer */}
-      <div className="bg-[#C65D3B] text-white text-center py-[10px] text-[11px] tracking-[.18em] uppercase font-semibold">
-        10% off your first order &nbsp;·&nbsp; Use code{" "}
-        <span className="bg-white text-[#C65D3B] px-2 py-[1px] rounded font-bold tracking-[.08em]">FIRST10</span>
-        &nbsp;at checkout
+      {/* Announcement — single-line marquee on all screens */}
+      <div className="bg-[#C65D3B] text-white py-[10px] overflow-hidden">
+        <style>{`
+          @keyframes announce {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .announce-track { animation: announce 18s linear infinite; }
+          .announce-track:hover { animation-play-state: paused; }
+        `}</style>
+        <div className="flex announce-track w-max whitespace-nowrap text-[11px] tracking-[.18em] uppercase font-semibold">
+          {[0, 1].map((i) => (
+            <span key={i} className="flex items-center gap-6 pr-12">
+              <span>10% off your first order</span>
+              <span className="opacity-50">·</span>
+              <span>Use code <span className="bg-white text-[#C65D3B] px-[6px] py-[1px] rounded font-bold tracking-[.06em] mx-1">FIRST10</span> at checkout</span>
+              <span className="opacity-50">·</span>
+              <span>Free shipping on orders above ₹499</span>
+              <span className="opacity-50">·</span>
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Trust signals bar — auto-scrolling marquee */}
@@ -855,7 +872,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => scrollTo("concerns")}
-              className="border border-white/70 text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-white/10 transition-colors duration-200 hidden sm:inline-flex"
+              className="border border-white/70 text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-white/10 transition-colors duration-200 inline-flex"
               data-testid="hero-cta-secondary"
             >
               Shop by Concern

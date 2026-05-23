@@ -182,7 +182,7 @@ export default function Header({ minimal = false }: HeaderProps) {
         </div>
 
         {/* ── DESKTOP layout ── */}
-        <div className="hidden md:flex items-center h-full px-16">
+        <div className="hidden md:flex items-center h-full px-6 lg:px-16">
           <div className="flex-shrink-0 mr-8">
             <a href="/"><Logo /></a>
           </div>
