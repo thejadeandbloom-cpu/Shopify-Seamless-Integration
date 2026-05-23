@@ -57,6 +57,20 @@ router.get("/reviews", async (req, res) => {
   }
 });
 
+router.get("/my-reviews", async (req, res) => {
+  const { email } = req.query;
+  if (!email || typeof email !== "string") { res.status(400).json({ error: "email required" }); return; }
+  try {
+    const rows = await db.select().from(reviewsTable)
+      .where(eq(reviewsTable.customerEmail, email.toLowerCase().trim()))
+      .orderBy(desc(reviewsTable.createdAt));
+    res.json(rows);
+  } catch (e) {
+    req.log.error(e, "Failed to fetch my-reviews");
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+});
+
 router.get("/admin/reviews", adminAuth, async (req, res) => {
   try {
     const rows = await db.select().from(reviewsTable).orderBy(desc(reviewsTable.createdAt));

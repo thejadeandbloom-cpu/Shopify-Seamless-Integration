@@ -1,5 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
-import { AlertTriangle, CheckCircle, XCircle, Clock, RefreshCw, LogOut, Users, FileText } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Clock, RefreshCw, LogOut, Users, FileText, Download } from "lucide-react";
+
+function downloadCSV(rows: Record<string, unknown>[], filename: string) {
+  if (!rows.length) return;
+  const headers = Object.keys(rows[0]);
+  const esc = (v: unknown) => { const s = String(v ?? "").replace(/"/g, '""'); return /[",\n\r]/.test(s) ? `"${s}"` : s; };
+  const csv = [headers.join(","), ...rows.map((r) => headers.map((h) => esc(r[h])).join(","))].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" }));
+  a.download = filename;
+  a.click();
+}
 
 const BASE = import.meta.env.BASE_URL ?? "/";
 const API = `${BASE}api`.replace(/\/+/g, "/");
@@ -254,6 +265,16 @@ export default function AdminRefunds() {
         {/* ── LEADS TAB ── */}
         {activeTab === "leads" && (
           <>
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-[13px] font-semibold text-[#0D0D0D]">WhatsApp Leads</div>
+              <button
+                onClick={() => downloadCSV(leads.map((l) => ({ ID: l.id, WhatsApp: l.phone, Source: l.source, Date: new Date(l.createdAt).toLocaleString("en-IN") })), `jb-leads-${Date.now()}.csv`)}
+                disabled={leads.length === 0}
+                className="flex items-center gap-2 px-3 py-2 bg-[#0D0D0D] text-white text-[11px] font-bold tracking-[.1em] uppercase rounded-[4px] hover:bg-[#C65D3B] transition-colors disabled:opacity-40"
+              >
+                <Download size={12} /> Export CSV
+              </button>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
               {[
                 { label: "Total Leads", val: leads.length, color: "#0D0D0D" },
@@ -318,6 +339,16 @@ export default function AdminRefunds() {
         {/* ── REFUNDS TAB ── */}
         {activeTab === "refunds" && (
           <>
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-[13px] font-semibold text-[#0D0D0D]">Refund Claims</div>
+              <button
+                onClick={() => downloadCSV(claims.map((c) => ({ ID: c.id, Name: c.name, Email: c.email, Phone: c.phone, "Order ID": c.orderId, Product: c.product, "Purchase Date": c.purchaseDate, Reason: c.reason, "Bank/UPI": c.bankDetails, Status: c.status, Refunded: c.refunded ? "Yes" : "No", "Abuse Flag": c.abuseFlag, Notes: c.notes, Date: new Date(c.createdAt).toLocaleString("en-IN") })), `jb-refunds-${Date.now()}.csv`)}
+                disabled={claims.length === 0}
+                className="flex items-center gap-2 px-3 py-2 bg-[#0D0D0D] text-white text-[11px] font-bold tracking-[.1em] uppercase rounded-[4px] hover:bg-[#C65D3B] transition-colors disabled:opacity-40"
+              >
+                <Download size={12} /> Export CSV
+              </button>
+            </div>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-8">
               {[
                 { label: "Total", val: counts.all, color: "#0D0D0D" },
@@ -482,6 +513,16 @@ export default function AdminRefunds() {
         {/* ── REVIEWS TAB ── */}
         {activeTab === "reviews" && (
           <>
+            <div className="flex items-center justify-between mb-4">
+              <div className="text-[13px] font-semibold text-[#0D0D0D]">Customer Reviews</div>
+              <button
+                onClick={() => downloadCSV(reviews.map((r) => ({ ID: r.id, Product: r.productLabel, Name: r.customerName, Email: r.customerEmail, City: r.city, "Order ID": r.orderId, Rating: r.rating, Title: r.title, Review: r.body, Approved: r.isApproved ? "Yes" : "No", "Visible After": new Date(r.visibleAfter).toLocaleDateString("en-IN"), Submitted: new Date(r.createdAt).toLocaleString("en-IN") })), `jb-reviews-${Date.now()}.csv`)}
+                disabled={reviews.length === 0}
+                className="flex items-center gap-2 px-3 py-2 bg-[#0D0D0D] text-white text-[11px] font-bold tracking-[.1em] uppercase rounded-[4px] hover:bg-[#C65D3B] transition-colors disabled:opacity-40"
+              >
+                <Download size={12} /> Export CSV
+              </button>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
               {[
                 { label: "Total", val: reviews.length, color: "#0D0D0D" },

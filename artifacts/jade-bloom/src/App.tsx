@@ -9,6 +9,7 @@ import FaqButton from "@/components/FaqButton";
 import Home from "@/pages/Home";
 import AdminRefunds from "@/pages/AdminRefunds";
 import WriteReview from "@/pages/WriteReview";
+import MyOrders from "@/pages/MyOrders";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,9 @@ function Router() {
   }
   if (path === "/write-review" || path.endsWith("/write-review")) {
     return <WriteReview />;
+  }
+  if (path === "/my-orders" || path.endsWith("/my-orders")) {
+    return <MyOrders />;
   }
   return (
     <>
