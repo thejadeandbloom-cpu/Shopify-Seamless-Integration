@@ -521,18 +521,13 @@ export default function Home() {
             </p>
           </RevealDiv>
 
-          {/* Before/after photos — no overlay */}
-          <div className="flex gap-6 overflow-x-auto pb-4 mb-16" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
-            {RESULTS.map((r, i) => (
-              <RevealDiv key={i} delay={i * 80} className="flex-none w-[260px] md:w-[320px] h-[340px] md:h-[420px] rounded-[4px] overflow-hidden bg-[#F2EDE8]">
-                <img src={r.img} alt="Before and after result" className="w-full h-full object-cover" />
-              </RevealDiv>
-            ))}
-          </div>
-
-          {/* WhatsApp screenshots */}
+          {/* Sub-labels */}
           <RevealDiv className="mb-8">
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 bg-[#F9F7F5] border border-[#EBEBEB] rounded-full px-4 py-2 text-[11px] font-semibold text-[#484848]">
+                <span className="inline-block w-2 h-2 rounded-full bg-[#C65D3B]" />
+                Before &amp; after photos
+              </span>
               <span className="inline-flex items-center gap-2 bg-[#F9F7F5] border border-[#EBEBEB] rounded-full px-4 py-2 text-[11px] font-semibold text-[#484848]">
                 <span className="inline-block w-2 h-2 rounded-full bg-[#25D366]" />
                 Real WhatsApp feedback — unfiltered
@@ -540,30 +535,29 @@ export default function Home() {
             </div>
           </RevealDiv>
 
-          <div className="flex gap-6 overflow-x-auto pb-4" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
+          {/* Single unified scroll — 6 cards */}
+          <div
+            className="flex gap-5 overflow-x-auto pb-4 items-start"
+            style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}
+          >
+            {/* 3 before/after photo cards */}
+            {RESULTS.map((r, i) => (
+              <RevealDiv key={`result-${i}`} delay={i * 60} className="flex-none w-[260px] md:w-[300px] rounded-[6px] overflow-hidden bg-[#F2EDE8]">
+                <img src={r.img} alt="Before and after result" className="w-full h-auto block" />
+              </RevealDiv>
+            ))}
+
+            {/* 3 WhatsApp screenshot cards — full image, no crop */}
             {WHATSAPP_REVIEWS.map((r, i) => (
-              <RevealDiv key={i} delay={i * 80} className="flex-none w-[300px] bg-[#F9F7F5] rounded-[8px] border border-[#EBEBEB] overflow-hidden flex flex-col">
-                {/* Screenshot image */}
-                <div className="w-full overflow-hidden bg-[#1a1a2e]" style={{ maxHeight: 400 }}>
-                  <img
-                    src={r.img}
-                    alt={`WhatsApp review from ${r.name}`}
-                    className="w-full object-cover object-top"
-                    style={{ maxHeight: 400 }}
-                  />
-                </div>
-                {/* Attribution strip */}
-                <div className="px-4 py-4 border-t border-[#EBEBEB] bg-white flex-1 flex flex-col justify-between">
-                  <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[13px] leading-[1.6] text-[#484848] mb-3 italic">
-                    "{r.quote}"
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="block text-[12px] font-semibold text-[#0D0D0D]">{r.name}</span>
-                      <span className="block text-[10px] text-[#C65D3B] font-medium mt-[2px]">{r.product}</span>
-                    </div>
-                    <span className="text-[10px] tracking-[.08em] uppercase text-[#969696] font-medium">Verified</span>
-                  </div>
+              <RevealDiv key={`wa-${i}`} delay={(i + 3) * 60} className="flex-none w-[260px] md:w-[300px] bg-white rounded-[6px] border border-[#EBEBEB] overflow-hidden flex flex-col">
+                <img
+                  src={r.img}
+                  alt={`WhatsApp review from ${r.name}`}
+                  className="w-full h-auto block"
+                />
+                <div className="px-4 py-3 border-t border-[#EBEBEB]">
+                  <span className="block text-[12px] font-semibold text-[#0D0D0D]">{r.name}</span>
+                  <span className="block text-[10px] text-[#C65D3B] font-medium mt-[2px]">{r.product}</span>
                 </div>
               </RevealDiv>
             ))}
