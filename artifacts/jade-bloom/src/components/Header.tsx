@@ -34,94 +34,108 @@ export default function Header() {
     }, 50);
   };
 
+  const Logo = () => (
+    <img
+      src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/Logo_Final_jpg.jpg?v=1775928161"
+      alt="Jade and Bloom"
+      className="h-[94px] w-auto object-contain"
+      draggable={false}
+    />
+  );
+
   return (
     <>
       <header
-        className="sticky top-0 z-[200] bg-white/97 border-b border-[#EBEBEB] h-[100px] flex items-center px-4 md:px-16 transition-shadow duration-300 relative"
+        className="sticky top-0 z-[200] bg-white border-b border-[#EBEBEB] h-[100px] transition-shadow duration-300"
         style={{ boxShadow: scrolled ? "0 1px 16px rgba(0,0,0,.06)" : "none" }}
         data-testid="header"
       >
-        {/* ── MOBILE: cart on left ── */}
-        <button
-          onClick={() => setIsCartOpen(true)}
-          className="relative flex md:hidden items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors flex-shrink-0"
-          data-testid="cart-button-mobile"
-        >
-          <ShoppingBag size={19} strokeWidth={1.5} className="text-[#0D0D0D]" />
-          {totalQuantity > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
-              {totalQuantity}
-            </span>
-          )}
-        </button>
+        {/* ── MOBILE layout (hidden on md+) ──
+            [cart]  [logo — flex-1 centered]  [burger]          */}
+        <div className="flex md:hidden items-center h-full px-3">
+          {/* Cart — left */}
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="relative flex-shrink-0 flex items-center justify-center w-11 h-11 rounded-sm hover:bg-[#F2EDE8] transition-colors"
+            data-testid="cart-button"
+          >
+            <ShoppingBag size={20} strokeWidth={1.5} className="text-[#0D0D0D]" />
+            {totalQuantity > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
+                {totalQuantity}
+              </span>
+            )}
+          </button>
 
-        {/* ── LOGO ──
-            Mobile: absolutely centered in header
-            Desktop: static, left side of flex row            */}
-        <img
-          src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/Logo_Final_jpg.jpg?v=1775928161"
-          alt="Jade and Bloom"
-          className="
-            absolute left-1/2 -translate-x-1/2
-            md:static md:left-auto md:translate-x-0
-            h-[94px] w-auto object-contain flex-shrink-0
-          "
-        />
+          {/* Logo — centered */}
+          <div className="flex-1 flex justify-center">
+            <Logo />
+          </div>
 
-        {/* ── DESKTOP: centered nav ── */}
-        <nav className="hidden md:flex flex-1 justify-center">
-          <ul className="flex gap-9 list-none">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <button
-                  onClick={() => scrollTo(link.href)}
-                  className="text-[11px] tracking-[.14em] uppercase text-[#484848] font-medium hover:text-[#0D0D0D] transition-colors duration-200 cursor-pointer bg-transparent border-none"
-                  data-testid={`nav-${link.label.toLowerCase().replace(" ", "-")}`}
-                >
-                  {link.label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          {/* Burger — right */}
+          <button
+            onClick={() => setDrawerOpen(true)}
+            className="flex-shrink-0 flex flex-col gap-[5px] w-11 h-11 items-center justify-center rounded-sm hover:bg-[#F2EDE8] transition-colors"
+            aria-label="Open menu"
+            data-testid="hamburger-button"
+          >
+            <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
+            <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
+            <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
+          </button>
+        </div>
 
-        {/* ── DESKTOP: cart on right ── */}
-        <button
-          onClick={() => setIsCartOpen(true)}
-          className="relative hidden md:flex items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors flex-shrink-0"
-          data-testid="cart-button"
-        >
-          <ShoppingBag size={19} strokeWidth={1.5} className="text-[#0D0D0D]" />
-          {totalQuantity > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
-              {totalQuantity}
-            </span>
-          )}
-        </button>
+        {/* ── DESKTOP layout (hidden below md) ──
+            [logo]  [nav — flex-1 centered]  [cart]             */}
+        <div className="hidden md:flex items-center h-full px-16">
+          {/* Logo — left */}
+          <div className="flex-shrink-0 mr-8">
+            <Logo />
+          </div>
 
-        {/* ── MOBILE: burger on extreme right ── */}
-        <button
-          onClick={() => setDrawerOpen(true)}
-          className="flex md:hidden flex-col gap-[5px] w-10 h-10 items-center justify-center rounded-sm hover:bg-[#F2EDE8] transition-colors ml-auto flex-shrink-0"
-          aria-label="Open menu"
-          data-testid="hamburger-button"
-        >
-          <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
-          <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
-          <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
-        </button>
+          {/* Nav — centered */}
+          <nav className="flex-1 flex justify-center">
+            <ul className="flex gap-9 list-none">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <button
+                    onClick={() => scrollTo(link.href)}
+                    className="text-[11px] tracking-[.14em] uppercase text-[#484848] font-medium hover:text-[#0D0D0D] transition-colors duration-200 cursor-pointer bg-transparent border-none"
+                    data-testid={`nav-${link.label.toLowerCase().replace(" ", "-")}`}
+                  >
+                    {link.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Cart — right */}
+          <button
+            onClick={() => setIsCartOpen(true)}
+            className="relative flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors"
+            data-testid="cart-button-desktop"
+          >
+            <ShoppingBag size={19} strokeWidth={1.5} className="text-[#0D0D0D]" />
+            {totalQuantity > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count-desktop">
+                {totalQuantity}
+              </span>
+            )}
+          </button>
+        </div>
       </header>
 
-      {/* ── Mobile / Tablet Drawer ── */}
+      {/* ── Mobile / Tablet Nav Drawer ── */}
       <div
-        className={`fixed inset-0 z-[300] pointer-events-none transition-all ${drawerOpen ? "pointer-events-auto" : ""}`}
+        className={`fixed inset-0 z-[300] ${drawerOpen ? "pointer-events-auto" : "pointer-events-none"}`}
       >
         <div
-          className={`absolute inset-0 bg-black/50 transition-opacity duration-350 ${drawerOpen ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${drawerOpen ? "opacity-100" : "opacity-0"}`}
           onClick={() => setDrawerOpen(false)}
         />
         <div
-          className={`absolute top-0 right-0 bottom-0 w-[80%] max-w-[320px] bg-white flex flex-col transition-transform duration-350 ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}
+          className={`absolute top-0 right-0 bottom-0 w-[80%] max-w-[320px] bg-white flex flex-col transition-transform duration-300 ${drawerOpen ? "translate-x-0" : "translate-x-full"}`}
           style={{ transitionTimingFunction: "cubic-bezier(.16,1,.3,1)" }}
         >
           <div className="flex items-center justify-between px-6 py-5 border-b border-[#EBEBEB]">
@@ -134,7 +148,7 @@ export default function Header() {
               <X size={18} />
             </button>
           </div>
-          <div className="flex-1 py-6">
+          <div className="flex-1 py-6 overflow-y-auto">
             {navLinks.map((link) => (
               <button
                 key={link.href}
