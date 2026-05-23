@@ -44,7 +44,7 @@ export default function Header() {
         <img
           src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/Logo_Final_jpg.jpg?v=1775928161"
           alt="Jade and Bloom"
-          className="h-10 w-auto object-contain"
+          className="h-14 w-auto object-contain"
         />
 
         <nav className="hidden md:block">
