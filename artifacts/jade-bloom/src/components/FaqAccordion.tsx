@@ -3,8 +3,8 @@ import { Plus, Minus } from "lucide-react";
 
 const FAQS = [
   {
-    q: "RESULTS OR YOUR MONEY BACK — 60 days*",
-    a: "If you don't see visible improvement in your skin concern, we'll refund 100% of your purchase price within 60 days of purchase.\n\n*Conditions apply:\n• Used as directed (once or twice daily as recommended)\n• Proof of usage required — photo of product + order confirmation\n• Unopened / unused products only\n• Excludes bulk and bundle purchases\n• One claim per customer per 12 months\n\nTo submit a claim, use the Refund Claim form in the footer below.",
+    q: "60-DAY MONEY-BACK GUARANTEE — How does it work?",
+    a: "If you're not satisfied, return your unopened and unused product within 60 days of purchase and we'll refund 100% of your purchase price. No questions asked.\n\nConditions:\n• Product must be unopened and unused\n• Proof of purchase required — your order confirmation email\n• One claim per customer per 12 months\n• Excludes bulk and bundle purchases\n\nTo submit a claim, use the Refund Claim form in the footer below.",
   },
   {
     q: "What skin types are your products suitable for?",
@@ -28,7 +28,7 @@ const FAQS = [
   },
   {
     q: "What is your return and refund policy?",
-    a: "We offer a 60-day money-back guarantee — if you don't see visible improvement, submit a claim via the form in our footer and we'll refund 100%. For damaged orders, share photos of the product with us via WhatsApp or Instagram and we'll resolve it quickly. General returns on opened products are not accepted as skincare is consumable by nature.",
+    a: "We accept returns on unopened and unused products within 60 days of purchase for a full refund — no questions asked. Once a product has been opened or used, it cannot be returned as skincare is consumable by nature.\n\nFor damaged or incorrect orders, share photos via WhatsApp or Instagram and we'll resolve it immediately.\n\nTo initiate a return, use the Refund Claim form in the footer.",
   },
   {
     q: "How long does shipping take?",
