@@ -13,7 +13,7 @@ export default function FaqButton() {
     <button
       onClick={scrollToFaq}
       aria-label="View frequently asked questions"
-      className="fixed bottom-[88px] right-6 z-[9999] flex items-center gap-3 bg-[#0D0D0D] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 hover:bg-[#C65D3B] transition-all duration-200"
+      className="fixed bottom-[108px] right-6 z-[9999] flex items-center gap-3 bg-[#0D0D0D] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 hover:bg-[#C65D3B] transition-all duration-200"
       style={{ padding: "12px 20px 12px 16px" }}
     >
       <span
