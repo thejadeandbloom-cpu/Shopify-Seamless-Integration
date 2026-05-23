@@ -427,58 +427,6 @@ function ProductCard({ product, index, onReviewClick, showIngredients }: { produ
   );
 }
 
-function PincodeChecker() {
-  const [pincode, setPincode] = useState("");
-  const [result, setResult] = useState<{ available: boolean; message: string } | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const check = async () => {
-    if (!/^\d{6}$/.test(pincode)) { setError("Enter a valid 6-digit pincode"); return; }
-    setLoading(true); setError(""); setResult(null);
-    try {
-      const apiBase = `${import.meta.env.BASE_URL ?? "/"}api`.replace(/\/+/g, "/");
-      const res = await fetch(`${apiBase}/pincode/check?pincode=${pincode}`);
-      const data = await res.json() as { available?: boolean; message?: string; error?: string };
-      if (data.error) { setError(data.error); } else { setResult({ available: !!data.available, message: data.message ?? "" }); }
-    } catch { setError("Could not check. Please try again."); }
-    finally { setLoading(false); }
-  };
-
-  return (
-    <div className="mt-8 mb-2 p-4 bg-white border border-[#EBEBEB] rounded-[6px] flex flex-col sm:flex-row sm:items-center gap-3">
-      <div className="flex-none">
-        <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[10px] tracking-[.15em] uppercase text-[#484848] font-semibold">Check Delivery</p>
-        <p className="text-[11px] text-[#969696] mt-[2px]">Enter your pincode to check availability</p>
-      </div>
-      <div className="flex-1 flex items-center gap-2">
-        <input
-          type="text"
-          inputMode="numeric"
-          maxLength={6}
-          placeholder="e.g. 110001"
-          value={pincode}
-          onChange={(e) => { setPincode(e.target.value.replace(/\D/g, "")); setResult(null); setError(""); }}
-          onKeyDown={(e) => e.key === "Enter" && check()}
-          className="flex-1 border border-[#EBEBEB] rounded-[3px] px-3 py-[8px] text-[13px] outline-none focus:border-[#C65D3B] transition-colors min-w-0"
-        />
-        <button
-          onClick={check}
-          disabled={loading || pincode.length < 6}
-          className="flex-none px-4 py-[8px] bg-[#0D0D0D] text-white text-[10px] tracking-[.12em] uppercase font-bold rounded-[3px] hover:bg-[#C65D3B] transition-colors disabled:opacity-40"
-        >
-          {loading ? "…" : "Check"}
-        </button>
-      </div>
-      {error && <p className="text-[11px] text-[#E05C2A] sm:flex-none">{error}</p>}
-      {result && (
-        <p className={`text-[11px] font-semibold sm:flex-none ${result.available ? "text-[#3A8C5C]" : "text-[#E05C2A]"}`}>
-          {result.available ? "✓ " : "✗ "}{result.message}
-        </p>
-      )}
-    </div>
-  );
-}
 
 function StatCounter({ target, label }: { target: string; label: string }) {
   const [displayed, setDisplayed] = useState("0");
@@ -928,7 +876,6 @@ export default function Home() {
               {showProductIngredients ? "Hide Ingredients" : "See Ingredients"}
             </button>
           </RevealDiv>
-          <PincodeChecker />
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 mt-6">
             {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} showIngredients={showProductIngredients} />)}
           </div>
