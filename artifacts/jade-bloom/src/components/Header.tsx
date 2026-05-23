@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
 export default function Header() {
@@ -37,17 +37,39 @@ export default function Header() {
   return (
     <>
       <header
-        className="sticky top-0 z-[200] bg-white/97 border-b border-[#EBEBEB] h-[80px] flex items-center justify-between px-16 transition-shadow duration-300"
+        className="sticky top-0 z-[200] bg-white/97 border-b border-[#EBEBEB] h-[100px] flex items-center px-4 md:px-16 transition-shadow duration-300 relative"
         style={{ boxShadow: scrolled ? "0 1px 16px rgba(0,0,0,.06)" : "none" }}
         data-testid="header"
       >
+        {/* ── MOBILE: cart on left ── */}
+        <button
+          onClick={() => setIsCartOpen(true)}
+          className="relative flex md:hidden items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors flex-shrink-0"
+          data-testid="cart-button-mobile"
+        >
+          <ShoppingBag size={19} strokeWidth={1.5} className="text-[#0D0D0D]" />
+          {totalQuantity > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
+              {totalQuantity}
+            </span>
+          )}
+        </button>
+
+        {/* ── LOGO ──
+            Mobile: absolutely centered in header
+            Desktop: static, left side of flex row            */}
         <img
           src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/Logo_Final_jpg.jpg?v=1775928161"
           alt="Jade and Bloom"
-          className="h-[75px] w-auto object-contain"
+          className="
+            absolute left-1/2 -translate-x-1/2
+            md:static md:left-auto md:translate-x-0
+            h-[94px] w-auto object-contain flex-shrink-0
+          "
         />
 
-        <nav className="hidden md:block">
+        {/* ── DESKTOP: centered nav ── */}
+        <nav className="hidden md:flex flex-1 justify-center">
           <ul className="flex gap-9 list-none">
             {navLinks.map((link) => (
               <li key={link.href}>
@@ -63,33 +85,34 @@ export default function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-4">
-          <button
-            onClick={() => setIsCartOpen(true)}
-            className="relative flex items-center justify-center w-9 h-9 rounded-sm hover:bg-[#F2EDE8] transition-colors"
-            data-testid="cart-button"
-          >
-            <ShoppingBag size={18} strokeWidth={1.5} className="text-[#0D0D0D]" />
-            {totalQuantity > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
-                {totalQuantity}
-              </span>
-            )}
-          </button>
+        {/* ── DESKTOP: cart on right ── */}
+        <button
+          onClick={() => setIsCartOpen(true)}
+          className="relative hidden md:flex items-center justify-center w-10 h-10 rounded-sm hover:bg-[#F2EDE8] transition-colors flex-shrink-0"
+          data-testid="cart-button"
+        >
+          <ShoppingBag size={19} strokeWidth={1.5} className="text-[#0D0D0D]" />
+          {totalQuantity > 0 && (
+            <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#C65D3B] text-white text-[9px] font-bold rounded-full flex items-center justify-center leading-none" data-testid="cart-count">
+              {totalQuantity}
+            </span>
+          )}
+        </button>
 
-          <button
-            onClick={() => setDrawerOpen(true)}
-            className="flex md:hidden flex-col gap-[5px] w-9 h-9 items-center justify-center rounded-sm hover:bg-[#F2EDE8] transition-colors"
-            data-testid="hamburger-button"
-          >
-            <span className="block w-5 h-[1.5px] bg-[#0D0D0D] rounded" />
-            <span className="block w-5 h-[1.5px] bg-[#0D0D0D] rounded" />
-            <span className="block w-5 h-[1.5px] bg-[#0D0D0D] rounded" />
-          </button>
-        </div>
+        {/* ── MOBILE: burger on extreme right ── */}
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="flex md:hidden flex-col gap-[5px] w-10 h-10 items-center justify-center rounded-sm hover:bg-[#F2EDE8] transition-colors ml-auto flex-shrink-0"
+          aria-label="Open menu"
+          data-testid="hamburger-button"
+        >
+          <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
+          <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
+          <span className="block w-[22px] h-[1.5px] bg-[#0D0D0D] rounded" />
+        </button>
       </header>
 
-      {/* Mobile Drawer */}
+      {/* ── Mobile / Tablet Drawer ── */}
       <div
         className={`fixed inset-0 z-[300] pointer-events-none transition-all ${drawerOpen ? "pointer-events-auto" : ""}`}
       >
