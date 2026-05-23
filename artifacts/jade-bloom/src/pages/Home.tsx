@@ -891,8 +891,7 @@ export default function Home() {
               <RevealDiv
                 key={`result-${i}`}
                 delay={i * 60}
-                className="flex-none w-[220px] md:w-[260px] rounded-[10px] overflow-hidden"
-                style={{ height: "320px" }}
+                className="flex-none w-[220px] md:w-[260px] h-[320px] rounded-[10px] overflow-hidden"
               >
                 <img
                   src={r.img}
@@ -918,8 +917,7 @@ export default function Home() {
               <RevealDiv
                 key={`wa-${i}`}
                 delay={i * 60}
-                className="flex-none w-[220px] md:w-[260px] rounded-[10px] overflow-hidden ring-1 ring-white/[0.07]"
-                style={{ height: "320px" }}
+                className="flex-none w-[220px] md:w-[260px] h-[320px] rounded-[10px] overflow-hidden ring-1 ring-white/[0.07]"
               >
                 <img
                   src={r.img}
@@ -1136,10 +1134,13 @@ export default function Home() {
             </div>
             <div>
               <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] tracking-[.15em] uppercase text-[#C65D3B] mb-3 font-semibold">Support</div>
-              <a href="mailto:hello@thejadeandbloom.com" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Contact Us</a>
+              <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] tracking-[.1em] uppercase text-white/30 mb-2">Email</p>
+              <a href="mailto:hello@thejadeandbloom.com" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">hello@thejadeandbloom.com</a>
+              <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] tracking-[.1em] uppercase text-white/30 mb-2">WhatsApp</p>
+              <a href="https://wa.me/918750557322" target="_blank" rel="noopener noreferrer" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">+91 87505 57322</a>
               <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Shipping Info</button>
               <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Damage Policy</button>
-              <a href="#" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Privacy Policy</a>
+              <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Privacy Policy</button>
             </div>
           </div>
           {/* 60-Day Refund Claim Form */}
