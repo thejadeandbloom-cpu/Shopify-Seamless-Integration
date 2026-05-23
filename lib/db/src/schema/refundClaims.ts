@@ -12,6 +12,7 @@ export const refundClaimsTable = pgTable("refund_claims", {
   purchaseDate: text("purchase_date").notNull(),
   reason: text("reason").notNull(),
   bankDetails: text("bank_details").notNull(),
+  usageLog: text("usage_log").notNull().default(""),
   status: text("status").notNull().default("pending"),
   refunded: boolean("refunded").notNull().default(false),
   notes: text("notes").notNull().default(""),
@@ -26,6 +27,7 @@ export const insertRefundClaimSchema = createInsertSchema(refundClaimsTable).omi
   refunded: true,
   notes: true,
   abuseFlag: true,
+  usageLog: true,
   createdAt: true,
   updatedAt: true,
 });

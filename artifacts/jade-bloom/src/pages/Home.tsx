@@ -371,6 +371,7 @@ function RefundClaimForm() {
     orderId: "",
     product: "",
     purchaseDate: "",
+    usageLog: "",
     reason: "",
     bankDetails: "",
   });
@@ -411,7 +412,7 @@ function RefundClaimForm() {
         <p className="text-[13px] text-white/60 max-w-[400px] mx-auto">
           Your refund claim has been submitted. We'll review it and respond to your email within 48 hours.
         </p>
-        <button onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", orderId: "", product: "", purchaseDate: "", reason: "", bankDetails: "" }); }} className="mt-5 text-[11px] text-[#C65D3B] hover:underline tracking-[.1em] uppercase">
+        <button onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", orderId: "", product: "", purchaseDate: "", usageLog: "", reason: "", bankDetails: "" }); }} className="mt-5 text-[11px] text-[#C65D3B] hover:underline tracking-[.1em] uppercase">
           Submit another claim
         </button>
       </div>
@@ -420,9 +421,9 @@ function RefundClaimForm() {
 
   return (
     <div id="refund-claim" className="border border-white/10 rounded-[8px] p-6 md:p-8 mb-10">
-      <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-2">60-Day Money-Back Guarantee</div>
+      <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-2">30-Day Results Guarantee</div>
       <h3 style={{ fontFamily: "'Cinzel', serif" }} className="text-[18px] text-white mb-1">Refund Claim Form</h3>
-      <p className="text-[12px] text-white/45 mb-6">For unopened and unused products within 60 days of purchase. We'll review your claim and respond within 48 hours.</p>
+      <p className="text-[12px] text-white/45 mb-6">Used the product consistently for 30 days and didn't see results? Submit your claim below. A daily usage log is required. Claims must be within 30 days of purchase.</p>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
@@ -466,13 +467,27 @@ function RefundClaimForm() {
         </div>
 
         <div className="md:col-span-2">
-          <label className={labelCls}>7. Reason for Return</label>
-          <textarea required rows={3} className={`${inputCls} resize-none`} placeholder="Why are you returning the product?"
+          <label className={labelCls}>7. Daily Usage Log</label>
+          <div className="border border-dashed border-white/15 rounded-[4px] px-4 py-4 mb-2 text-[12px] text-white/40 leading-[1.7]">
+            A daily log proves consistent 30-day use. Accepted formats:<br />
+            <span className="text-white/60">• Google Photos / Drive link with dated photos (Day 1 to Day 30)</span><br />
+            <span className="text-white/60">• Instagram story highlights or WhatsApp media album link</span><br />
+            <span className="text-white/60">• Written diary with dates (paste it below)</span>
+          </div>
+          <textarea required rows={4} className={`${inputCls} resize-none`}
+            placeholder="Paste your log link (Google Drive, Instagram, etc.) or describe your 30-day routine day by day..."
+            value={form.usageLog} onChange={(e) => setForm((f) => ({ ...f, usageLog: e.target.value }))} />
+        </div>
+
+        <div className="md:col-span-2">
+          <label className={labelCls}>8. What results did you expect vs. what you experienced?</label>
+          <textarea required rows={3} className={`${inputCls} resize-none`}
+            placeholder="e.g. Expected dark spots to fade, but no visible change after 30 days of consistent morning use..."
             value={form.reason} onChange={(e) => setForm((f) => ({ ...f, reason: e.target.value }))} />
         </div>
 
         <div className="md:col-span-2">
-          <label className={labelCls}>8. Bank / UPI Details for Refund</label>
+          <label className={labelCls}>9. Bank / UPI Details for Refund</label>
           <input required className={inputCls} placeholder="UPI ID or Bank Account + IFSC" value={form.bankDetails}
             onChange={(e) => setForm((f) => ({ ...f, bankDetails: e.target.value }))} />
         </div>
@@ -488,7 +503,7 @@ function RefundClaimForm() {
             className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] tracking-[.18em] uppercase font-bold rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-50">
             {submitting ? "Submitting..." : "Submit Refund Claim"}
           </button>
-          <p className="text-[10px] text-white/30 mt-2 text-center">Unopened/unused products only · One claim per customer per 12 months · Excludes bundle purchases</p>
+          <p className="text-[10px] text-white/30 mt-2 text-center">Must be within 30 days of purchase · Daily log required · One claim per 12 months · Excludes bundles</p>
         </div>
       </form>
     </div>

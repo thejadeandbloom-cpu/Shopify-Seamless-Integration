@@ -12,6 +12,7 @@ type Claim = {
   orderId: string;
   product: string;
   purchaseDate: string;
+  usageLog: string;
   reason: string;
   bankDetails: string;
   status: string;
@@ -248,8 +249,21 @@ export default function AdminRefunds() {
                   </div>
 
                   <div className="text-[12px]">
-                    <span className="text-[10px] uppercase tracking-[.1em] text-[#969696] block mb-[2px]">Reason</span>
+                    <span className="text-[10px] uppercase tracking-[.1em] text-[#969696] block mb-[2px]">Expected vs. Experienced</span>
                     <p className="text-[#484848] leading-[1.6]">{claim.reason}</p>
+                  </div>
+
+                  <div className="text-[12px]">
+                    <span className="text-[10px] uppercase tracking-[.1em] text-[#969696] block mb-[2px]">30-Day Usage Log</span>
+                    {claim.usageLog ? (
+                      claim.usageLog.startsWith("http") ? (
+                        <a href={claim.usageLog} target="_blank" rel="noopener noreferrer" className="text-[#C65D3B] underline break-all">{claim.usageLog}</a>
+                      ) : (
+                        <p className="text-[#484848] leading-[1.6] whitespace-pre-line">{claim.usageLog}</p>
+                      )
+                    ) : (
+                      <span className="text-[#969696] italic">Not provided</span>
+                    )}
                   </div>
 
                   <div className="text-[12px]">

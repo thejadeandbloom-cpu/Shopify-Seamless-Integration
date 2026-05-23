@@ -3,8 +3,8 @@ import { Plus, Minus } from "lucide-react";
 
 const FAQS = [
   {
-    q: "60-DAY MONEY-BACK GUARANTEE — How does it work?",
-    a: "If you're not satisfied, return your unopened and unused product within 60 days of purchase and we'll refund 100% of your purchase price. No questions asked.\n\nConditions:\n• Product must be unopened and unused\n• Proof of purchase required — your order confirmation email\n• One claim per customer per 12 months\n• Excludes bulk and bundle purchases\n\nTo submit a claim, use the Refund Claim form in the footer below.",
+    q: "30-DAY RESULTS GUARANTEE — How does it work?",
+    a: "If you use Jade and Bloom consistently for 30 days and don't see any visible improvement in your skin concern, we'll refund 100% of your purchase price.\n\nConditions:\n• Product must be used as directed (once or twice daily) for the full 30 days\n• Daily usage log required — a simple photo or written diary showing 30 days of consistent use\n• Claim must be submitted within 30 days of your purchase date\n• Proof of purchase required — your order confirmation email\n• One claim per customer per 12 months\n• Excludes bulk and bundle purchases\n\nTo submit a claim, use the Refund Claim form in the footer below.",
   },
   {
     q: "What skin types are your products suitable for?",
@@ -28,7 +28,7 @@ const FAQS = [
   },
   {
     q: "What is your return and refund policy?",
-    a: "We accept returns on unopened and unused products within 60 days of purchase for a full refund — no questions asked. Once a product has been opened or used, it cannot be returned as skincare is consumable by nature.\n\nFor damaged or incorrect orders, share photos via WhatsApp or Instagram and we'll resolve it immediately.\n\nTo initiate a return, use the Refund Claim form in the footer.",
+    a: "We offer a 30-day results guarantee — if you use the product consistently for 30 days and don't see visible improvement, submit a claim with your daily usage log and we'll refund 100%.\n\nClaims must be submitted within 30 days of purchase. A daily usage log (photo diary or written record) is required as proof of consistent use.\n\nFor damaged or incorrect orders, share photos via WhatsApp or Instagram and we'll resolve it immediately.",
   },
   {
     q: "How long does shipping take?",

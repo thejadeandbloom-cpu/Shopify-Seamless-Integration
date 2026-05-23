@@ -22,10 +22,19 @@ function adminAuth(req: Parameters<Parameters<typeof router.use>[0]>[0], res: Pa
 
 router.post("/refund-claims", async (req, res) => {
   try {
-    const { name, email, phone, orderId, product, purchaseDate, reason, bankDetails } = req.body as Record<string, string>;
+    const { name, email, phone, orderId, product, purchaseDate, usageLog, reason, bankDetails } = req.body as Record<string, string>;
 
-    if (!name || !email || !phone || !orderId || !product || !purchaseDate || !reason || !bankDetails) {
+    if (!name || !email || !phone || !orderId || !product || !purchaseDate || !usageLog || !reason || !bankDetails) {
       res.status(400).json({ error: "All fields are required" });
+      return;
+    }
+
+    // Validate claim is within 30 days of purchase date
+    const purchase = new Date(purchaseDate);
+    const today = new Date();
+    const daysSincePurchase = Math.floor((today.getTime() - purchase.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysSincePurchase > 30) {
+      res.status(400).json({ error: `Your purchase date was ${daysSincePurchase} days ago. Claims must be submitted within 30 days of purchase.` });
       return;
     }
 
@@ -56,6 +65,7 @@ router.post("/refund-claims", async (req, res) => {
       purchaseDate,
       reason: reason.trim(),
       bankDetails: bankDetails.trim(),
+      usageLog: usageLog.trim(),
       abuseFlag,
     }).returning();
 
