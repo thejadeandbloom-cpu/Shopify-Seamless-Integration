@@ -5,6 +5,7 @@ import { getProduct } from "@/lib/shopify";
 import ConcernBundleModal from "@/components/ConcernBundleModal";
 import FaqAccordion from "@/components/FaqAccordion";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import HowToUse from "@/components/HowToUse";
 
 const EASE = "cubic-bezier(.16,1,.3,1)";
 
@@ -572,6 +573,11 @@ export default function Home() {
             </div>
           </RevealDiv>
         </div>
+      </section>
+
+      {/* How to Use */}
+      <section id="routine" className="bg-[#F9F7F5] px-8 md:px-16 py-20">
+        <HowToUse />
       </section>
 
       {/* Real Results */}
