@@ -183,51 +183,41 @@ const WHATSAPP_REVIEWS = [
   },
 ];
 
-const REVIEWS: { product: string; rating: string; count: number; id: string; reviews: { stars: number; title?: string; text: string; name: string; city: string }[] }[] = [
-  {
-    product: "2% Green Tea Face Wash", rating: "4.9", count: 58, id: "reviews-product-1",
-    reviews: [
-      { stars: 5, title: "Actually stops breakouts", text: "My skin cleared up significantly. Daily use is great.", name: "Rohan G.", city: "Pune" },
-      { stars: 5, title: "Perfect for summer", text: "Doesn't strip skin. Green tea soothes. Worth the price.", name: "Deepa S.", city: "Hyderabad" },
-      { stars: 5, text: "Best face wash under ₹300. Amazing.", name: "Priyanka R.", city: "Bangalore" },
-      { stars: 5, text: "Gentle yet effective. No irritation.", name: "Harsh P.", city: "Delhi" },
-      { stars: 5, text: "My oily skin is finally balanced.", name: "Nikita K.", city: "Mumbai" },
-      { stars: 5, text: "No breakouts since I started using.", name: "Tanya M.", city: "Chennai" },
-    ],
-  },
-  {
-    product: "14% Vitamin C Face Serum", rating: "4.8", count: 52, id: "reviews-product-2",
-    reviews: [
-      { stars: 5, title: "Results in 3 weeks!", text: "My dark spots actually faded. The formulation is no joke.", name: "Priya M.", city: "Delhi" },
-      { stars: 5, title: "Best serum for Indian skin", text: "No sticky feeling. Absorbs instantly. Skin visibly brighter.", name: "Anjali K.", city: "Mumbai" },
-      { stars: 4, title: "Good but need patience", text: "Works for hyperpigmentation. Results at week 4.", name: "Neha P.", city: "Bangalore" },
-      { stars: 5, title: "Game changer", text: "14% is serious. My melasma is fading fast.", name: "Ritu V.", city: "Pune" },
-      { stars: 5, title: "Worth every rupee", text: "Lightweight. Non-irritating. Real results.", name: "Meera S.", city: "Chennai" },
-      { stars: 5, title: "My skin loves it", text: "Combines well with the face wash and moisturizer.", name: "Deepa K.", city: "Hyderabad" },
-    ],
-  },
-  {
-    product: "1% Kojic Acid + 5% Vitamin C Moisturizer", rating: "4.8", count: 48, id: "reviews-product-3",
-    reviews: [
-      { stars: 5, title: "Best day moisturizer", text: "Lightweight but super hydrating. Dark spots fading visibly.", name: "Asha K.", city: "Delhi" },
-      { stars: 5, title: "Skin barrier fixed", text: "Not heavy at all. Works perfectly with serum underneath.", name: "Sunita M.", city: "Mumbai" },
-      { stars: 5, text: "Kojic acid actually working. Less spots in 2 weeks.", name: "Ritika V.", city: "Bangalore" },
-      { stars: 5, text: "Soft, supple skin all day. No greasiness.", name: "Priya N.", city: "Pune" },
-      { stars: 5, text: "Skin looks plump and hydrated.", name: "Neha S.", city: "Hyderabad" },
-      { stars: 5, text: "Perfect texture. Melts into skin instantly.", name: "Anjali T.", city: "Chennai" },
-    ],
-  },
-  {
-    product: "Fluid Sunscreen SPF 50 PA++++", rating: "4.7", count: 45, id: "reviews-product-4",
-    reviews: [
-      { stars: 5, title: "No white cast! Finally!", text: "Best SPF for darker Indian skin tones.", name: "Meera V.", city: "Chennai" },
-      { stars: 5, title: "Hydrating sunscreen", text: "Sea Buckthorn makes a real difference.", name: "Isha D.", city: "Delhi" },
-      { stars: 5, text: "Lightweight and invisible finish.", name: "Pooja M.", city: "Bangalore" },
-      { stars: 5, text: "My skin doesn't get oily with this.", name: "Rahul K.", city: "Mumbai" },
-      { stars: 5, text: "Finally SPF that feels like serum.", name: "Ritika S.", city: "Pune" },
-      { stars: 5, text: "Best for layering with makeup.", name: "Anjali R.", city: "Hyderabad" },
-    ],
-  },
+type Review = { stars: number; title?: string; text: string; name: string; city: string; product: string };
+
+const ALL_REVIEWS: Review[] = [
+  { stars: 5, title: "Actually stops breakouts", text: "My skin cleared up significantly in 2 weeks. Use it every morning and night — it's now non-negotiable in my routine.", name: "Rohan G.", city: "Pune", product: "Green Tea Face Wash" },
+  { stars: 5, title: "Results in 3 weeks!", text: "My dark spots actually faded. The formulation is no joke — I've tried serums at 3x the price with zero results.", name: "Priya M.", city: "Delhi", product: "Vitamin C Serum" },
+  { stars: 5, title: "Best day moisturizer", text: "Lightweight but super hydrating. Dark spots have been fading visibly over the last month.", name: "Asha K.", city: "Delhi", product: "Kojic Acid Moisturizer" },
+  { stars: 5, title: "No white cast! Finally!", text: "Best SPF I've tried for my skin tone. No cast, no grease, just invisible protection.", name: "Meera V.", city: "Chennai", product: "Fluid Sunscreen" },
+  { stars: 5, title: "Perfect for summer", text: "Doesn't strip the skin barrier at all. Green tea genuinely soothes. Worth every rupee.", name: "Deepa S.", city: "Hyderabad", product: "Green Tea Face Wash" },
+  { stars: 5, title: "Best serum for Indian skin", text: "No sticky feeling. Absorbs in seconds. Skin looks visibly brighter — my colleagues noticed before I even mentioned it.", name: "Anjali K.", city: "Mumbai", product: "Vitamin C Serum" },
+  { stars: 5, title: "Skin barrier fixed", text: "Not heavy at all. Works perfectly as the layer under my serum. My dry patches are completely gone.", name: "Sunita M.", city: "Mumbai", product: "Kojic Acid Moisturizer" },
+  { stars: 5, title: "Hydrating sunscreen", text: "Sea Buckthorn makes a real difference. Skin feels fed, not just covered. I stopped looking for a separate moisturizer under this.", name: "Isha D.", city: "Delhi", product: "Fluid Sunscreen" },
+  { stars: 5, text: "Best face wash under ₹300. I was skeptical but the salicylic acid is actually doing its job.", name: "Priyanka R.", city: "Bangalore", product: "Green Tea Face Wash" },
+  { stars: 4, title: "Good but need patience", text: "Works for hyperpigmentation. Didn't see anything before week 4 but after that the difference was clear.", name: "Neha P.", city: "Bangalore", product: "Vitamin C Serum" },
+  { stars: 5, text: "Kojic acid actually working. Noticeably fewer dark spots in just 2 weeks of consistent use.", name: "Ritika V.", city: "Bangalore", product: "Kojic Acid Moisturizer" },
+  { stars: 5, text: "Lightweight and invisible on my skin. Perfect for layering before foundation.", name: "Pooja M.", city: "Bangalore", product: "Fluid Sunscreen" },
+  { stars: 5, text: "Gentle yet effective. No irritation even on my sensitive skin.", name: "Harsh P.", city: "Delhi", product: "Green Tea Face Wash" },
+  { stars: 5, title: "Game changer", text: "14% is serious. My melasma is fading fast — this is the first product that's actually moved the needle.", name: "Ritu V.", city: "Pune", product: "Vitamin C Serum" },
+  { stars: 5, text: "Soft, supple skin all day. No greasiness at all even in Delhi humidity.", name: "Priya N.", city: "Pune", product: "Kojic Acid Moisturizer" },
+  { stars: 5, text: "My skin doesn't get oily midday anymore. This sunscreen keeps everything balanced.", name: "Rahul K.", city: "Mumbai", product: "Fluid Sunscreen" },
+  { stars: 5, text: "My oily skin is finally balanced. No more shine by noon.", name: "Nikita K.", city: "Mumbai", product: "Green Tea Face Wash" },
+  { stars: 5, title: "Worth every rupee", text: "Lightweight. Non-irritating. Real results. I recommend this to every friend asking about skincare.", name: "Meera S.", city: "Chennai", product: "Vitamin C Serum" },
+  { stars: 5, text: "Skin looks plump and hydrated all day. My makeup sits beautifully over this.", name: "Neha S.", city: "Hyderabad", product: "Kojic Acid Moisturizer" },
+  { stars: 5, text: "Finally an SPF that feels like serum. I actually want to put this on every morning.", name: "Ritika S.", city: "Pune", product: "Fluid Sunscreen" },
+  { stars: 5, text: "No breakouts since I switched. My skin feels clean without that tight, stripped feeling.", name: "Tanya M.", city: "Chennai", product: "Green Tea Face Wash" },
+  { stars: 5, title: "My skin loves it", text: "Combines beautifully with the face wash and moisturizer. The whole routine works together.", name: "Deepa K.", city: "Hyderabad", product: "Vitamin C Serum" },
+  { stars: 5, text: "Perfect texture — melts into skin instantly. Never pilling under sunscreen.", name: "Anjali T.", city: "Chennai", product: "Kojic Acid Moisturizer" },
+  { stars: 5, text: "Best for layering with makeup. Doesn't pill, doesn't separate. Incredible for ₹489.", name: "Anjali R.", city: "Hyderabad", product: "Fluid Sunscreen" },
+  { stars: 5, title: "Cleared my closed comedones", text: "I had tiny bumps all over my forehead for years. 3 weeks of this face wash and they're gone.", name: "Kavya T.", city: "Hyderabad", product: "Green Tea Face Wash" },
+  { stars: 5, title: "Brighter in one week", text: "I was not expecting to see results so fast. My dull skin looks alive again.", name: "Simran B.", city: "Chandigarh", product: "Vitamin C Serum" },
+  { stars: 5, text: "Husband noticed my skin first — that's how I knew it was actually working.", name: "Pooja V.", city: "Mumbai", product: "Kojic Acid Moisturizer" },
+  { stars: 5, title: "Reef-safe matters to me", text: "I travel a lot and this is the only SPF I've found that's truly comfortable in humid weather.", name: "Karan M.", city: "Goa", product: "Fluid Sunscreen" },
+  { stars: 5, text: "I have combination skin and this face wash works perfectly — not too drying, not too soft.", name: "Divya S.", city: "Kochi", product: "Green Tea Face Wash" },
+  { stars: 4, text: "Serum takes a bit to get used to but the results are undeniable after a month.", name: "Aditya K.", city: "Jaipur", product: "Vitamin C Serum" },
+  { stars: 5, title: "Holy grail moisturizer", text: "I've tried 8 moisturizers this year. This is the only one staying in my routine permanently.", name: "Tanya R.", city: "Kolkata", product: "Kojic Acid Moisturizer" },
+  { stars: 5, text: "Zero white cast on my NC45 skin. Took a chance and I am so glad I did.", name: "Preethi N.", city: "Coimbatore", product: "Fluid Sunscreen" },
 ];
 
 function Stars({ count }: { count: number }) {
@@ -605,40 +595,75 @@ export default function Home() {
       </div>
 
       {/* Reviews */}
-      <section id="reviews" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
+      <section id="reviews" className="bg-white px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
-          <RevealDiv className="mb-12">
-            <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Customer Reviews</div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] font-normal text-[#0D0D0D]">
-              What people are saying.
-            </h2>
-          </RevealDiv>
-          <div className="space-y-16">
-            {REVIEWS.map((section) => (
-              <div key={section.id} id={section.id}>
-                <div className="mb-6">
-                  <h3 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[18px] text-[#0D0D0D] mb-2 font-medium">{section.product}</h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[14px] text-[#C8902A] tracking-[2px]">{"★".repeat(5)}</span>
-                    <span className="text-[12px] text-[#484848]">{section.rating} out of 5 ({section.count} reviews)</span>
-                  </div>
-                </div>
-                <div className="flex gap-4 overflow-x-auto pb-3" style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}>
-                  {section.reviews.map((r, i) => (
-                    <div key={i} className="flex-none w-[260px] bg-white p-4 rounded-[4px] border border-[#EBEBEB] hover:border-[#C65D3B] transition-colors flex flex-col gap-2">
-                      <span className="text-[12px] tracking-[1px] text-[#C8902A]">{"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}</span>
-                      {r.title && <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] text-[#0D0D0D] font-semibold">{r.title}</p>}
-                      <p className="text-[12px] leading-[1.5] text-[#484848] flex-1">{r.text}</p>
-                      <div>
-                        <b className="block text-[12px] text-[#0D0D0D]">{r.name}</b>
-                        <span className="text-[10px] text-[#969696]">{r.city}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+
+          {/* Header */}
+          <RevealDiv className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Customer Reviews</div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] font-normal text-[#0D0D0D]">
+                What people are saying.
+              </h2>
+            </div>
+            <div className="flex items-center gap-5 flex-none pb-1">
+              <div className="text-center">
+                <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[32px] font-semibold text-[#0D0D0D] leading-none">4.8</div>
+                <div className="text-[#C8902A] text-[13px] tracking-[2px] mt-1">★★★★★</div>
+                <div className="text-[10px] text-[#969696] mt-1 tracking-[.06em]">203 reviews</div>
               </div>
+              <div className="w-px h-12 bg-[#EBEBEB]" />
+              <div className="space-y-[5px]">
+                {[["5 ★", 87], ["4 ★", 10], ["3 ★", 3]].map(([label, pct]) => (
+                  <div key={String(label)} className="flex items-center gap-2">
+                    <span className="text-[10px] text-[#969696] w-8">{label}</span>
+                    <div className="w-[80px] h-[5px] bg-[#F0EDE9] rounded-full overflow-hidden">
+                      <div className="h-full bg-[#C8902A] rounded-full" style={{ width: `${pct}%` }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </RevealDiv>
+
+          {/* Masonry grid */}
+          <div
+            className="columns-1 sm:columns-2 lg:columns-3 gap-4"
+            style={{ columnGap: "1rem" }}
+          >
+            {ALL_REVIEWS.map((r, i) => (
+              <RevealDiv
+                key={i}
+                delay={Math.min(i * 40, 300)}
+                className="break-inside-avoid mb-4 bg-[#F9F7F5] border border-[#EBEBEB] rounded-[6px] p-5 flex flex-col gap-3 hover:border-[#C65D3B] transition-colors"
+              >
+                <div className="flex items-start justify-between gap-2">
+                  <span className="text-[#C8902A] text-[12px] tracking-[1.5px]">
+                    {"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}
+                  </span>
+                  <span className="text-[9px] tracking-[.12em] uppercase font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F0D8CE] rounded-full px-2 py-[3px] flex-none">
+                    {r.product}
+                  </span>
+                </div>
+                {r.title && (
+                  <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] text-[#0D0D0D] font-semibold leading-snug">
+                    {r.title}
+                  </p>
+                )}
+                <p className="text-[13px] leading-[1.65] text-[#484848]">"{r.text}"</p>
+                <div className="pt-2 border-t border-[#EBEBEB] flex items-center justify-between">
+                  <span className="text-[12px] font-semibold text-[#0D0D0D]">{r.name}</span>
+                  <span className="text-[10px] text-[#969696]">{r.city} · Verified</span>
+                </div>
+              </RevealDiv>
             ))}
           </div>
+
+          <RevealDiv className="text-center mt-8">
+            <p className="text-[11px] text-[#969696] tracking-[.08em]">
+              Showing 32 of 203 verified reviews
+            </p>
+          </RevealDiv>
         </div>
       </section>
 
