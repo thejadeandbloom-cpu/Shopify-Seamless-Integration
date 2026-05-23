@@ -41,17 +41,11 @@ export default function Header() {
         style={{ boxShadow: scrolled ? "0 1px 16px rgba(0,0,0,.06)" : "none" }}
         data-testid="header"
       >
-        <div className="flex flex-col items-center gap-[3px]">
-          <span
-            className="text-[14px] tracking-[.22em] text-[#0D0D0D] leading-none uppercase"
-            style={{ fontFamily: "'Cinzel', serif" }}
-          >
-            Jade and Bloom
-          </span>
-          <span className="text-[7.5px] tracking-[.3em] uppercase text-[#C65D3B] font-medium">
-            Beauty, Bold and Beyond
-          </span>
-        </div>
+        <img
+          src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/Logo_Final_jpg.jpg?v=1775928161"
+          alt="Jade and Bloom"
+          className="h-10 w-auto object-contain"
+        />
 
         <nav className="hidden md:block">
           <ul className="flex gap-9 list-none">
