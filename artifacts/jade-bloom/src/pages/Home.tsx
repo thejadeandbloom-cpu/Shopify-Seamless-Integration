@@ -104,7 +104,7 @@ const PRODUCTS = [
     badge: "Reef-safe & sweat-proof",
     stat: "96% reported zero white cast",
     stock: 6,
-    name: "Fluid Sunscreen SPF 50",
+    name: "Fluid Sunscreen SPF 50 PA++++",
     desc: "Invisible. Weightless. Won't clog pores. Reef-safe.",
     price: "489",
     was: "629",
@@ -165,7 +165,7 @@ const FORMULATION = [
     benefit: "Reduces discoloration + firms + nourishes",
   },
   {
-    name: "Fluid Sunscreen SPF 50",
+    name: "Fluid Sunscreen SPF 50 PA++++",
     subtitle: "Protector + Antioxidant",
     ingredients: [{ n: "Zinc Oxide", v: "8%" }, { n: "Titanium Dioxide", v: "6%" }, { n: "Avobenzone", v: "5%" }, { n: "Sea Buckthorn", v: "0.8%" }],
     benefit: "Broad-spectrum UV + antioxidant protection",
