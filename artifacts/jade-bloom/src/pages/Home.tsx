@@ -396,44 +396,89 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Hero */}
+      {/* Hero — split layout: headline left, products right */}
       <section
-        className="relative w-full flex items-center justify-center text-center text-white overflow-hidden"
-        style={{ height: "clamp(400px, 80vh, 600px)" }}
+        className="w-full overflow-hidden"
+        style={{ background: "linear-gradient(135deg, #FAF8F4 0%, #F4EDE5 100%)" }}
         data-testid="hero"
       >
-        <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('https://cdn.shopify.com/s/files/1/0971/5757/9042/files/1000078751.jpg?v=1779352768')" }}
-        />
-        <div className="absolute inset-0 z-[1]" style={{ background: "linear-gradient(135deg, rgba(14,8,4,.42) 0%, rgba(20,10,5,.26) 100%)" }} />
-        <div className="relative z-[2] max-w-[720px] px-8">
-          <p className="text-[11px] tracking-[.25em] uppercase text-white/80 font-semibold mb-5">50+ women tested · 4 weeks to visible results</p>
-          <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(36px,5vw,64px)] leading-[1.2] mb-5 font-normal">
-            Your Dark Spots Don't Stand <em className="italic" style={{ color: "#FFE4B5" }}>a Chance.</em>
-          </h1>
-          <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(14px,2.5vw,18px)] leading-[1.6] text-white/85 mb-4">
-            14% Vitamin C melts into skin. Kojic Acid blocks melanin. You'll see the difference by week 4.
-          </p>
-          <p className="text-[11px] tracking-[.08em] text-white/90 mb-8 font-medium">
-            Ships within 24 hours · Tracking included · Shipping included in price
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <button
-              onClick={() => scrollTo("products")}
-              className="bg-white text-[#0D0D0D] px-8 py-[14px] rounded-[2px] text-[11px] font-semibold tracking-[.14em] uppercase hover:bg-[#F2EDE8] transition-colors"
-              data-testid="hero-cta-primary"
+        <div className="max-w-[1200px] mx-auto px-5 md:px-12 flex flex-col md:flex-row items-center gap-6 md:gap-16 pt-10 pb-8 md:py-20">
+
+          {/* Left — text */}
+          <div className="flex-1 flex flex-col items-center md:items-start text-center md:text-left order-1 md:order-1">
+            {/* Social proof */}
+            <div className="flex items-center gap-[6px] mb-4">
+              <span className="text-[#C8902A] text-[12px] tracking-[2px]">★★★★★</span>
+              <span className="text-[10px] tracking-[.18em] uppercase text-[#696969] font-semibold">50+ women tested</span>
+            </div>
+
+            <h1
+              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-[clamp(34px,6vw,68px)] leading-[1.15] font-normal text-[#0D0D0D] mb-4"
             >
-              Start Your Routine
-            </button>
-            <button
-              onClick={() => scrollTo("concerns")}
-              className="bg-transparent text-white border border-white px-8 py-[14px] rounded-[2px] text-[11px] font-semibold tracking-[.14em] uppercase hover:bg-white hover:text-[#0D0D0D] transition-all"
-              data-testid="hero-cta-secondary"
+              Your Dark Spots<br />
+              Don't Stand{" "}
+              <em className="italic" style={{ color: "#C65D3B" }}>a Chance.</em>
+            </h1>
+
+            <p
+              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              className="text-[14px] md:text-[16px] leading-[1.65] text-[#555] mb-6 max-w-[420px]"
             >
-              Shop by Concern
-            </button>
+              14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or your money back.
+            </p>
+
+            <div className="flex gap-3 flex-wrap justify-center md:justify-start mb-5">
+              <button
+                onClick={() => scrollTo("products")}
+                className="bg-[#0D0D0D] text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-[#C65D3B] transition-colors duration-200"
+                data-testid="hero-cta-primary"
+              >
+                Start Your Routine
+              </button>
+              <button
+                onClick={() => scrollTo("concerns")}
+                className="border border-[#0D0D0D]/40 text-[#0D0D0D] px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:border-[#0D0D0D] transition-colors duration-200"
+                data-testid="hero-cta-secondary"
+              >
+                Shop by Concern
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-x-5 gap-y-1 justify-center md:justify-start">
+              {["Free shipping", "Ships in 24 hrs", "COD available", "Easy returns"].map((t) => (
+                <span key={t} className="text-[10px] text-[#888] font-medium flex items-center gap-1">
+                  <span className="text-[#C65D3B] font-bold">✓</span> {t}
+                </span>
+              ))}
+            </div>
           </div>
+
+          {/* Right — 2×2 product grid */}
+          <div className="flex-shrink-0 w-full md:w-auto order-2 md:order-2">
+            <div className="grid grid-cols-2 gap-3 max-w-[400px] mx-auto md:mx-0 md:w-[380px]">
+              {PRODUCTS.map((p) => (
+                <button
+                  key={p.handle}
+                  onClick={() => scrollTo("products")}
+                  className="rounded-[10px] overflow-hidden flex flex-col items-center justify-center relative group"
+                  style={{ background: p.imgBg, aspectRatio: "3/4" }}
+                >
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/30 to-transparent p-2">
+                    <p className="text-white text-[9px] font-semibold tracking-[.06em] text-center leading-tight drop-shadow">
+                      {p.name}
+                    </p>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
 
