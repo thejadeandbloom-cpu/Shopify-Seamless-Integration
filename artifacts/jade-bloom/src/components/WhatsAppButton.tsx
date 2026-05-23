@@ -1,23 +1,13 @@
-const WA_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined;
-const WA_MESSAGE = encodeURIComponent(
-  "Hi! I'd like to know more about Jade and Bloom skincare products."
-);
-
 export default function WhatsAppButton() {
-  if (!WA_NUMBER) return null;
-
-  const href = `https://wa.me/${WA_NUMBER}?text=${WA_MESSAGE}`;
-
   return (
     <a
-      href={href}
+      href="/api/whatsapp"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 group"
+      className="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
       style={{ padding: "12px 20px 12px 16px" }}
     >
-      {/* WhatsApp icon */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="22"
