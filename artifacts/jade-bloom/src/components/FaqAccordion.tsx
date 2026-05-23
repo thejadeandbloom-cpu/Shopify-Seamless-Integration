@@ -76,7 +76,7 @@ export default function FaqAccordion() {
 
           <div
             className="overflow-hidden transition-all duration-300"
-            style={{ maxHeight: open === i ? 800 : 0, opacity: open === i ? 1 : 0 }}
+            style={{ maxHeight: open === i ? 2000 : 0, opacity: open === i ? 1 : 0 }}
           >
             <div
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}

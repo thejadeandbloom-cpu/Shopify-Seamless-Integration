@@ -1128,8 +1128,8 @@ export default function Home() {
 
       {/* Sticky Bar */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-[150] bg-[#0D0D0D] text-white px-5 py-3 flex items-center justify-between text-[13px] transition-transform duration-300"
-        style={{ transform: stickyBarVisible ? "translateY(0)" : "translateY(100%)", transitionTimingFunction: EASE }}
+        className="fixed bottom-0 left-0 right-0 z-[150] bg-[#0D0D0D] text-white px-5 flex items-center justify-between text-[13px] transition-transform duration-300"
+        style={{ transform: stickyBarVisible ? "translateY(0)" : "translateY(100%)", transitionTimingFunction: EASE, paddingTop: "12px", paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
         data-testid="sticky-shop-bar"
       >
         <span><strong>4 products.</strong> Built for Indian skin.</span>
