@@ -464,28 +464,46 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right — 2×2 product grid */}
+          {/* Right — asymmetric editorial layout: hero product large, 3 small */}
           <div className="flex-shrink-0 w-full md:w-auto order-2 md:order-2">
-            <div className="grid grid-cols-2 gap-3 max-w-[400px] mx-auto md:mx-0 md:w-[380px]">
-              {PRODUCTS.map((p) => (
-                <button
-                  key={p.handle}
-                  onClick={() => scrollTo("products")}
-                  className="rounded-[10px] overflow-hidden flex flex-col items-center justify-center relative group"
-                  style={{ background: p.imgBg, aspectRatio: "3/4" }}
-                >
-                  <img
-                    src={p.img}
-                    alt={p.name}
-                    className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/30 to-transparent p-2">
-                    <p className="text-white text-[9px] font-semibold tracking-[.06em] text-center leading-tight drop-shadow">
-                      {p.name}
-                    </p>
-                  </div>
-                </button>
-              ))}
+            <div className="flex gap-2 max-w-[400px] mx-auto md:mx-0 md:w-[380px]" style={{ height: "clamp(280px, 70vw, 420px)" }}>
+
+              {/* Featured product — serum (index 1) */}
+              <button
+                onClick={() => scrollTo("products")}
+                className="flex-[2] rounded-[12px] overflow-hidden relative group"
+                style={{ background: PRODUCTS[1].imgBg }}
+              >
+                <img
+                  src={PRODUCTS[1].img}
+                  alt={PRODUCTS[1].name}
+                  className="w-full h-full object-contain p-4 group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/40 to-transparent pt-6 pb-3 px-3">
+                  <div className="text-[8px] text-white/70 tracking-[.1em] uppercase mb-[2px]">Dark Spots · Dullness</div>
+                  <p className="text-white text-[11px] font-semibold leading-tight">14% Vitamin C Serum</p>
+                  <p className="text-white/80 text-[9px] mt-[2px]">₹618</p>
+                </div>
+              </button>
+
+              {/* Column of 3 smaller products */}
+              <div className="flex-1 flex flex-col gap-2">
+                {[PRODUCTS[0], PRODUCTS[2], PRODUCTS[3]].map((p) => (
+                  <button
+                    key={p.handle}
+                    onClick={() => scrollTo("products")}
+                    className="flex-1 rounded-[10px] overflow-hidden relative group"
+                    style={{ background: p.imgBg }}
+                  >
+                    <img
+                      src={p.img}
+                      alt={p.name}
+                      className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </button>
+                ))}
+              </div>
+
             </div>
           </div>
 
