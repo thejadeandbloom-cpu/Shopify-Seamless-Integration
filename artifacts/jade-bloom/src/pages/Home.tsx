@@ -609,6 +609,16 @@ export default function Home() {
         <div className="max-w-[1200px] mx-auto">
 
           {/* Header */}
+          {(() => {
+            const RATING_STATS: Record<string, { rating: string; count: number; bars: [string, number][] }> = {
+              "All":                    { rating: "4.8", count: 203, bars: [["5 ★", 87], ["4 ★", 10], ["3 ★", 3]] },
+              "Green Tea Face Wash":    { rating: "4.9", count: 58,  bars: [["5 ★", 93], ["4 ★", 5],  ["3 ★", 2]] },
+              "Vitamin C Serum":        { rating: "4.8", count: 52,  bars: [["5 ★", 87], ["4 ★", 10], ["3 ★", 3]] },
+              "Kojic Acid Moisturizer": { rating: "4.8", count: 48,  bars: [["5 ★", 85], ["4 ★", 12], ["3 ★", 3]] },
+              "Fluid Sunscreen":        { rating: "4.7", count: 45,  bars: [["5 ★", 80], ["4 ★", 15], ["3 ★", 5]] },
+            };
+            const stats = RATING_STATS[reviewFilter] ?? RATING_STATS["All"];
+            return (
           <RevealDiv className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
               <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Customer Reviews</div>
@@ -618,23 +628,25 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-5 flex-none pb-1">
               <div className="text-center">
-                <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[32px] font-semibold text-[#0D0D0D] leading-none">4.8</div>
+                <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[32px] font-semibold text-[#0D0D0D] leading-none">{stats.rating}</div>
                 <div className="text-[#C8902A] text-[13px] tracking-[2px] mt-1">★★★★★</div>
-                <div className="text-[10px] text-[#969696] mt-1 tracking-[.06em]">203 reviews</div>
+                <div className="text-[10px] text-[#969696] mt-1 tracking-[.06em]">{stats.count} reviews</div>
               </div>
               <div className="w-px h-12 bg-[#EBEBEB]" />
               <div className="space-y-[5px]">
-                {[["5 ★", 87], ["4 ★", 10], ["3 ★", 3]].map(([label, pct]) => (
+                {stats.bars.map(([label, pct]) => (
                   <div key={String(label)} className="flex items-center gap-2">
                     <span className="text-[10px] text-[#969696] w-8">{label}</span>
                     <div className="w-[80px] h-[5px] bg-[#F0EDE9] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#C8902A] rounded-full" style={{ width: `${pct}%` }} />
+                      <div className="h-full bg-[#C8902A] rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
                     </div>
                   </div>
                 ))}
               </div>
             </div>
           </RevealDiv>
+            );
+          })()}
 
           {/* Filter tabs */}
           <div className="flex flex-wrap gap-2 mb-8">
