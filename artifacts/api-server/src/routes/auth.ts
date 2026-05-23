@@ -3,6 +3,17 @@ import { db, otpCodesTable } from "@workspace/db";
 import { eq, and, gt } from "drizzle-orm";
 import { Resend } from "resend";
 
+async function callMakeWebhook(phone: string, code: string): Promise<void> {
+  const url = process.env.MAKE_WHATSAPP_WEBHOOK_URL;
+  if (!url) throw new Error("MAKE_WHATSAPP_WEBHOOK_URL is not set");
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ phone, code }),
+  });
+  if (!res.ok) throw new Error(`Make.com webhook returned ${res.status}`);
+}
+
 const router = Router();
 
 function getResend() {
@@ -98,6 +109,75 @@ router.post("/auth/verify-otp", async (req, res) => {
     res.json({ success: true, token, email: normalised });
   } catch (e) {
     req.log.error(e, "Failed to verify OTP");
+    res.status(500).json({ error: "Verification failed. Please try again." });
+  }
+});
+
+// POST /api/auth/send-otp-whatsapp  — phone-based OTP via Make.com → WhatsApp
+router.post("/auth/send-otp-whatsapp", async (req, res) => {
+  const { phone } = req.body as { phone?: string };
+  if (!phone || typeof phone !== "string") {
+    res.status(400).json({ error: "Valid phone number required" });
+    return;
+  }
+  // Normalise: keep digits only, ensure 10-digit Indian number
+  const digits = phone.replace(/\D/g, "");
+  if (digits.length < 10) {
+    res.status(400).json({ error: "Please enter a valid 10-digit mobile number" });
+    return;
+  }
+  // Use last 10 digits, prefix with country code for storage key
+  const normalised = `phone:91${digits.slice(-10)}`;
+  const code = generateOtp();
+  const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+  try {
+    await db
+      .update(otpCodesTable)
+      .set({ used: true })
+      .where(and(eq(otpCodesTable.email, normalised), eq(otpCodesTable.used, false)));
+
+    await db.insert(otpCodesTable).values({ email: normalised, code, expiresAt });
+    await callMakeWebhook(`91${digits.slice(-10)}`, code);
+    res.json({ success: true });
+  } catch (e) {
+    req.log.error(e, "Failed to send WhatsApp OTP");
+    res.status(500).json({ error: "Failed to send WhatsApp message. Please try again." });
+  }
+});
+
+// POST /api/auth/verify-otp-phone  — verify OTP sent to phone
+router.post("/auth/verify-otp-phone", async (req, res) => {
+  const { phone, code } = req.body as { phone?: string; code?: string };
+  if (!phone || !code) { res.status(400).json({ error: "phone and code required" }); return; }
+  const digits = phone.replace(/\D/g, "");
+  const normalised = `phone:91${digits.slice(-10)}`;
+
+  try {
+    const now = new Date();
+    const rows = await db
+      .select()
+      .from(otpCodesTable)
+      .where(
+        and(
+          eq(otpCodesTable.email, normalised),
+          eq(otpCodesTable.code, code.trim()),
+          eq(otpCodesTable.used, false),
+          gt(otpCodesTable.expiresAt, now),
+        )
+      )
+      .limit(1);
+
+    if (!rows.length) {
+      res.status(401).json({ error: "Invalid or expired code. Please request a new one." });
+      return;
+    }
+
+    await db.update(otpCodesTable).set({ used: true }).where(eq(otpCodesTable.id, rows[0].id));
+    const token = Buffer.from(`${normalised}:${Date.now()}`).toString("base64");
+    res.json({ success: true, token, email: normalised });
+  } catch (e) {
+    req.log.error(e, "Failed to verify phone OTP");
     res.status(500).json({ error: "Verification failed. Please try again." });
   }
 });
