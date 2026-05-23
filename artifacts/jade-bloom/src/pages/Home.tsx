@@ -61,6 +61,13 @@ const PRODUCTS = [
     reviewFilter: "Green Tea Face Wash",
     imgBg: "#E3F0E8",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775",
+    ingredients: [
+      { n: "Green Tea Extract", v: "2.0%" },
+      { n: "Salicylic Acid", v: "1.5%" },
+      { n: "Aloe Vera", v: "2.0%" },
+      { n: "Niacinamide", v: "1%" },
+      { n: "Glycerin", v: "—" },
+    ],
   },
   {
     handle: "vitamin-c-serum",
@@ -79,6 +86,13 @@ const PRODUCTS = [
     reviewFilter: "Vitamin C Serum",
     imgBg: "#FEF0DE",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760",
+    ingredients: [
+      { n: "Vitamin C (3-O-Ethyl)", v: "14%" },
+      { n: "Hyaluronic Acid", v: "5%" },
+      { n: "Niacinamide", v: "2%" },
+      { n: "Panthenol (B5)", v: "—" },
+      { n: "Ferulic Acid", v: "—" },
+    ],
   },
   {
     handle: "kojic-acid-moisturizer",
@@ -97,6 +111,13 @@ const PRODUCTS = [
     reviewFilter: "Kojic Acid Moisturizer",
     imgBg: "#E2ECF8",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826",
+    ingredients: [
+      { n: "Kojic Acid", v: "1%" },
+      { n: "Vitamin C", v: "5%" },
+      { n: "Hyaluronic Acid", v: "2%" },
+      { n: "Niacinamide", v: "5%" },
+      { n: "Vitamin E", v: "0.5%" },
+    ],
   },
   {
     handle: "fluid-sunscreen",
@@ -115,6 +136,13 @@ const PRODUCTS = [
     reviewFilter: "Fluid Sunscreen",
     imgBg: "#FBF5DF",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858",
+    ingredients: [
+      { n: "Zinc Oxide", v: "8%" },
+      { n: "Titanium Dioxide", v: "6%" },
+      { n: "Avobenzone", v: "5%" },
+      { n: "Sea Buckthorn Oil", v: "0.8%" },
+      { n: "Niacinamide", v: "—" },
+    ],
   },
 ];
 
@@ -206,6 +234,17 @@ const WHATSAPP_REVIEWS = [
   },
 ];
 
+function getAvatarColor(name: string): string {
+  const palette = ["#C65D3B", "#2A6BBF", "#3A8C5C", "#8B4A9C", "#C8902A", "#1A7A7A", "#B84545", "#5C6BC0"];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return palette[Math.abs(hash) % palette.length];
+}
+
+function getInitials(name: string): string {
+  return name.split(" ").filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join("");
+}
+
 type Review = { stars: number; title?: string; text: string; name: string; city: string; product: string };
 
 const ALL_REVIEWS: Review[] = [
@@ -255,6 +294,7 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
   const { addToCart, isLoading } = useCart();
   const [variantId, setVariantId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+  const [showIngredients, setShowIngredients] = useState(false);
 
   const handleAddToCart = async () => {
     setAdding(true);
@@ -343,8 +383,90 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
         >
           {adding ? "Adding..." : "Add to Cart"}
         </button>
+
+        {/* Trust badges */}
+        <div className="flex flex-wrap gap-[4px] mt-2">
+          {["🇮🇳 Made in India", "🐰 Cruelty-Free", "✓ Paraben & Sulphate Free", "⚗ pH Balanced"].map((b) => (
+            <span key={b} className="text-[8px] text-[#484848] bg-[#F4F4F4] border border-[#E5E5E5] rounded-full px-[6px] py-[2px] leading-snug">
+              {b}
+            </span>
+          ))}
+        </div>
+
+        {/* Key Ingredients toggle */}
+        <button
+          onClick={() => setShowIngredients((v) => !v)}
+          className="mt-2 w-full flex items-center justify-between text-[10px] font-semibold text-[#484848] hover:text-[#C65D3B] transition-colors py-[5px] border-t border-[#EBEBEB]"
+        >
+          <span>Key Ingredients</span>
+          <span className="text-[12px] leading-none" style={{ transform: showIngredients ? "rotate(180deg)" : "none", display: "inline-block", transition: "transform 0.2s" }}>▾</span>
+        </button>
+        {showIngredients && (
+          <div className="pb-1">
+            {product.ingredients.map(({ n, v }) => (
+              <div key={n} className="flex items-center justify-between py-[3px] border-b border-[#F4F4F4] last:border-0">
+                <span className="text-[10px] text-[#484848]">{n}</span>
+                <span className="text-[10px] font-semibold text-[#C65D3B]">{v}</span>
+              </div>
+            ))}
+            <p className="text-[9px] text-[#ABABAB] mt-[5px]">Full INCI list available on request</p>
+          </div>
+        )}
       </div>
     </RevealDiv>
+  );
+}
+
+function PincodeChecker() {
+  const [pincode, setPincode] = useState("");
+  const [result, setResult] = useState<{ available: boolean; message: string } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const check = async () => {
+    if (!/^\d{6}$/.test(pincode)) { setError("Enter a valid 6-digit pincode"); return; }
+    setLoading(true); setError(""); setResult(null);
+    try {
+      const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+      const res = await fetch(`${base}/api/pincode/check?pincode=${pincode}`);
+      const data = await res.json() as { available?: boolean; message?: string; error?: string };
+      if (data.error) { setError(data.error); } else { setResult({ available: !!data.available, message: data.message ?? "" }); }
+    } catch { setError("Could not check. Please try again."); }
+    finally { setLoading(false); }
+  };
+
+  return (
+    <div className="mt-8 mb-2 p-4 bg-white border border-[#EBEBEB] rounded-[6px] flex flex-col sm:flex-row sm:items-center gap-3">
+      <div className="flex-none">
+        <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[10px] tracking-[.15em] uppercase text-[#484848] font-semibold">Check Delivery</p>
+        <p className="text-[11px] text-[#969696] mt-[2px]">Enter your pincode to check availability</p>
+      </div>
+      <div className="flex-1 flex items-center gap-2">
+        <input
+          type="text"
+          inputMode="numeric"
+          maxLength={6}
+          placeholder="e.g. 110001"
+          value={pincode}
+          onChange={(e) => { setPincode(e.target.value.replace(/\D/g, "")); setResult(null); setError(""); }}
+          onKeyDown={(e) => e.key === "Enter" && check()}
+          className="flex-1 border border-[#EBEBEB] rounded-[3px] px-3 py-[8px] text-[13px] outline-none focus:border-[#C65D3B] transition-colors min-w-0"
+        />
+        <button
+          onClick={check}
+          disabled={loading || pincode.length < 6}
+          className="flex-none px-4 py-[8px] bg-[#0D0D0D] text-white text-[10px] tracking-[.12em] uppercase font-bold rounded-[3px] hover:bg-[#C65D3B] transition-colors disabled:opacity-40"
+        >
+          {loading ? "…" : "Check"}
+        </button>
+      </div>
+      {error && <p className="text-[11px] text-[#E05C2A] sm:flex-none">{error}</p>}
+      {result && (
+        <p className={`text-[11px] font-semibold sm:flex-none ${result.available ? "text-[#3A8C5C]" : "text-[#E05C2A]"}`}>
+          {result.available ? "✓ " : "✗ "}{result.message}
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -786,7 +908,8 @@ export default function Home() {
               Formulated together. Used in order. Designed for Indian skin.
             </p>
           </RevealDiv>
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+          <PincodeChecker />
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 mt-6">
             {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} />)}
           </div>
         </div>
@@ -1062,9 +1185,17 @@ export default function Home() {
                   </p>
                 )}
                 <p className="text-[13px] leading-[1.65] text-[#484848]">"{r.text}"</p>
-                <div className="pt-2 border-t border-[#EBEBEB] flex items-center justify-between">
-                  <span className="text-[12px] font-semibold text-[#0D0D0D]">{r.name}</span>
-                  <span className="text-[10px] text-[#969696]">{r.city} · Verified</span>
+                <div className="pt-2 border-t border-[#EBEBEB] flex items-center gap-2">
+                  <div
+                    className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[9px] font-bold flex-none"
+                    style={{ background: getAvatarColor(r.name) }}
+                  >
+                    {getInitials(r.name)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[12px] font-semibold text-[#0D0D0D] block leading-none">{r.name}</span>
+                    <span className="text-[10px] text-[#969696]">{r.city} · Verified</span>
+                  </div>
                 </div>
               </RevealDiv>
             ))}
