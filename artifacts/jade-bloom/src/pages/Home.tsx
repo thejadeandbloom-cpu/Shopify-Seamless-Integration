@@ -359,8 +359,7 @@ function StatCounter({ target, label }: { target: string; label: string }) {
 }
 
 const HERO_VIDEOS = [
-  "https://cdn.shopify.com/videos/c/o/v/26704123898c46a39606a0d21192a096.mp4",
-  "https://cdn.shopify.com/videos/c/o/v/f0c39613219c4f19aa4d4f6dcb98fb88.mp4",
+  "https://cdn.shopify.com/videos/c/o/v/c1c44399d9654bfa93ae10f6a6d9e774.mp4",
 ];
 
 export default function Home() {
