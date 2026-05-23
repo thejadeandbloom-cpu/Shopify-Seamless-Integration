@@ -271,7 +271,7 @@ function ProductCard({ product, index }: { product: typeof PRODUCTS[0]; index: n
           <Stars count={product.stars} />
           <span className="text-[11px] text-[#969696]">{product.stars} ({product.reviewCount})</span>
           <button
-            onClick={() => document.getElementById(product.reviewId)?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" })}
             className="ml-auto text-[11px] text-[#C65D3B] font-semibold hover:text-[#A84828] transition-colors"
           >
             {product.reviewsCount} reviews →
