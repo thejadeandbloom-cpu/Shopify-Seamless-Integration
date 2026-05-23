@@ -695,9 +695,9 @@ export default function Home() {
                 <Youtube size={16} />
                 <div><span className="block">YouTube</span><span className="block text-[10px] text-white/50">Jade and Bloom</span></div>
               </a>
-              <a href="https://www.thejadeandbloom.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 bg-white/10 rounded-[4px] text-[12px] font-semibold hover:bg-white/15 transition-colors">
+              <a href="https://www.amazon.in/s?k=jade+and+bloom" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-4 py-3 bg-white/10 rounded-[4px] text-[12px] font-semibold hover:bg-white/15 transition-colors">
                 <ExternalLink size={16} />
-                <div><span className="block">Shop</span><span className="block text-[10px] text-white/50">www.thejadeandbloom.com</span></div>
+                <div><span className="block">Shop on Amazon</span><span className="block text-[10px] text-white/50">amazon.in</span></div>
               </a>
             </div>
           </div>

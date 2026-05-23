@@ -129,12 +129,12 @@ export default function Header() {
               </button>
             ))}
             <a
-              href="https://www.thejadeandbloom.com"
+              href="https://www.amazon.in/s?k=jade+and+bloom"
               target="_blank"
               rel="noopener noreferrer"
               className="block w-full text-left px-6 py-[14px] text-[13px] tracking-[.12em] uppercase text-[#0D0D0D] font-medium border-b border-[#EBEBEB] hover:bg-[#F2EDE8] transition-colors"
             >
-              Shop →
+              Shop on Amazon →
             </a>
           </div>
           <div className="p-6 border-t border-[#EBEBEB]">
