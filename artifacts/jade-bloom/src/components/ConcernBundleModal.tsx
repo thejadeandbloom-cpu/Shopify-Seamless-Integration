@@ -71,11 +71,12 @@ export default function ConcernBundleModal({ concern, onClose }: ConcernBundleMo
 
   const bundle = CONCERN_BUNDLES.find((b) => b.concern === concern);
 
-  // Register with global overlay counter so FAQ/WA buttons hide
+  // Register with global overlay counter only when modal is actually visible
   useEffect(() => {
+    if (!bundle) return;
     openOverlay();
     return () => closeOverlay();
-  }, []);
+  }, [!!bundle]);
 
   useEffect(() => {
     if (!bundle) return;
