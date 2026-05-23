@@ -275,15 +275,6 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
         <div className="absolute top-2 left-2 z-10 max-w-[calc(100%-68px)] truncate text-[7.5px] tracking-[.12em] uppercase font-bold text-[#484848] bg-white/85 backdrop-blur-sm px-[6px] py-[3px] rounded-full leading-none">
           {product.tag}
         </div>
-        {/* Star rating — top right */}
-        <button
-          onClick={() => onReviewClick(product.reviewFilter)}
-          className="absolute top-2 right-2 z-10 flex items-center gap-[3px] bg-white/85 backdrop-blur-sm rounded-full px-[7px] py-[3px] hover:bg-white transition-colors"
-        >
-          <span className="text-[#C8902A] text-[9px] leading-none">★</span>
-          <span className="text-[9px] font-semibold text-[#0D0D0D] leading-none">{product.stars}</span>
-          <span className="text-[9px] text-[#969696] leading-none">({product.reviewsCount})</span>
-        </button>
         <img
           src={product.img}
           alt={product.name}
@@ -294,10 +285,20 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
 
       {/* Info */}
       <div className="p-3 md:p-4 flex-1 flex flex-col gap-2">
-        {/* Benefit badge */}
-        <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full w-fit">
-          {product.badge}
-        </span>
+        {/* Benefit badge + rating row */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full truncate">
+            {product.badge}
+          </span>
+          <button
+            onClick={() => onReviewClick(product.reviewFilter)}
+            className="flex items-center gap-[3px] flex-none hover:opacity-70 transition-opacity"
+          >
+            <span className="text-[#C8902A] text-[10px] leading-none">★</span>
+            <span className="text-[10px] font-semibold text-[#0D0D0D] leading-none">{product.stars}</span>
+            <span className="text-[10px] text-[#969696] leading-none">({product.reviewsCount})</span>
+          </button>
+        </div>
 
         {/* Name */}
         <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] md:text-[13px] tracking-[.03em] text-[#0D0D0D] leading-snug font-semibold">
