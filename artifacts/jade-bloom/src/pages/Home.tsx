@@ -72,7 +72,7 @@ const PRODUCTS = [
     fullInci: "Aqua, Cocamidopropyl Betaine, Sodium Lauroyl Sarcosinate, Propylene Glycol, Glycerin, Aloe Barbadensis Leaf Extract, Camellia Sinensis Leaf Extract, Salicylic Acid, Betaine, Allantoin, Tocopheryl Acetate, Citric Acid, Phenoxyethanol, Ethylhexylglycerin, Trisodium Ethylenediamine Disuccinate, Fragrance",
   },
   {
-    handle: "vitamin-c-serum",
+    handle: "14-vitamin-c-serum",
     tag: "Dark Spots · Dullness",
     badge: "Visible glow\nin 4 weeks",
     stat: "91% noticed brighter skin in 4 weeks",
@@ -99,7 +99,7 @@ const PRODUCTS = [
     fullInci: "Aqua, 3-O-Ethyl Ascorbic Acid, Propanediol, Butylene Glycol, Glycerin, Sodium Hyaluronate, Niacinamide, Betaine, Panthenol, Dipotassium Glycyrrhizate, Allantoin, Tocopherol, Acrylates/C10-30 Alkyl Acrylate Crosspolymer, Phenoxyethanol, Ethylhexylglycerin, Triethanolamine, Sodium Gluconate",
   },
   {
-    handle: "kojic-acid-moisturizer",
+    handle: "brightening-moisturiser",
     tag: "Dryness · Sensitivity",
     badge: "Hydrated within minutes",
     stat: "94% felt skin hydrated all day",
@@ -126,7 +126,7 @@ const PRODUCTS = [
     fullInci: "Aqua, Glycerin, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Niacinamide, Butylene Glycol, 3-O-Ethyl Ascorbic Acid, Glyceryl Stearate, PEG-100 Stearate, Dimethicone, Sodium Hyaluronate, Kojic Acid, Panthenol, Tocopherol, Allantoin, Carbomer, Triethanolamine, Phenoxyethanol, Ethylhexylglycerin, Trisodium Ethylenediamine Disuccinate, Fragrance",
   },
   {
-    handle: "fluid-sunscreen",
+    handle: "fluid-sunscreen-spf-50",
     tag: "UV Protection · Aging",
     badge: "Zero white cast.\nAll day.",
     stat: "96% reported zero white cast",

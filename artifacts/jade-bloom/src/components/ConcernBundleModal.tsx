@@ -22,9 +22,9 @@ const CONCERN_BUNDLES: ConcernBundle[] = [
     concern: "Dark Spots & Hyperpigmentation",
     tagline: "A targeted 3-step routine that blocks melanin production at every stage.",
     products: [
-      { handle: "vitamin-c-serum", name: "14% Vitamin C Serum", price: "618", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760" },
-      { handle: "kojic-acid-moisturizer", name: "Kojic Acid + Vitamin C Moisturizer", price: "449", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826" },
-      { handle: "fluid-sunscreen", name: "Fluid Sunscreen SPF 50 PA++++", price: "489", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858" },
+      { handle: "14-vitamin-c-serum", name: "14% Vitamin C Serum", price: "618", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760" },
+      { handle: "brightening-moisturiser", name: "Kojic Acid + Vitamin C Moisturizer", price: "449", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826" },
+      { handle: "fluid-sunscreen-spf-50", name: "Fluid Sunscreen SPF 50 PA++++", price: "489", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858" },
     ],
   },
   {
@@ -32,8 +32,8 @@ const CONCERN_BUNDLES: ConcernBundle[] = [
     tagline: "Brighten, exfoliate and restore your glow — morning and night.",
     products: [
       { handle: "green-tea-face-wash", name: "2% Green Tea Face Wash", price: "269", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775" },
-      { handle: "vitamin-c-serum", name: "14% Vitamin C Serum", price: "618", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760" },
-      { handle: "kojic-acid-moisturizer", name: "Kojic Acid + Vitamin C Moisturizer", price: "449", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826" },
+      { handle: "14-vitamin-c-serum", name: "14% Vitamin C Serum", price: "618", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760" },
+      { handle: "brightening-moisturiser", name: "Kojic Acid + Vitamin C Moisturizer", price: "449", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826" },
     ],
   },
   {
@@ -41,8 +41,8 @@ const CONCERN_BUNDLES: ConcernBundle[] = [
     tagline: "Lock in moisture and protect the barrier — from cleanser to SPF.",
     products: [
       { handle: "green-tea-face-wash", name: "2% Green Tea Face Wash", price: "269", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775" },
-      { handle: "kojic-acid-moisturizer", name: "Kojic Acid + Vitamin C Moisturizer", price: "449", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826" },
-      { handle: "fluid-sunscreen", name: "Fluid Sunscreen SPF 50 PA++++", price: "489", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858" },
+      { handle: "brightening-moisturiser", name: "Kojic Acid + Vitamin C Moisturizer", price: "449", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826" },
+      { handle: "fluid-sunscreen-spf-50", name: "Fluid Sunscreen SPF 50 PA++++", price: "489", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858" },
     ],
   },
   {
@@ -50,8 +50,8 @@ const CONCERN_BUNDLES: ConcernBundle[] = [
     tagline: "Clear pores, control oil and prevent breakouts at every step.",
     products: [
       { handle: "green-tea-face-wash", name: "2% Green Tea Face Wash", price: "269", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775" },
-      { handle: "vitamin-c-serum", name: "14% Vitamin C Serum", price: "618", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760" },
-      { handle: "fluid-sunscreen", name: "Fluid Sunscreen SPF 50 PA++++", price: "489", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858" },
+      { handle: "14-vitamin-c-serum", name: "14% Vitamin C Serum", price: "618", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760" },
+      { handle: "fluid-sunscreen-spf-50", name: "Fluid Sunscreen SPF 50 PA++++", price: "489", img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858" },
     ],
   },
 ];

@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const BUNDLE_UPSELL = {
   label: "Complete the routine & save 15%",
-  handles: ["green-tea-face-wash", "vitamin-c-serum", "kojic-acid-moisturizer", "fluid-sunscreen"],
+  handles: ["green-tea-face-wash", "14-vitamin-c-serum", "brightening-moisturiser", "fluid-sunscreen-spf-50"],
   names: ["Face Wash", "Vitamin C Serum", "Moisturizer", "Sunscreen SPF 50"],
 };
 

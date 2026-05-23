@@ -187,9 +187,9 @@ function IngredientCard({ row, animate }: { row: typeof INGREDIENTS[0]; animate:
 
 const ROUTINE_HANDLES = [
   "green-tea-face-wash",
-  "vitamin-c-serum",
-  "kojic-acid-moisturizer",
-  "fluid-sunscreen",
+  "14-vitamin-c-serum",
+  "brightening-moisturiser",
+  "fluid-sunscreen-spf-50",
 ];
 
 const BUNDLE_DISCOUNT_CODE = "BUNDLE15";
