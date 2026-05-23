@@ -53,7 +53,7 @@ export default function LeadCapturePopup() {
       setLoading(false);
     }
 
-    const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER ?? "919999999999";
+    const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER ?? "918750557322";
     const msg = encodeURIComponent(
       `Hi! I visited the Jade and Bloom website and would like my 10% welcome discount. My number is +91${cleaned.slice(-10)}.`
     );

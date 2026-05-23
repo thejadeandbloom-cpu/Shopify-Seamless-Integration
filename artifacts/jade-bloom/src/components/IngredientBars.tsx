@@ -12,7 +12,7 @@ const ROWS = [
   },
   {
     ingredient: "Green Tea Extract",
-    benefit: "Controls oil · Soothes inflammation · Antioxidant defence",
+    benefit: "Controls oil · Soothes inflammation · Antioxidant defense",
     jb: 20,
     jbLabel: "2.0%",
     industry: 1,

@@ -25,7 +25,7 @@ const INGREDIENTS = [
     industry: 0.1,
     max: 2.2,
     multiplier: "20×",
-    benefit: "Controls oil · Soothes inflammation · Antioxidant defence",
+    benefit: "Controls oil · Soothes inflammation · Antioxidant defense",
   },
   {
     ingredient: "Hyaluronic Acid",

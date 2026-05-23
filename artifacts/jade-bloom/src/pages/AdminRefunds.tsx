@@ -246,7 +246,7 @@ export default function AdminRefunds() {
                   </thead>
                   <tbody>
                     {leads.map((lead, i) => {
-                      const waNumber = (import.meta.env.VITE_WHATSAPP_NUMBER ?? "919999999999");
+                      const waNumber = (import.meta.env.VITE_WHATSAPP_NUMBER ?? "918750557322");
                       const msg = encodeURIComponent(`Hi! I visited the Jade and Bloom website and would like my 10% welcome discount. My number is ${lead.phone}.`);
                       return (
                         <tr key={lead.id} className={`border-b border-[#EBEBEB] last:border-0 ${i % 2 === 0 ? "" : "bg-[#FAFAFA]"}`}>

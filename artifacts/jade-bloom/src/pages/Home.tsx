@@ -477,7 +477,7 @@ function RefundClaimForm() {
 
         <div>
           <label className={labelCls}>4. Order ID</label>
-          <input required className={inputCls} placeholder="e.g. JB-10234 or Shopify order #" value={form.orderId}
+          <input required className={inputCls} placeholder="e.g. JB-10234 (from your order confirmation email)" value={form.orderId}
             onChange={(e) => setForm((f) => ({ ...f, orderId: e.target.value }))} />
         </div>
 
@@ -1135,7 +1135,7 @@ export default function Home() {
             <div>
               <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] tracking-[.15em] uppercase text-[#C65D3B] mb-3 font-semibold">Support</div>
               <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] tracking-[.1em] uppercase text-white/30 mb-2">Email</p>
-              <a href="mailto:hello@thejadeandbloom.com" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">hello@thejadeandbloom.com</a>
+              <a href="mailto:support@thejadeandbloom.com" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">support@thejadeandbloom.com</a>
               <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] tracking-[.1em] uppercase text-white/30 mb-2">WhatsApp</p>
               <a href="https://wa.me/918750557322" target="_blank" rel="noopener noreferrer" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">+91 87505 57322</a>
               <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Shipping Info</button>

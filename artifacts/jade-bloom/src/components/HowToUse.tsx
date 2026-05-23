@@ -19,7 +19,7 @@ const AM_STEPS = [
   },
   {
     step: 3,
-    label: "Moisturise",
+    label: "Moisturize",
     product: "Kojic Acid + Vitamin C Moisturizer",
     instruction: "Take a pea-sized amount. Apply in upward strokes across face and neck. Focus on dry patches and areas with dark spots.",
     tip: "Neck and jawline count too — don't stop at the chin.",
@@ -54,7 +54,7 @@ const PM_STEPS = [
   },
   {
     step: 3,
-    label: "Moisturise",
+    label: "Moisturize",
     product: "Kojic Acid + Vitamin C Moisturizer",
     instruction: "Apply a slightly larger amount than morning. Night is when your skin drinks in hydration. Massage in upward strokes.",
     tip: "No sunscreen needed at night — let the moisturizer do its job.",
