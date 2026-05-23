@@ -24,8 +24,7 @@ type MyReview = {
   visibleAfter: string;
 };
 
-type Step = "input" | "otp" | "dashboard";
-type AuthMode = "email" | "phone";
+type Step = "email" | "otp" | "dashboard";
 
 function StatusBadge({ review }: { review: MyReview }) {
   const now = new Date();
@@ -51,21 +50,18 @@ const inp = "w-full border border-[#EBEBEB] rounded-[4px] px-4 py-[11px] text-[1
 export default function MyOrders() {
   const { customer, login, logout } = useCustomerAuth();
 
-  const [step,      setStep]      = useState<Step>(() => customer ? "dashboard" : "input");
-  const [mode,      setMode]      = useState<AuthMode>("email");
-  const [email,     setEmail]     = useState(customer?.email ?? "");
-  const [phone,     setPhone]     = useState("");
-  const [otp,       setOtp]       = useState("");
-  const [reviews,   setReviews]   = useState<MyReview[]>([]);
-  const [loading,   setLoading]   = useState(false);
-  const [error,     setError]     = useState("");
-  const [resendCD,  setResendCD]  = useState(0);
-
-  // identity used for reviews fetch / display
-  const identity = customer?.email ?? (mode === "phone" ? `phone:91${phone.replace(/\D/g,"").slice(-10)}` : email);
+  const [step,     setStep]     = useState<Step>(() => customer ? "dashboard" : "email");
+  const [email,    setEmail]    = useState(customer?.email ?? "");
+  const [otp,      setOtp]      = useState("");
+  const [reviews,  setReviews]  = useState<MyReview[]>([]);
+  const [loading,  setLoading]  = useState(false);
+  const [error,    setError]    = useState("");
+  const [resendCD, setResendCD] = useState(0);
 
   useEffect(() => {
-    if (customer && step === "dashboard") fetchReviews(customer.email);
+    if (customer && step === "dashboard") {
+      fetchReviews(customer.email);
+    }
   }, []);
 
   useEffect(() => {
@@ -74,39 +70,26 @@ export default function MyOrders() {
     return () => clearTimeout(t);
   }, [resendCD]);
 
-  const fetchReviews = async (id: string) => {
+  const fetchReviews = async (emailAddr: string) => {
     try {
-      const res = await fetch(`${API_BASE}/my-reviews?email=${encodeURIComponent(id)}`);
+      const res = await fetch(`${API_BASE}/my-reviews?email=${encodeURIComponent(emailAddr)}`);
       const data = await res.json() as MyReview[];
       setReviews(Array.isArray(data) ? data : []);
     } catch { /* silent */ }
   };
 
-  // ── Send OTP ──────────────────────────────────────────────────
   const sendOtp = async (e?: React.FormEvent) => {
     e?.preventDefault();
+    if (!email.trim()) return;
     setLoading(true); setError("");
     try {
-      if (mode === "email") {
-        if (!email.trim() || !email.includes("@")) throw new Error("Please enter a valid email");
-        const res = await fetch(`${API_BASE}/auth/send-otp`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: email.trim() }),
-        });
-        const data = await res.json() as { error?: string };
-        if (!res.ok) throw new Error(data.error ?? "Failed to send code");
-      } else {
-        const digits = phone.replace(/\D/g, "");
-        if (digits.length < 10) throw new Error("Please enter a valid 10-digit mobile number");
-        const res = await fetch(`${API_BASE}/auth/send-otp-whatsapp`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ phone: digits }),
-        });
-        const data = await res.json() as { error?: string };
-        if (!res.ok) throw new Error(data.error ?? "Failed to send code");
-      }
+      const res = await fetch(`${API_BASE}/auth/send-otp`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      const data = await res.json() as { error?: string };
+      if (!res.ok) throw new Error(data.error ?? "Failed to send code");
       setStep("otp");
       setResendCD(60);
     } catch (err) {
@@ -116,29 +99,22 @@ export default function MyOrders() {
     }
   };
 
-  // ── Verify OTP ────────────────────────────────────────────────
   const verifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!otp.trim()) return;
     setLoading(true); setError("");
     try {
-      let endpoint = `${API_BASE}/auth/verify-otp`;
-      let body: Record<string, string> = { email: email.trim(), code: otp.trim() };
-      if (mode === "phone") {
-        endpoint = `${API_BASE}/auth/verify-otp-phone`;
-        body = { phone: phone.replace(/\D/g, ""), code: otp.trim() };
-      }
-      const res = await fetch(endpoint, {
+      const res = await fetch(`${API_BASE}/auth/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ email: email.trim(), code: otp.trim() }),
       });
       const data = await res.json() as { error?: string; token?: string; email?: string };
       if (!res.ok) throw new Error(data.error ?? "Invalid code");
 
-      const id = data.email ?? (mode === "email" ? email.trim() : `phone:91${phone.replace(/\D/g,"").slice(-10)}`);
-      login(id, data.token ?? "");
-      await fetchReviews(id);
+      const verifiedEmail = data.email ?? email.trim();
+      login(verifiedEmail, data.token ?? "");
+      await fetchReviews(verifiedEmail);
       setStep("dashboard");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Verification failed");
@@ -149,115 +125,37 @@ export default function MyOrders() {
 
   const handleLogout = () => {
     logout();
-    setStep("input");
-    setEmail(""); setPhone(""); setOtp(""); setReviews([]); setError("");
+    setStep("email");
+    setEmail(""); setOtp(""); setReviews([]); setError("");
   };
 
   const reviewedHandles    = new Set(reviews.map((r) => r.productHandle));
   const unreviewedProducts = PRODUCTS.filter((p) => !reviewedHandles.has(p.handle));
   const reviewedProducts   = PRODUCTS.filter((p) =>  reviewedHandles.has(p.handle));
-  const activeEmail        = customer?.email ?? identity;
-
-  // Pretty label for dashboard
-  const displayIdentity = activeEmail.startsWith("phone:")
-    ? `+${activeEmail.replace("phone:", "")}`
-    : activeEmail;
+  const activeEmail        = customer?.email ?? email;
 
   return (
     <div className="min-h-screen bg-[#F9F7F5]" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       <div className="max-w-[600px] mx-auto px-5 py-10">
 
-        {/* ── STEP 1: Input (email or phone) ── */}
-        {step === "input" && (
+        {/* ── STEP 1: Enter email ── */}
+        {step === "email" && (
           <>
             <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">My Account</div>
             <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Sign in</h1>
-            <p className="text-[13px] text-[#696969] leading-[1.65] mb-6">
-              We'll send a 6-digit code — no password needed.
+            <p className="text-[13px] text-[#696969] leading-[1.65] mb-8">
+              Enter your email to see your reviews and write new ones. We'll send a 6-digit code — no password needed.
             </p>
-
-            {/* Tab switcher */}
-            <div className="flex bg-white border border-[#EBEBEB] rounded-[6px] p-1 mb-6 shadow-sm">
-              <button
-                type="button"
-                onClick={() => { setMode("email"); setError(""); }}
-                className={`flex-1 py-2 text-[11px] font-bold tracking-[.1em] uppercase rounded-[4px] transition-colors ${
-                  mode === "email"
-                    ? "bg-[#C65D3B] text-white shadow-sm"
-                    : "text-[#696969] hover:text-[#0D0D0D]"
-                }`}
-              >
-                Email
-              </button>
-              <button
-                type="button"
-                onClick={() => { setMode("phone"); setError(""); }}
-                className={`flex-1 py-2 text-[11px] font-bold tracking-[.1em] uppercase rounded-[4px] transition-colors ${
-                  mode === "phone"
-                    ? "bg-[#C65D3B] text-white shadow-sm"
-                    : "text-[#696969] hover:text-[#0D0D0D]"
-                }`}
-              >
-                WhatsApp
-              </button>
-            </div>
-
             <form onSubmit={sendOtp} className="bg-white border border-[#EBEBEB] rounded-[10px] p-6 shadow-sm">
-              {mode === "email" ? (
-                <>
-                  <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">Your email address</label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@email.com"
-                    className={`${inp} mb-4`}
-                    required
-                    autoFocus
-                  />
-                </>
-              ) : (
-                <>
-                  <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">WhatsApp mobile number</label>
-                  <div className="flex gap-2 mb-4">
-                    <div className="flex items-center px-3 border border-[#EBEBEB] rounded-[4px] bg-[#F9F7F5] text-[13px] font-semibold text-[#484848] select-none whitespace-nowrap">
-                      🇮🇳 +91
-                    </div>
-                    <input
-                      type="tel"
-                      inputMode="numeric"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                      placeholder="98765 43210"
-                      className={inp}
-                      required
-                      autoFocus
-                      maxLength={10}
-                    />
-                  </div>
-                  <div className="flex items-start gap-2 mb-4 text-[11px] text-[#696969] bg-[#F9F7F5] border border-[#EBEBEB] rounded-[6px] px-3 py-2">
-                    <span className="text-[#25D366] text-[14px] leading-none mt-[1px]">✓</span>
-                    <span>We'll send your code as a <strong>WhatsApp message</strong> to this number.</span>
-                  </div>
-                </>
-              )}
-
-              {error && (
-                <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60"
-              >
-                {loading ? "Sending…" : mode === "phone" ? "Send code on WhatsApp" : "Send login code"}
+              <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">Your email address</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@email.com" className={`${inp} mb-4`} required autoFocus />
+              {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>}
+              <button type="submit" disabled={loading}
+                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60">
+                {loading ? "Sending…" : "Send login code"}
               </button>
-              <p className="text-[10px] text-[#ABABAB] text-center mt-3">
-                {mode === "phone"
-                  ? "You'll receive a WhatsApp message with a 6-digit code."
-                  : "We'll send a one-time 6-digit code to this address."}
-              </p>
+              <p className="text-[10px] text-[#ABABAB] text-center mt-3">We'll send a one-time 6-digit code to this address.</p>
             </form>
           </>
         )}
@@ -265,55 +163,28 @@ export default function MyOrders() {
         {/* ── STEP 2: Enter OTP ── */}
         {step === "otp" && (
           <>
-            <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">
-              {mode === "phone" ? "Check your WhatsApp" : "Check your inbox"}
-            </div>
+            <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-1">Check your inbox</div>
             <h1 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[30px] font-normal text-[#0D0D0D] mb-2">Enter your code</h1>
             <p className="text-[13px] text-[#696969] leading-[1.65] mb-8">
-              {mode === "phone" ? (
-                <>We sent a 6-digit code via WhatsApp to <strong className="text-[#0D0D0D]">+91 {phone}</strong>. It expires in 10 minutes.</>
-              ) : (
-                <>We sent a 6-digit code to <strong className="text-[#0D0D0D]">{email}</strong>. It expires in 10 minutes.</>
-              )}
+              We sent a 6-digit code to <strong className="text-[#0D0D0D]">{email}</strong>. It expires in 10 minutes.
             </p>
             <form onSubmit={verifyOtp} className="bg-white border border-[#EBEBEB] rounded-[10px] p-6 shadow-sm">
               <label className="block text-[11px] font-semibold tracking-[.1em] uppercase text-[#484848] mb-2">6-digit code</label>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]{6}"
-                maxLength={6}
-                value={otp}
-                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                placeholder="123456"
-                className={`${inp} mb-4 text-center text-[22px] font-bold tracking-[.25em]`}
-                required
-                autoFocus
-              />
-              {error && (
-                <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>
-              )}
-              <button
-                type="submit"
-                disabled={loading || otp.length < 6}
-                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60 mb-3"
-              >
+              <input type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6}
+                value={otp} onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                placeholder="123456" className={`${inp} mb-4 text-center text-[22px] font-bold tracking-[.25em]`} required autoFocus />
+              {error && <div className="text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-[4px] px-3 py-2 mb-4">{error}</div>}
+              <button type="submit" disabled={loading || otp.length < 6}
+                className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] font-bold tracking-[.18em] uppercase rounded-[4px] hover:bg-[#A84828] transition-colors disabled:opacity-60 mb-3">
                 {loading ? "Verifying…" : "Verify & continue"}
               </button>
               <div className="flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={() => { setStep("input"); setOtp(""); setError(""); }}
-                  className="text-[11px] text-[#969696] hover:text-[#C65D3B] transition-colors"
-                >
-                  ← {mode === "phone" ? "Change number" : "Change email"}
+                <button type="button" onClick={() => { setStep("email"); setOtp(""); setError(""); }}
+                  className="text-[11px] text-[#969696] hover:text-[#C65D3B] transition-colors">
+                  ← Change email
                 </button>
-                <button
-                  type="button"
-                  onClick={() => sendOtp()}
-                  disabled={resendCD > 0 || loading}
-                  className="text-[11px] font-semibold text-[#C65D3B] disabled:text-[#969696] disabled:cursor-not-allowed hover:underline transition-colors"
-                >
+                <button type="button" onClick={() => sendOtp()} disabled={resendCD > 0 || loading}
+                  className="text-[11px] font-semibold text-[#C65D3B] disabled:text-[#969696] disabled:cursor-not-allowed hover:underline transition-colors">
                   {resendCD > 0 ? `Resend in ${resendCD}s` : "Resend code"}
                 </button>
               </div>
@@ -327,12 +198,10 @@ export default function MyOrders() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <div className="text-[9px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-[2px]">My Account</div>
-                <div className="text-[17px] font-semibold text-[#0D0D0D]">{displayIdentity}</div>
+                <div className="text-[17px] font-semibold text-[#0D0D0D]">{activeEmail}</div>
               </div>
-              <button
-                onClick={handleLogout}
-                className="text-[11px] font-semibold text-[#969696] hover:text-red-500 transition-colors border border-[#EBEBEB] px-3 py-2 rounded-[4px] hover:border-red-300"
-              >
+              <button onClick={handleLogout}
+                className="text-[11px] font-semibold text-[#969696] hover:text-red-500 transition-colors border border-[#EBEBEB] px-3 py-2 rounded-[4px] hover:border-red-300">
                 Sign out
               </button>
             </div>
