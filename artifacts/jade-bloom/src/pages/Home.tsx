@@ -6,6 +6,7 @@ import ConcernBundleModal from "@/components/ConcernBundleModal";
 import FaqAccordion from "@/components/FaqAccordion";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import HowToUse from "@/components/HowToUse";
+import IngredientBars from "@/components/IngredientBars";
 
 const EASE = "cubic-bezier(.16,1,.3,1)";
 
@@ -500,80 +501,7 @@ export default function Home() {
       </section>
 
       {/* Formulation Science */}
-      <section className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto">
-          <RevealDiv className="text-center mb-16">
-            <div className="text-[11px] tracking-[.22em] uppercase text-[#C65D3B] font-semibold mb-3">Formulation Science</div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[42px] leading-[1.2] mb-4 font-normal text-[#0D0D0D]">
-              Clinical Actives. Real Percentages.
-            </h2>
-            <p className="text-[14px] text-[#666] max-w-[600px] mx-auto">
-              Not trace amounts. Not marketing smoke. Every ingredient at its optimal concentration.
-            </p>
-          </RevealDiv>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {FORMULATION.map((f, i) => (
-              <RevealDiv key={f.name} delay={i * 80} className="bg-white p-8 rounded-lg border border-[#EBEBEB]">
-                <div className="mb-6 pb-4 border-b-2 border-[#C65D3B]">
-                  <h3 className="text-[18px] font-semibold text-[#0D0D0D]">{f.name}</h3>
-                  <p className="text-[12px] text-[#999] mt-1">{f.subtitle}</p>
-                </div>
-                <div className="space-y-0">
-                  {f.ingredients.map((ing, j) => (
-                    <div key={ing.n} className={`flex justify-between items-center py-3 ${j < f.ingredients.length - 1 ? "border-b border-[#f0f0f0]" : ""}`}>
-                      <span className="text-[13px] text-[#333]">{ing.n}</span>
-                      <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[16px] font-semibold text-[#C65D3B]">{ing.v}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-5 p-4 bg-[#FFF9F5] border-l-[3px] border-[#C65D3B] rounded">
-                  <div className="text-[11px] font-semibold text-[#666] mb-1 uppercase tracking-[.06em]">Key Benefit</div>
-                  <div className="text-[12px] text-[#333]">{f.benefit}</div>
-                </div>
-              </RevealDiv>
-            ))}
-          </div>
-
-          {/* Comparison Table */}
-          <RevealDiv>
-            <div className="text-center mb-10">
-              <div className="text-[11px] tracking-[.22em] uppercase text-[#C65D3B] font-semibold mb-3">Why We're Different</div>
-              <h3 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[32px] text-[#0D0D0D] font-normal">
-                Real Strength. Real Results. Real Price.
-              </h3>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm" style={{ minWidth: 480 }}>
-                <thead>
-                  <tr className="bg-[#F9F7F5] border-b-2 border-[#EBEBEB]">
-                    <th className="p-4 text-left font-semibold text-[#333] text-[13px]">Key Ingredient</th>
-                    <th className="p-4 text-center font-semibold text-[#C65D3B] text-[13px]">Jade &amp; Bloom</th>
-                    <th className="p-4 text-center font-semibold text-[#999] text-[13px]">Competitor A</th>
-                    <th className="p-4 text-center font-semibold text-[#999] text-[13px]">Competitor B</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    ["Green Tea Extract", "2.0%", "0.1%", "Trace"],
-                    ["Vitamin C", "14%", "5%", "3%"],
-                    ["Salicylic Acid", "1.5%", "0.5%", "0.3%"],
-                    ["Hyaluronic Acid", "5%", "2%", "1%"],
-                    ["Price (Face Wash)", "₹269", "₹349", "₹399"],
-                  ].map(([label, jb, ca, cb], i) => (
-                    <tr key={label} className={`border-b border-[#EBEBEB] ${i === 4 ? "bg-[#FFF9F5]" : ""}`}>
-                      <td className={`p-4 text-[#333] text-[13px] ${i === 4 ? "font-semibold" : ""}`}>{label}</td>
-                      <td className="p-4 text-center font-semibold text-[#C65D3B] text-[14px]">{jb}</td>
-                      <td className="p-4 text-center text-[#999] text-[13px]">{ca}</td>
-                      <td className="p-4 text-center text-[#999] text-[13px]">{cb}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </RevealDiv>
-        </div>
-      </section>
+      <IngredientBars />
 
       {/* How to Use */}
       <section id="routine" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
