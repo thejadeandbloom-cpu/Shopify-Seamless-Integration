@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { getProduct } from "@/lib/shopify";
 import ConcernBundleModal from "@/components/ConcernBundleModal";
 import FaqAccordion from "@/components/FaqAccordion";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const EASE = "cubic-bezier(.16,1,.3,1)";
 
@@ -285,11 +286,16 @@ function ProductCard({ product, index }: { product: typeof PRODUCTS[0]; index: n
           </button>
         </div>
         <div className="flex items-center justify-between">
-          <div className="flex items-baseline gap-[6px]">
-            <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[18px] text-[#0D0D0D] font-semibold">
-              <span className="text-[12px] font-normal">₹</span>{product.price}
+          <div>
+            <div className="flex items-baseline gap-[6px] mb-[3px]">
+              <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[18px] text-[#0D0D0D] font-semibold">
+                <span className="text-[12px] font-normal">₹</span>{product.price}
+              </span>
+              <span className="text-[11px] text-[#969696] line-through">₹{product.was}</span>
+            </div>
+            <span className="text-[10px] text-[#C65D3B] font-semibold">
+              Save ₹{Math.round(parseInt(product.price) * 0.1)} with FIRST10
             </span>
-            <span className="text-[11px] text-[#969696] line-through">₹{product.was}</span>
           </div>
           <button
             onClick={handleAddToCart}
@@ -359,16 +365,17 @@ export default function Home() {
 
   return (
     <div className="overflow-x-hidden">
-      {/* Announcement */}
-      <div className="bg-[#0D0D0D] text-white/60 text-center py-[9px] text-[10px] tracking-[.22em] uppercase">
-        <span className="text-white font-semibold">Shipping included</span> in all prices ·{" "}
-        <span className="text-white font-semibold">Dispatch</span> within 24 hrs · No hidden charges · Made in India
+      {/* Announcement — first order offer */}
+      <div className="bg-[#C65D3B] text-white text-center py-[10px] text-[11px] tracking-[.18em] uppercase font-semibold">
+        10% off your first order &nbsp;·&nbsp; Use code{" "}
+        <span className="bg-white text-[#C65D3B] px-2 py-[1px] rounded font-bold tracking-[.08em]">FIRST10</span>
+        &nbsp;at checkout
       </div>
 
       {/* Trust signals bar */}
       <div className="bg-[#F9F7F5] border-b border-[#EBEBEB] py-3 overflow-x-auto">
         <div className="flex gap-8 min-w-max px-16 text-[11px] tracking-[.1em] text-[#484848]">
-          {["Cruelty-Free", "Paraben-Free", "pH Balanced (4.5–5.5)", "Dispatch in 24 hrs", "30-Day Guarantee", "Dermatologist Tested"].map((t) => (
+          {["Cruelty-Free", "Paraben-Free", "pH Balanced (4.5–5.5)", "COD Available", "Dispatch in 24 hrs", "Dermatologist Tested"].map((t) => (
             <span key={t} className="whitespace-nowrap">
               <b className="text-[#C65D3B]">✓</b> {t}
             </span>
@@ -791,6 +798,9 @@ export default function Home() {
         concern={activeConcern}
         onClose={() => setActiveConcern(null)}
       />
+
+      {/* Floating WhatsApp button */}
+      <WhatsAppButton />
 
       <style>{`
         .rv-on { opacity: 1 !important; transform: translateY(0) !important; }
