@@ -46,9 +46,9 @@ function RevealDiv({ delay = 0, className = "", children }: { delay?: number; cl
 const PRODUCTS = [
   {
     handle: "green-tea-face-wash",
-    tag: "Acne · Oily Skin · Pores",
+    tag: "Acne · Oily Skin",
     badge: "Clearer skin in 2–3 weeks",
-    name: "2% Green Tea Extract Face Wash",
+    name: "2% Green Tea Face Wash",
     desc: "1.5% Salicylic Acid clears pores and prevents breakouts. pH-balanced. Won't strip your skin.",
     price: "269",
     was: "349",
@@ -57,13 +57,14 @@ const PRODUCTS = [
     reviewId: "reviews-product-1",
     reviewsCount: 58,
     reviewFilter: "Green Tea Face Wash",
+    imgBg: "#E3F0E8",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775",
   },
   {
     handle: "vitamin-c-serum",
-    tag: "Dark Spots · Dullness · Aging",
+    tag: "Dark Spots · Dullness",
     badge: "Visible glow in 4 weeks",
-    name: "14% Vitamin C Face Serum",
+    name: "14% Vitamin C Serum",
     desc: "Brightens. Boosts collagen. Fades dark spots. Lightweight. Won't oxidize.",
     price: "618",
     was: "799",
@@ -72,13 +73,14 @@ const PRODUCTS = [
     reviewId: "reviews-product-2",
     reviewsCount: 52,
     reviewFilter: "Vitamin C Serum",
+    imgBg: "#FEF0DE",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760",
   },
   {
     handle: "kojic-acid-moisturizer",
-    tag: "Dryness · Sensitivity · Barrier",
+    tag: "Dryness · Sensitivity",
     badge: "Hydrated within minutes",
-    name: "1% Kojic Acid + 5% Vitamin C Moisturizer",
+    name: "Kojic Acid Moisturizer",
     desc: "Locks hydration. Balances pH. Strengthens skin barrier. Non-comedogenic.",
     price: "449",
     was: "579",
@@ -87,13 +89,14 @@ const PRODUCTS = [
     reviewId: "reviews-product-3",
     reviewsCount: 48,
     reviewFilter: "Kojic Acid Moisturizer",
+    imgBg: "#E2ECF8",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826",
   },
   {
     handle: "fluid-sunscreen",
-    tag: "UV Protection · Aging · Pigmentation",
+    tag: "UV Protection · Aging",
     badge: "Reef-safe & sweat-proof",
-    name: "Fluid Sunscreen SPF 50 PA++++",
+    name: "Fluid Sunscreen SPF 50",
     desc: "Invisible. Weightless. Won't clog pores. Reef-safe.",
     price: "489",
     was: "629",
@@ -102,6 +105,7 @@ const PRODUCTS = [
     reviewId: "reviews-product-4",
     reviewsCount: 45,
     reviewFilter: "Fluid Sunscreen",
+    imgBg: "#FBF5DF",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858",
   },
 ];
@@ -253,55 +257,62 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
   };
 
   return (
-    <RevealDiv delay={index * 80} className="bg-white rounded-[4px] border border-[#EBEBEB] overflow-hidden flex flex-col">
-      <div className="h-[200px] md:h-[320px] bg-[#F2EDE8] border-b border-[#EBEBEB] flex items-center justify-center overflow-hidden">
+    <RevealDiv delay={index * 80} className="rounded-[8px] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300" style={{ background: "#fff" }}>
+      {/* Image area — colored bg, tall */}
+      <div
+        className="relative flex items-center justify-center overflow-hidden"
+        style={{ background: product.imgBg, height: "clamp(160px, 38vw, 300px)" }}
+      >
+        {/* Skin concern tag — top left */}
+        <div className="absolute top-3 left-3 text-[8px] tracking-[.14em] uppercase font-bold text-[#484848] bg-white/80 backdrop-blur-sm px-2 py-[3px] rounded-full">
+          {product.tag}
+        </div>
+        {/* Review count — top right */}
+        <button
+          onClick={() => onReviewClick(product.reviewFilter)}
+          className="absolute top-3 right-3 flex items-center gap-[3px] bg-white/80 backdrop-blur-sm rounded-full px-2 py-[3px] hover:bg-white transition-colors"
+        >
+          <span className="text-[#C8902A] text-[9px]">★</span>
+          <span className="text-[9px] font-semibold text-[#0D0D0D]">{product.stars}</span>
+          <span className="text-[9px] text-[#969696]">({product.reviewsCount})</span>
+        </button>
         <img
           src={product.img}
           alt={product.name}
-          className="max-h-full max-w-full object-contain"
+          className="h-full w-full object-contain p-3 md:p-5 group-hover:scale-105 transition-transform duration-500"
           data-testid={`product-img-${product.handle}`}
         />
       </div>
-      <div className="p-3 md:p-5 flex-1 flex flex-col">
-        <div className="text-[8.5px] tracking-[.2em] uppercase text-[#C65D3B] font-semibold mb-2">{product.tag}</div>
-        <div className="text-[11px] font-semibold text-[#C65D3B] mb-3 bg-[#FFF9F5] px-2 py-1 rounded inline-block w-fit">{product.badge}</div>
-        <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[13px] tracking-[.04em] text-[#0D0D0D] leading-snug mb-2 font-medium">
+
+      {/* Info */}
+      <div className="p-3 md:p-4 flex-1 flex flex-col gap-2">
+        {/* Benefit badge */}
+        <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full w-fit">
+          {product.badge}
+        </span>
+
+        {/* Name */}
+        <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] md:text-[13px] tracking-[.03em] text-[#0D0D0D] leading-snug font-semibold">
           {product.name}
         </div>
-        <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[13px] text-[#484848] leading-[1.62] flex-1 mb-3">
-          {product.desc}
-        </p>
-        <div className="flex items-center gap-[5px] mb-3 pb-3 border-b border-[#EBEBEB]">
-          <Stars count={product.stars} />
-          <span className="text-[11px] text-[#969696]">{product.stars} ({product.reviewCount})</span>
-          <button
-            onClick={() => onReviewClick(product.reviewFilter)}
-            className="ml-auto text-[11px] text-[#C65D3B] font-semibold hover:text-[#A84828] transition-colors"
-          >
-            {product.reviewsCount} reviews →
-          </button>
+
+        {/* Price row */}
+        <div className="flex items-baseline gap-[5px] mt-auto pt-2">
+          <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[17px] md:text-[19px] text-[#0D0D0D] font-semibold leading-none">
+            ₹{product.price}
+          </span>
+          <span className="text-[11px] text-[#ABABAB] line-through">₹{product.was}</span>
         </div>
-        <div className="flex items-center justify-between">
-          <div>
-            <div className="flex items-baseline gap-[6px] mb-[3px]">
-              <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[18px] text-[#0D0D0D] font-semibold">
-                <span className="text-[12px] font-normal">₹</span>{product.price}
-              </span>
-              <span className="text-[11px] text-[#969696] line-through">₹{product.was}</span>
-            </div>
-            <span className="text-[10px] text-[#C65D3B] font-semibold">
-              Save ₹{Math.round(parseInt(product.price) * 0.1)} with FIRST10
-            </span>
-          </div>
-          <button
-            onClick={handleAddToCart}
-            disabled={adding || isLoading}
-            className="text-[9px] tracking-[.16em] uppercase font-semibold px-4 py-[10px] bg-[#0D0D0D] text-white rounded-[1px] hover:bg-[#C65D3B] transition-colors disabled:opacity-60"
-            data-testid={`add-to-cart-${product.handle}`}
-          >
-            {adding ? "..." : "Add to Cart"}
-          </button>
-        </div>
+
+        {/* Add to Cart */}
+        <button
+          onClick={handleAddToCart}
+          disabled={adding || isLoading}
+          className="mt-1 w-full py-[10px] bg-[#0D0D0D] text-white text-[9px] tracking-[.18em] uppercase font-bold rounded-[3px] hover:bg-[#C65D3B] transition-colors duration-200 disabled:opacity-50"
+          data-testid={`add-to-cart-${product.handle}`}
+        >
+          {adding ? "Adding..." : "Add to Cart"}
+        </button>
       </div>
     </RevealDiv>
   );
