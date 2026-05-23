@@ -358,6 +358,176 @@ function StatCounter({ target, label }: { target: string; label: string }) {
   );
 }
 
+const SKIN_CONCERNS = ["Acne", "Dark Spots", "Dryness", "Ageing", "Large Pores", "Dullness"];
+const PRODUCTS_LIST = ["Face Wash", "Vitamin C Serum", "Kojic Acid Moisturizer", "Fluid Sunscreen"];
+
+function RefundClaimForm() {
+  const [form, setForm] = useState({
+    orderNumber: "",
+    product: "",
+    purchaseDate: "",
+    concerns: [] as string[],
+    usedAsDirected: "",
+    reason: "",
+    refundMethod: "",
+  });
+  const [submitted, setSubmitted] = useState(false);
+
+  const toggleConcern = (c: string) =>
+    setForm((f) => ({
+      ...f,
+      concerns: f.concerns.includes(c) ? f.concerns.filter((x) => x !== c) : [...f.concerns, c],
+    }));
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const msg = [
+      "JADE AND BLOOM — 60-DAY REFUND CLAIM",
+      `Order #: ${form.orderNumber}`,
+      `Product: ${form.product}`,
+      `Purchase Date: ${form.purchaseDate}`,
+      `Skin Concern: ${form.concerns.join(", ")}`,
+      `Used as directed: ${form.usedAsDirected}`,
+      `Reason: ${form.reason}`,
+      `Refund Method: ${form.refundMethod}`,
+      "",
+      "Please also send: screenshot of order + photo of product.",
+    ].join("\n");
+    window.open(`/api/whatsapp?text=${encodeURIComponent(msg)}`, "_blank");
+    setSubmitted(true);
+  };
+
+  const inputCls = "w-full bg-white/5 border border-white/15 rounded-[4px] px-3 py-[10px] text-[13px] text-white placeholder-white/30 focus:outline-none focus:border-[#C65D3B] transition-colors";
+  const labelCls = "block text-[11px] tracking-[.14em] uppercase text-white/50 font-semibold mb-[6px]";
+
+  if (submitted) {
+    return (
+      <div id="refund-claim" className="border border-white/10 rounded-[8px] p-8 mb-10 text-center">
+        <div className="text-[#C65D3B] text-[28px] mb-3">✓</div>
+        <h3 style={{ fontFamily: "'Cinzel', serif" }} className="text-[16px] text-white mb-2">Claim Submitted</h3>
+        <p className="text-[13px] text-white/60 max-w-[400px] mx-auto">
+          WhatsApp has opened with your claim details. Please also send your order screenshot and product photo in the same chat. We'll respond within 48 hours.
+        </p>
+        <button onClick={() => setSubmitted(false)} className="mt-5 text-[11px] text-[#C65D3B] hover:underline tracking-[.1em] uppercase">
+          Submit another claim
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div id="refund-claim" className="border border-white/10 rounded-[8px] p-6 md:p-8 mb-10">
+      <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-2">60-Day Results Guarantee</div>
+      <h3 style={{ fontFamily: "'Cinzel', serif" }} className="text-[18px] text-white mb-1">Refund Claim Form</h3>
+      <p className="text-[12px] text-white/45 mb-6">Fill this form and it will open WhatsApp with your details pre-filled. Also send your order screenshot + product photo in the same chat.</p>
+
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        {/* 1. Order Number */}
+        <div>
+          <label className={labelCls}>1. Order Number</label>
+          <input required className={inputCls} placeholder="e.g. JB-10234" value={form.orderNumber}
+            onChange={(e) => setForm((f) => ({ ...f, orderNumber: e.target.value }))} />
+        </div>
+
+        {/* 2. Product */}
+        <div>
+          <label className={labelCls}>2. Product</label>
+          <select required className={inputCls} value={form.product}
+            onChange={(e) => setForm((f) => ({ ...f, product: e.target.value }))}>
+            <option value="">Select product</option>
+            {PRODUCTS_LIST.map((p) => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
+
+        {/* 3. Purchase Date */}
+        <div>
+          <label className={labelCls}>3. Purchase Date</label>
+          <input required type="date" className={inputCls} value={form.purchaseDate}
+            onChange={(e) => setForm((f) => ({ ...f, purchaseDate: e.target.value }))} />
+        </div>
+
+        {/* 5. Used as directed */}
+        <div>
+          <label className={labelCls}>5. Used as directed (once/twice daily)?</label>
+          <div className="flex gap-4 mt-1">
+            {["Yes", "No"].map((opt) => (
+              <label key={opt} className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="used" value={opt} required
+                  checked={form.usedAsDirected === opt}
+                  onChange={() => setForm((f) => ({ ...f, usedAsDirected: opt }))}
+                  className="accent-[#C65D3B]" />
+                <span className="text-[13px] text-white/70">{opt}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. Skin Concern */}
+        <div className="md:col-span-2">
+          <label className={labelCls}>4. Skin Concern (what did you expect to improve?)</label>
+          <div className="flex flex-wrap gap-2 mt-1">
+            {SKIN_CONCERNS.map((c) => (
+              <button type="button" key={c} onClick={() => toggleConcern(c)}
+                className={`px-3 py-[6px] rounded-full text-[12px] font-semibold border transition-colors ${
+                  form.concerns.includes(c)
+                    ? "bg-[#C65D3B] border-[#C65D3B] text-white"
+                    : "border-white/20 text-white/50 hover:border-white/40"
+                }`}>
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 6. Upload proof — instructions only */}
+        <div className="md:col-span-2">
+          <label className={labelCls}>6. Upload Proof (send in WhatsApp after submitting)</label>
+          <div className="border border-dashed border-white/15 rounded-[4px] px-4 py-5 text-[12px] text-white/40">
+            After submitting this form, WhatsApp will open — please attach:<br />
+            <span className="text-white/60">• Screenshot of your order confirmation</span><br />
+            <span className="text-white/60">• Photo of the unopened / unused product (or empty bottle with receipt)</span>
+          </div>
+        </div>
+
+        {/* 7. Reason */}
+        <div className="md:col-span-2">
+          <label className={labelCls}>7. Why didn't you see results?</label>
+          <textarea required rows={3} className={`${inputCls} resize-none`} placeholder="Describe what you expected and what you experienced..."
+            value={form.reason} onChange={(e) => setForm((f) => ({ ...f, reason: e.target.value }))} />
+        </div>
+
+        {/* 8. Refund Method */}
+        <div className="md:col-span-2">
+          <label className={labelCls}>8. Preferred Refund Method</label>
+          <div className="flex flex-col sm:flex-row gap-3 mt-1">
+            {[
+              { val: "Original Payment", label: "Original Payment Method" },
+              { val: "Store Credit", label: "Store Credit (10% bonus added)" },
+            ].map(({ val, label }) => (
+              <label key={val} className="flex items-center gap-2 cursor-pointer">
+                <input type="radio" name="refund" value={val} required
+                  checked={form.refundMethod === val}
+                  onChange={() => setForm((f) => ({ ...f, refundMethod: val }))}
+                  className="accent-[#C65D3B]" />
+                <span className="text-[13px] text-white/70">{label}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div className="md:col-span-2">
+          <button type="submit"
+            className="w-full py-[13px] bg-[#C65D3B] text-white text-[11px] tracking-[.18em] uppercase font-bold rounded-[4px] hover:bg-[#A84828] transition-colors">
+            Submit Claim via WhatsApp
+          </button>
+          <p className="text-[10px] text-white/30 mt-2 text-center">One claim per customer per 12 months · Excludes bundle purchases</p>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 const HERO_VIDEOS = [
   "https://cdn.shopify.com/videos/c/o/v/c1c44399d9654bfa93ae10f6a6d9e774.mp4",
 ];
@@ -847,6 +1017,9 @@ export default function Home() {
               <a href="#" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Privacy Policy</a>
             </div>
           </div>
+          {/* 60-Day Refund Claim Form */}
+          <RefundClaimForm />
+
           <div className="flex flex-col md:flex-row items-center justify-between pt-5 border-t border-white/10 gap-2 text-[12px] text-white/50">
             <span>© 2025 Jade and Bloom. All rights reserved.</span>
             <span className="text-[#C65D3B]">Formulated &amp; Made in India</span>

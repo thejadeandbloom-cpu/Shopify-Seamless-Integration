@@ -8,10 +8,10 @@ router.get("/whatsapp", (req, res) => {
     res.status(404).send("Not configured");
     return;
   }
-  const message = encodeURIComponent(
-    "Hi! I'd like to know more about Jade and Bloom skincare products."
-  );
-  res.redirect(`https://wa.me/${number}?text=${message}`);
+  const text = typeof req.query.text === "string" && req.query.text
+    ? req.query.text
+    : "Hi! I'd like to know more about Jade and Bloom skincare products.";
+  res.redirect(`https://wa.me/${number}?text=${encodeURIComponent(text)}`);
 });
 
 export default router;

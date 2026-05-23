@@ -3,8 +3,12 @@ import { Plus, Minus } from "lucide-react";
 
 const FAQS = [
   {
+    q: "RESULTS OR YOUR MONEY BACK — 60 days*",
+    a: "If you don't see visible improvement in your skin concern, we'll refund 100% of your purchase price within 60 days of purchase.\n\n*Conditions apply:\n• Used as directed (once or twice daily as recommended)\n• Proof of usage required — photo of product + order confirmation\n• Unopened / unused products only\n• Excludes bulk and bundle purchases\n• One claim per customer per 12 months\n\nTo submit a claim, use the Refund Claim form in the footer below.",
+  },
+  {
     q: "What skin types are your products suitable for?",
-    a: "All Jade and Bloom products are formulated for Indian skin tones and skin types — oily, dry, combination, and sensitive. Each product is dermatologist-tested and pH-balanced (4.5–5.5) so they work without causing irritation.",
+    a: "All Jade and Bloom products are formulated for Indian skin tones and skin types — oily, dry, combination, and sensitive. Each product is pH-balanced (4.5–5.5) so they work without causing irritation.",
   },
   {
     q: "How soon will I see results?",
@@ -23,8 +27,8 @@ const FAQS = [
     a: "Yes. All products are cruelty-free, paraben-free, and free from harsh sulfates and artificial fragrances. We use actives at clinically effective concentrations, not just for marketing.",
   },
   {
-    q: "What is your return policy?",
-    a: "As skincare products are consumable in nature, we do not accept returns. However, if your order arrives damaged, we've got you covered. Simply share clear images of the damaged product with our team via Instagram or WhatsApp, and we'll review your case. Discount coupons are provided on a case-by-case basis for verified damage — no complicated processes, just a quick conversation with us.",
+    q: "What is your return and refund policy?",
+    a: "We offer a 60-day money-back guarantee — if you don't see visible improvement, submit a claim via the form in our footer and we'll refund 100%. For damaged orders, share photos of the product with us via WhatsApp or Instagram and we'll resolve it quickly. General returns on opened products are not accepted as skincare is consumable by nature.",
   },
   {
     q: "How long does shipping take?",
@@ -60,14 +64,14 @@ export default function FaqAccordion() {
 
           <div
             className="overflow-hidden transition-all duration-300"
-            style={{ maxHeight: open === i ? 400 : 0, opacity: open === i ? 1 : 0 }}
+            style={{ maxHeight: open === i ? 800 : 0, opacity: open === i ? 1 : 0 }}
           >
-            <p
+            <div
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
-              className="text-[14px] leading-[1.75] text-[#484848] pb-5 pr-8"
+              className="text-[14px] leading-[1.75] text-[#484848] pb-5 pr-8 whitespace-pre-line"
             >
               {faq.a}
-            </p>
+            </div>
           </div>
         </div>
       ))}
