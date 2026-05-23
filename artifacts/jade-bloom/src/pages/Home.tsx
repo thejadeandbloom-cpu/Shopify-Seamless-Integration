@@ -510,6 +510,76 @@ function RefundClaimForm() {
   );
 }
 
+const INSTAGRAM_REELS = [
+  "https://www.instagram.com/reel/DVf8wn7DPOx/",
+  "https://www.instagram.com/reel/DVQvKZJCCZv/",
+  "https://www.instagram.com/reel/DVV4UhnDfmQ/",
+  "https://www.instagram.com/reel/DV6ksDvCKYA/",
+];
+
+function InstagramReels() {
+  useEffect(() => {
+    const id = "instagram-embed-script";
+    if (document.getElementById(id)) {
+      // Script already present — just re-process
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).instgrm?.Embeds?.process();
+      return;
+    }
+    const script = document.createElement("script");
+    script.id = id;
+    script.src = "https://www.instagram.com/embed.js";
+    script.async = true;
+    script.onload = () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).instgrm?.Embeds?.process();
+    };
+    document.body.appendChild(script);
+  }, []);
+
+  return (
+    <section className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
+      <div className="max-w-[1200px] mx-auto">
+        <RevealDiv className="mb-10 text-center">
+          <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">As Seen On Instagram</div>
+          <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(24px,3.5vw,44px)] leading-[1.2] font-normal text-[#0D0D0D]">
+            Real People. Real Results.
+          </h2>
+          <p className="text-[14px] text-[#969696] mt-3">
+            Follow us{" "}
+            <a href="https://instagram.com/the.jadeandbloom" target="_blank" rel="noopener noreferrer" className="text-[#C65D3B] hover:underline">
+              @the.jadeandbloom
+            </a>
+          </p>
+        </RevealDiv>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {INSTAGRAM_REELS.map((url) => (
+            <RevealDiv key={url} className="w-full">
+              <blockquote
+                className="instagram-media w-full !min-w-0 !max-w-full"
+                data-instgrm-permalink={url}
+                data-instgrm-version="14"
+                data-instgrm-captioned
+                style={{
+                  background: "#FFF",
+                  border: 0,
+                  borderRadius: "8px",
+                  boxShadow: "0 1px 8px rgba(0,0,0,.08)",
+                  margin: 0,
+                  padding: 0,
+                  width: "100%",
+                  minWidth: "0 !important",
+                }}
+              />
+            </RevealDiv>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const HERO_VIDEOS = [
   "https://cdn.shopify.com/videos/c/o/v/c1c44399d9654bfa93ae10f6a6d9e774.mp4",
 ];
@@ -943,6 +1013,9 @@ export default function Home() {
           })()}
         </div>
       </section>
+
+      {/* Instagram Reels */}
+      <InstagramReels />
 
       {/* FAQ */}
       <section id="faq" className="bg-white px-4 md:px-16 py-12 md:py-20">
