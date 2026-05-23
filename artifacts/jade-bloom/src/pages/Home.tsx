@@ -858,55 +858,78 @@ export default function Home() {
       </section>
 
       {/* Real Results */}
-      <section className="bg-white px-4 md:px-16 py-12 md:py-20">
+      <section className="bg-[#0D0D0D] px-4 md:px-16 py-14 md:py-22">
         <div className="max-w-[1200px] mx-auto">
-          <RevealDiv className="mb-12">
-            <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Real Results</div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] mb-3 font-normal text-[#0D0D0D]">
-              What our customers are seeing.
-            </h2>
-            <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[16px] leading-[1.6] text-[#484848]">
-              8–12 weeks. Consistent use. Real Indian skin.
+
+          {/* Header */}
+          <RevealDiv className="mb-10 md:mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+            <div>
+              <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">Real Results</div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,52px)] leading-[1.15] font-normal text-white">
+                What our customers<br className="hidden md:block" /> are seeing.
+              </h2>
+            </div>
+            <p className="text-white/40 text-[13px] leading-[1.7] max-w-[260px]">
+              8–12 weeks. Consistent use.<br />Real Indian skin.
             </p>
           </RevealDiv>
 
-          {/* Sub-labels */}
-          <RevealDiv className="mb-8">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 bg-[#F9F7F5] border border-[#EBEBEB] rounded-full px-4 py-2 text-[11px] font-semibold text-[#484848]">
-                <span className="inline-block w-2 h-2 rounded-full bg-[#C65D3B]" />
-                Before &amp; after photos
-              </span>
-            </div>
+          {/* Two rows: before/after + screenshots */}
+
+          {/* Row 1 — Before & After */}
+          <RevealDiv className="mb-3">
+            <span className="inline-flex items-center gap-2 px-3 py-[5px] rounded-full border border-white/10 text-[10px] tracking-[.14em] uppercase font-semibold text-white/40 mb-5 block w-fit">
+              <span className="w-[6px] h-[6px] rounded-full bg-[#C65D3B] inline-block" />
+              Before &amp; After
+            </span>
           </RevealDiv>
-
-          {/* Single unified scroll — 6 cards */}
           <div
-            className="flex gap-5 overflow-x-auto pb-4 items-start"
-            style={{ scrollbarWidth: "thin", scrollbarColor: "#C65D3B #E8E4E0" }}
+            className="flex gap-3 overflow-x-auto pb-2 mb-10"
+            style={{ scrollbarWidth: "none" }}
           >
-            {/* 3 before/after photo cards */}
             {RESULTS.map((r, i) => (
-              <RevealDiv key={`result-${i}`} delay={i * 60} className="flex-none w-[260px] md:w-[300px] rounded-[6px] overflow-hidden bg-[#F2EDE8]">
-                <img src={r.img} alt="Before and after result" className="w-full h-auto block" />
-              </RevealDiv>
-            ))}
-
-            {/* 3 WhatsApp screenshot cards — full image, no crop */}
-            {WHATSAPP_REVIEWS.map((r, i) => (
-              <RevealDiv key={`wa-${i}`} delay={(i + 3) * 60} className="flex-none w-[260px] md:w-[300px] bg-white rounded-[6px] border border-[#EBEBEB] overflow-hidden flex flex-col">
+              <RevealDiv
+                key={`result-${i}`}
+                delay={i * 60}
+                className="flex-none w-[220px] md:w-[260px] rounded-[10px] overflow-hidden"
+                style={{ height: "320px" }}
+              >
                 <img
                   src={r.img}
-                  alt={`WhatsApp review from ${r.name}`}
-                  className="w-full h-auto block"
+                  alt="Before and after result"
+                  className="w-full h-full object-cover object-top"
                 />
-                <div className="px-4 py-3 border-t border-[#EBEBEB]">
-                  <span className="block text-[12px] font-semibold text-[#0D0D0D]">{r.name}</span>
-                  <span className="block text-[10px] text-[#C65D3B] font-medium mt-[2px]">{r.product}</span>
-                </div>
               </RevealDiv>
             ))}
           </div>
+
+          {/* Row 2 — Customer Screenshots */}
+          <RevealDiv className="mb-3">
+            <span className="inline-flex items-center gap-2 px-3 py-[5px] rounded-full border border-white/10 text-[10px] tracking-[.14em] uppercase font-semibold text-white/40 mb-5 block w-fit">
+              <span className="w-[6px] h-[6px] rounded-full bg-[#25D366] inline-block" />
+              Customer Messages
+            </span>
+          </RevealDiv>
+          <div
+            className="flex gap-3 overflow-x-auto pb-2"
+            style={{ scrollbarWidth: "none" }}
+          >
+            {WHATSAPP_REVIEWS.map((r, i) => (
+              <RevealDiv
+                key={`wa-${i}`}
+                delay={i * 60}
+                className="flex-none w-[220px] md:w-[260px] rounded-[10px] overflow-hidden ring-1 ring-white/[0.07]"
+                style={{ height: "320px" }}
+              >
+                <img
+                  src={r.img}
+                  alt="Customer message"
+                  className="w-full h-full object-cover object-top"
+                />
+              </RevealDiv>
+            ))}
+          </div>
+
         </div>
       </section>
 
