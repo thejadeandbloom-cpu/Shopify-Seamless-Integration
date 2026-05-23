@@ -56,6 +56,7 @@ const PRODUCTS = [
     reviewCount: 124,
     reviewId: "reviews-product-1",
     reviewsCount: 58,
+    reviewFilter: "Green Tea Face Wash",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775",
   },
   {
@@ -70,6 +71,7 @@ const PRODUCTS = [
     reviewCount: 124,
     reviewId: "reviews-product-2",
     reviewsCount: 52,
+    reviewFilter: "Vitamin C Serum",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760",
   },
   {
@@ -84,6 +86,7 @@ const PRODUCTS = [
     reviewCount: 98,
     reviewId: "reviews-product-3",
     reviewsCount: 48,
+    reviewFilter: "Kojic Acid Moisturizer",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826",
   },
   {
@@ -98,6 +101,7 @@ const PRODUCTS = [
     reviewCount: 147,
     reviewId: "reviews-product-4",
     reviewsCount: 45,
+    reviewFilter: "Fluid Sunscreen",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858",
   },
 ];
@@ -228,7 +232,7 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-function ProductCard({ product, index }: { product: typeof PRODUCTS[0]; index: number }) {
+function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUCTS[0]; index: number; onReviewClick: (filter: string) => void }) {
   const { addToCart, isLoading } = useCart();
   const [variantId, setVariantId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
@@ -271,7 +275,7 @@ function ProductCard({ product, index }: { product: typeof PRODUCTS[0]; index: n
           <Stars count={product.stars} />
           <span className="text-[11px] text-[#969696]">{product.stars} ({product.reviewCount})</span>
           <button
-            onClick={() => document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => onReviewClick(product.reviewFilter)}
             className="ml-auto text-[11px] text-[#C65D3B] font-semibold hover:text-[#A84828] transition-colors"
           >
             {product.reviewsCount} reviews →
@@ -354,6 +358,12 @@ export default function Home() {
   }, []);
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  const [reviewFilter, setReviewFilter] = useState("All");
+
+  const handleReviewClick = (filter: string) => {
+    setReviewFilter(filter);
+    setTimeout(() => document.getElementById("reviews")?.scrollIntoView({ behavior: "smooth" }), 50);
+  };
 
   return (
     <div className="overflow-x-hidden">
@@ -429,7 +439,7 @@ export default function Home() {
             </p>
           </RevealDiv>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
-            {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} />)}
+            {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} />)}
           </div>
         </div>
       </section>
@@ -626,12 +636,30 @@ export default function Home() {
             </div>
           </RevealDiv>
 
+          {/* Filter tabs */}
+          <div className="flex flex-wrap gap-2 mb-8">
+            {["All", "Green Tea Face Wash", "Vitamin C Serum", "Kojic Acid Moisturizer", "Fluid Sunscreen"].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setReviewFilter(tab)}
+                className="px-4 py-2 rounded-full text-[11px] font-semibold tracking-[.06em] transition-all duration-200 border"
+                style={
+                  reviewFilter === tab
+                    ? { background: "#C65D3B", color: "#fff", borderColor: "#C65D3B" }
+                    : { background: "transparent", color: "#484848", borderColor: "#EBEBEB" }
+                }
+              >
+                {tab === "All" ? `All (${ALL_REVIEWS.length})` : tab}
+              </button>
+            ))}
+          </div>
+
           {/* Masonry grid */}
           <div
             className="columns-1 sm:columns-2 lg:columns-3 gap-4"
             style={{ columnGap: "1rem" }}
           >
-            {ALL_REVIEWS.map((r, i) => (
+            {ALL_REVIEWS.filter((r) => reviewFilter === "All" || r.product === reviewFilter).map((r, i) => (
               <RevealDiv
                 key={i}
                 delay={Math.min(i * 40, 300)}
@@ -641,9 +669,11 @@ export default function Home() {
                   <span className="text-[#C8902A] text-[12px] tracking-[1.5px]">
                     {"★".repeat(r.stars)}{"☆".repeat(5 - r.stars)}
                   </span>
-                  <span className="text-[9px] tracking-[.12em] uppercase font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F0D8CE] rounded-full px-2 py-[3px] flex-none">
-                    {r.product}
-                  </span>
+                  {reviewFilter === "All" && (
+                    <span className="text-[9px] tracking-[.12em] uppercase font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F0D8CE] rounded-full px-2 py-[3px] flex-none">
+                      {r.product}
+                    </span>
+                  )}
                 </div>
                 {r.title && (
                   <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] text-[#0D0D0D] font-semibold leading-snug">
