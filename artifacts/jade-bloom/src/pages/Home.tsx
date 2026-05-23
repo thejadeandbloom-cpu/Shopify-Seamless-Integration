@@ -769,8 +769,6 @@ export default function Home() {
               <span className="opacity-50">·</span>
               <span>Use code <span className="bg-white text-[#C65D3B] px-[6px] py-[1px] rounded font-bold tracking-[.06em] mx-1">FIRST10</span> at checkout</span>
               <span className="opacity-50">·</span>
-              <span>Free shipping on orders above ₹499</span>
-              <span className="opacity-50">·</span>
             </span>
           ))}
         </div>

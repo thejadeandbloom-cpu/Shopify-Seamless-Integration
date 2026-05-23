@@ -130,15 +130,6 @@ export default function LeadCapturePopup() {
                 Login / Create account
               </a>
 
-              {/* Secondary — get bundle code via WhatsApp */}
-              <button
-                type="button"
-                onClick={() => setView("whatsapp")}
-                className="block w-full text-center border border-[#EBEBEB] text-[#484848] py-[11px] text-[11px] font-semibold tracking-[.1em] uppercase rounded-[4px] hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors mb-4"
-              >
-                Get BUNDLE15 on WhatsApp instead
-              </button>
-
               {/* Guest option */}
               <p className="text-[10px] text-[#ABABAB] text-center">
                 <button onClick={dismiss} className="underline hover:text-[#969696] transition-colors">
