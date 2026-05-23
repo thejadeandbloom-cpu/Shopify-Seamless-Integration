@@ -661,7 +661,7 @@ const COMPARISON_ROWS = [
   },
 ];
 
-const COMPARISON_BRANDS = ["Minimalist", "Plum", "Mamaearth", "Dot & Key"];
+const COMPARISON_BRANDS = ["Brand A", "Brand B", "Brand C", "Brand D"];
 
 function BrandComparison() {
   const Check = () => (
@@ -764,7 +764,7 @@ function BrandComparison() {
           </div>
 
           <p className="text-[10px] text-[#ABABAB] mt-4 text-center">
-            Data based on publicly available product information. Competitor claims are approximate.
+            Data based on publicly available product information. Brand comparisons are approximate and for illustrative purposes only.
           </p>
         </RevealDiv>
       </div>
