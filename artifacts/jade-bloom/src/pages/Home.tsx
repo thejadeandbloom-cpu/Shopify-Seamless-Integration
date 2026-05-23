@@ -176,26 +176,33 @@ const RESULTS = [
   { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_000000008f707207b881a98a418432b8.png?v=1779354251" },
   { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_0000000054987207a7784b6ae3988a34.png?v=1779354261" },
   { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/file_00000000937c7207adbdbe1b7cf19d8e.png?v=1779354284" },
+  { img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/IMG_4773.png?v=1779558440" },
 ];
 
 const WHATSAPP_REVIEWS = [
   {
-    img: "/review-kavya.png",
-    name: "Kavya M.",
-    product: "14% Vitamin C Serum",
-    quote: "My skin looks brighter, clearer and so much more even. It's now a must-have in my routine. 100% recommend if you want that natural glow!",
-  },
-  {
-    img: "/review-pooja.png",
-    name: "Pooja R.",
-    product: "Kojic Acid + Vitamin C Moisturizer",
-    quote: "After using this moisturizer consistently, the difference is real! My skin looks brighter, more even and so much healthier now.",
-  },
-  {
-    img: "/review-anon.png",
+    img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/IMG-20260523-WA0051.jpg?v=1779558423",
     name: "Verified Customer",
     product: "14% Vitamin C Serum",
-    quote: "My skin looks brighter, clearer and so much more even. 100% recommend if you want that natural, healthy glow!",
+    quote: "",
+  },
+  {
+    img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/IMG-20260523-WA0054.jpg?v=1779558408",
+    name: "Verified Customer",
+    product: "Kojic Acid + Vitamin C Moisturizer",
+    quote: "",
+  },
+  {
+    img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/IMG-20260523-WA0056.jpg?v=1779558397",
+    name: "Verified Customer",
+    product: "Full Routine",
+    quote: "",
+  },
+  {
+    img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/IMG-20260523-WA0058.jpg?v=1779558352",
+    name: "Verified Customer",
+    product: "Full Routine",
+    quote: "",
   },
 ];
 
@@ -869,10 +876,6 @@ export default function Home() {
               <span className="inline-flex items-center gap-2 bg-[#F9F7F5] border border-[#EBEBEB] rounded-full px-4 py-2 text-[11px] font-semibold text-[#484848]">
                 <span className="inline-block w-2 h-2 rounded-full bg-[#C65D3B]" />
                 Before &amp; after photos
-              </span>
-              <span className="inline-flex items-center gap-2 bg-[#F9F7F5] border border-[#EBEBEB] rounded-full px-4 py-2 text-[11px] font-semibold text-[#484848]">
-                <span className="inline-block w-2 h-2 rounded-full bg-[#25D366]" />
-                Real WhatsApp feedback — unfiltered
               </span>
             </div>
           </RevealDiv>
