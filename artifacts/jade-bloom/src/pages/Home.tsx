@@ -3,6 +3,7 @@ import { Instagram, Youtube, ExternalLink } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { getProduct } from "@/lib/shopify";
 import ConcernBundleModal from "@/components/ConcernBundleModal";
+import FaqAccordion from "@/components/FaqAccordion";
 
 const EASE = "cubic-bezier(.16,1,.3,1)";
 
@@ -706,6 +707,19 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FAQ */}
+      <section id="faq" className="bg-white px-8 md:px-16 py-20">
+        <div className="max-w-[780px] mx-auto">
+          <RevealDiv className="mb-12">
+            <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">FAQ</div>
+            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] font-normal text-[#0D0D0D]">
+              Questions? Answered.
+            </h2>
+          </RevealDiv>
+          <FaqAccordion />
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="bg-[#0D0D0D] text-white px-8 md:px-16 py-16">
         <div className="max-w-[1200px] mx-auto">
@@ -739,6 +753,7 @@ export default function Home() {
               <button onClick={() => scrollTo("story")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Our Story</button>
               <button onClick={() => scrollTo("concerns")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Shop by Concern</button>
               <button onClick={() => scrollTo("reviews")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Customer Reviews</button>
+              <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">FAQ</button>
             </div>
             <div>
               <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] tracking-[.15em] uppercase text-[#C65D3B] mb-3 font-semibold">Support</div>

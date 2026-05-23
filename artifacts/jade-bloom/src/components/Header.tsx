@@ -23,6 +23,7 @@ export default function Header() {
     { label: "Concerns", href: "#concerns" },
     { label: "Our Story", href: "#story" },
     { label: "Reviews", href: "#reviews" },
+    { label: "FAQ", href: "#faq" },
   ];
 
   const scrollTo = (href: string) => {
