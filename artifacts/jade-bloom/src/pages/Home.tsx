@@ -53,7 +53,7 @@ const PRODUCTS = [
     name: "2% Green Tea Face Wash",
     desc: "1.5% Salicylic Acid clears pores and prevents breakouts. pH-balanced. Won't strip your skin.",
     price: "269",
-    was: "349",
+    was: "399",
     stars: 4.8,
     reviewCount: 124,
     reviewId: "reviews-product-1",
@@ -65,13 +65,13 @@ const PRODUCTS = [
   {
     handle: "vitamin-c-serum",
     tag: "Dark Spots · Dullness",
-    badge: "Visible glow in 4 weeks",
+    badge: "Visible glow\nin 4 weeks",
     stat: "91% noticed brighter skin in 4 weeks",
     stock: 9,
     name: "14% Vitamin C Serum",
     desc: "Brightens. Boosts collagen. Fades dark spots. Lightweight. Won't oxidize.",
     price: "618",
-    was: "799",
+    was: "899",
     stars: 4.8,
     reviewCount: 124,
     reviewId: "reviews-product-2",
@@ -89,7 +89,7 @@ const PRODUCTS = [
     name: "Kojic Acid Moisturizer",
     desc: "Locks hydration. Balances pH. Strengthens skin barrier. Non-comedogenic.",
     price: "449",
-    was: "579",
+    was: "599",
     stars: 4.7,
     reviewCount: 98,
     reviewId: "reviews-product-3",
@@ -101,13 +101,13 @@ const PRODUCTS = [
   {
     handle: "fluid-sunscreen",
     tag: "UV Protection · Aging",
-    badge: "Zero white cast. All day.",
+    badge: "Zero white cast.\nAll day.",
     stat: "96% reported zero white cast",
     stock: 6,
     name: "Fluid Sunscreen SPF 50 PA++++",
     desc: "Invisible. Weightless. Won't clog pores. Reef-safe.",
     price: "489",
-    was: "629",
+    was: "699",
     stars: 4.9,
     reviewCount: 147,
     reviewId: "reviews-product-4",
@@ -292,7 +292,7 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
       {/* Info */}
       <div className="p-3 md:p-4 flex-1 flex flex-col gap-2">
         {/* Benefit badge */}
-        <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full w-full text-center block">
+        <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full w-full text-center block whitespace-pre-line leading-[1.4]">
           {product.badge}
         </span>
 
