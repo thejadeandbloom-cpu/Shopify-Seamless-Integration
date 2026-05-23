@@ -85,7 +85,7 @@ const PRODUCTS = [
     tag: "Dryness · Sensitivity",
     badge: "Hydrated within minutes",
     stat: "94% felt skin hydrated all day",
-    stock: 22,
+    stock: 11,
     name: "Kojic Acid Moisturizer",
     desc: "Locks hydration. Balances pH. Strengthens skin barrier. Non-comedogenic.",
     price: "449",
@@ -103,7 +103,7 @@ const PRODUCTS = [
     tag: "UV Protection · Aging",
     badge: "Reef-safe & sweat-proof",
     stat: "96% reported zero white cast",
-    stock: 18,
+    stock: 6,
     name: "Fluid Sunscreen SPF 50",
     desc: "Invisible. Weightless. Won't clog pores. Reef-safe.",
     price: "489",
@@ -266,7 +266,17 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
 
   return (
     <RevealDiv delay={index * 80} className="rounded-[8px] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300 bg-white">
-      {/* Image area — colored bg, aspect-ratio driven so images always fully visible */}
+      {/* Product name — above image for instant scannability */}
+      <div
+        className="px-3 pt-3 pb-2"
+        style={{ background: product.imgBg }}
+      >
+        <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] md:text-[12px] tracking-[.04em] text-[#0D0D0D] leading-snug font-semibold uppercase">
+          {product.name}
+        </div>
+      </div>
+
+      {/* Image area — same bg continues, aspect-ratio driven */}
       <div
         className="relative w-full overflow-hidden"
         style={{ background: product.imgBg, aspectRatio: "4/5" }}
@@ -296,17 +306,12 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
           <span className="text-[11px] text-[#969696] leading-none">({product.reviewsCount})</span>
         </button>
 
-        {/* Name */}
-        <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] md:text-[13px] tracking-[.03em] text-[#0D0D0D] leading-snug font-semibold">
-          {product.name}
-        </div>
-
         {/* Before/after stat */}
         <div className="text-[9.5px] text-[#484848] leading-snug bg-[#F9F7F5] rounded px-2 py-[5px] border-l-2 border-[#C65D3B]">
           {product.stat}
         </div>
 
-        {/* Urgency — low stock warning */}
+        {/* Urgency — low stock FOMO */}
         {product.stock <= 15 && (
           <div className="flex items-center gap-1">
             <span className="w-[6px] h-[6px] rounded-full bg-[#E05C2A] animate-pulse flex-shrink-0" />
