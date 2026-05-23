@@ -101,7 +101,7 @@ const PRODUCTS = [
   {
     handle: "fluid-sunscreen",
     tag: "UV Protection · Aging",
-    badge: "Reef-safe & sweat-proof",
+    badge: "Zero white cast. All day.",
     stat: "96% reported zero white cast",
     stock: 6,
     name: "Fluid Sunscreen SPF 50 PA++++",
@@ -292,7 +292,7 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
       {/* Info */}
       <div className="p-3 md:p-4 flex-1 flex flex-col gap-2">
         {/* Benefit badge */}
-        <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full w-fit">
+        <span className="text-[10px] font-semibold text-[#C65D3B] bg-[#FFF9F5] border border-[#F2E0D6] px-2 py-[3px] rounded-full w-full text-center block">
           {product.badge}
         </span>
 
