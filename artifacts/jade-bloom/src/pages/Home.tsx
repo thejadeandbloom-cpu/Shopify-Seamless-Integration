@@ -709,7 +709,7 @@ function BrandComparison() {
                   <th className="pb-4 px-3 w-[15%]">
                     <div className="bg-[#C65D3B] rounded-t-[8px] px-2 pt-3 pb-2 text-center">
                       <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[10px] tracking-[.1em] text-white font-semibold leading-tight">
-                        JADE<br />& BLOOM
+                        JADE AND<br />BLOOM
                       </div>
                     </div>
                   </th>

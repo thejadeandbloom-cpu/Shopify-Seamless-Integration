@@ -58,7 +58,7 @@ function Bar({ row, animate }: { row: typeof ROWS[0]; animate: boolean }) {
       <div className="mb-2">
         <div className="flex items-center gap-3 mb-1">
           <span className="text-[9px] tracking-[.18em] uppercase font-bold text-[#C65D3B] w-[90px] flex-none">
-            Jade &amp; Bloom
+            Jade and Bloom
           </span>
           <span
             style={{ fontFamily: "'Cinzel', serif" }}
