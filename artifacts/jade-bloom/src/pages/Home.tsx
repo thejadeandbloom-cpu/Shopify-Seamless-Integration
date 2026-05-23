@@ -466,32 +466,32 @@ export default function Home() {
             </div>
           </RevealDiv>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-5">
             {CONCERNS.map((c, i) => (
-              <RevealDiv key={c.name} delay={i * 80} className="">
+              <RevealDiv key={c.name} delay={i * 80}>
                 <button
                   onClick={() => setActiveConcern(c.name)}
-                  className="w-full text-left group block bg-[#F9F7F5] rounded-[4px] border border-[#EBEBEB] overflow-hidden hover:border-[#C65D3B] hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#C65D3B] focus:ring-offset-2"
+                  className="relative w-full group block overflow-hidden rounded-[6px] focus:outline-none focus:ring-2 focus:ring-[#C65D3B] focus:ring-offset-2"
+                  style={{ height: "clamp(220px, 40vw, 360px)" }}
                   data-testid={`concern-card-${i}`}
                 >
-                  <div className="w-full h-[130px] md:h-[200px] bg-[#F2EDE8] overflow-hidden">
-                    <img
-                      src={c.img}
-                      alt={c.name}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <h3 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[16px] leading-snug mb-2 text-[#0D0D0D] group-hover:text-[#C65D3B] transition-colors">
+                  {/* Full-bleed image */}
+                  <img
+                    src={c.img}
+                    alt={c.name}
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.18) 55%, transparent 100%)" }} />
+                  {/* Text */}
+                  <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 text-left">
+                    <p className="text-[9px] tracking-[.18em] uppercase font-semibold text-white/60 mb-1">{c.productCount} products</p>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif" }} className="text-white text-[15px] md:text-[18px] leading-snug mb-3 font-normal">
                       {c.name}
                     </h3>
-                    <p className="text-[12px] leading-[1.6] text-[#484848] mb-4">{c.desc}</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] tracking-[.1em] uppercase text-[#969696] font-medium">{c.productCount} products</span>
-                      <span className="text-[11px] font-semibold text-[#C65D3B] group-hover:underline">
-                        View Bundle →
-                      </span>
-                    </div>
+                    <span className="inline-flex items-center gap-2 text-[10px] tracking-[.16em] uppercase font-bold text-white bg-[#C65D3B] px-3 py-[6px] rounded-[2px] group-hover:bg-[#A84828] transition-colors">
+                      View Bundle
+                    </span>
                   </div>
                 </button>
               </RevealDiv>
