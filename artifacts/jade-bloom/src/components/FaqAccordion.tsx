@@ -24,15 +24,15 @@ const FAQS = [
   },
   {
     q: "What is your return policy?",
-    a: "We offer a 30-day money-back guarantee. If you're not satisfied for any reason, reach out to us on Instagram or WhatsApp and we'll make it right — no long forms, no hassle.",
+    a: "As skincare products are consumable in nature, we do not accept returns. However, if your order arrives damaged, we've got you covered. Simply share clear images of the damaged product with our team via Instagram or WhatsApp, and we'll review your case. Discount coupons are provided on a case-by-case basis for verified damage — no complicated processes, just a quick conversation with us.",
   },
   {
     q: "How long does shipping take?",
     a: "Orders are dispatched within 24 hours. Standard delivery takes 3–5 business days across India. You'll receive a tracking link as soon as your order ships.",
   },
   {
-    q: "Is there free shipping?",
-    a: "Yes — free shipping on all orders above ₹999.",
+    q: "Are there any additional shipping charges?",
+    a: "No — all product prices are fully inclusive of shipping. What you see is what you pay. No surprise charges at checkout.",
   },
 ];
 

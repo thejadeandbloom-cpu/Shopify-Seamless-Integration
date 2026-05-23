@@ -361,8 +361,8 @@ export default function Home() {
     <div className="overflow-x-hidden">
       {/* Announcement */}
       <div className="bg-[#0D0D0D] text-white/60 text-center py-[9px] text-[10px] tracking-[.22em] uppercase">
-        <span className="text-white font-semibold">Free shipping</span> over ₹999 ·{" "}
-        <span className="text-white font-semibold">Dispatch</span> within 24 hrs · 30-day money-back guarantee · Made in India
+        <span className="text-white font-semibold">Shipping included</span> in all prices ·{" "}
+        <span className="text-white font-semibold">Dispatch</span> within 24 hrs · No hidden charges · Made in India
       </div>
 
       {/* Trust signals bar */}
@@ -396,7 +396,7 @@ export default function Home() {
             14% Vitamin C melts into skin. Kojic Acid blocks melanin. You'll see the difference by week 4.
           </p>
           <p className="text-[11px] tracking-[.08em] text-white/90 mb-8 font-medium">
-            Ships within 24 hours · Tracking included · 30-day money-back guarantee
+            Ships within 24 hours · Tracking included · Shipping included in price
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <button
@@ -758,8 +758,8 @@ export default function Home() {
             <div>
               <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[12px] tracking-[.15em] uppercase text-[#C65D3B] mb-3 font-semibold">Support</div>
               <a href="mailto:hello@thejadeandbloom.com" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Contact Us</a>
-              <a href="#" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Shipping Policy</a>
-              <a href="#" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Returns &amp; Refunds</a>
+              <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Shipping Info</button>
+              <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Damage Policy</button>
               <a href="#" className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors">Privacy Policy</a>
             </div>
           </div>
