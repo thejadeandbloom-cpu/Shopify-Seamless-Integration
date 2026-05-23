@@ -41,14 +41,14 @@ export default function CartDrawer() {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[400] pointer-events-none transition-all ${isCartOpen ? "pointer-events-auto" : ""}`}
+        className={`fixed inset-0 z-[10000] transition-all ${isCartOpen ? "pointer-events-auto" : "pointer-events-none"}`}
       >
         <div
-          className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isCartOpen ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 bg-black/50 transition-opacity duration-300 ${isCartOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
           onClick={() => setIsCartOpen(false)}
         />
         <div
-          className={`absolute top-0 right-0 bottom-0 w-full max-w-[420px] bg-white flex flex-col shadow-2xl transition-transform duration-300 ${isCartOpen ? "translate-x-0" : "translate-x-full"}`}
+          className={`absolute top-0 right-0 bottom-0 w-full max-w-[420px] bg-white flex flex-col shadow-2xl transition-transform duration-300 z-[1] ${isCartOpen ? "translate-x-0" : "translate-x-full pointer-events-none"}`}
           style={{ transitionTimingFunction: "cubic-bezier(.16,1,.3,1)" }}
           data-testid="cart-drawer"
         >

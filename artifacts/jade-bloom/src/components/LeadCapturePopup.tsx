@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const STORAGE_KEY = "jb_lead_dismissed";
 const DELAY_MS = 12000;
@@ -8,6 +9,7 @@ const API = `${BASE}api`.replace(/\/+/g, "/");
 
 export default function LeadCapturePopup() {
   const [visible, setVisible] = useState(false);
+  const { openOverlay, closeOverlay } = useCart();
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,11 @@ export default function LeadCapturePopup() {
     const timer = setTimeout(() => setVisible(true), DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (visible) openOverlay();
+    else closeOverlay();
+  }, [visible]);
 
   const dismiss = () => {
     sessionStorage.setItem(STORAGE_KEY, "1");
@@ -60,7 +67,7 @@ export default function LeadCapturePopup() {
   if (!visible) return null;
 
   return (
-    <div className="fixed inset-0 z-[500] flex items-end sm:items-center justify-center px-4 pb-4 sm:pb-0">
+    <div className="fixed inset-0 z-[10001] flex items-end sm:items-center justify-center px-4 pb-4 sm:pb-0">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" onClick={dismiss} />
 
       <div

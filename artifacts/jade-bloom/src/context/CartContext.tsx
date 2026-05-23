@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { cartCreate, cartLinesAdd, cartLinesRemove, getCart } from '../lib/shopify';
 import { useToast } from '@/hooks/use-toast';
 
@@ -22,6 +22,9 @@ interface CartContextType {
   removeFromCart: (lineId: string) => Promise<void>;
   goToCheckout: () => void;
   isLoading: boolean;
+  isAnyOverlayOpen: boolean;
+  openOverlay: () => void;
+  closeOverlay: () => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -33,7 +36,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [totalAmount, setTotalAmount] = useState('0');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [overlayCount, setOverlayCount] = useState(0);
   const { toast } = useToast();
+
+  const openOverlay = useCallback(() => setOverlayCount((c) => c + 1), []);
+  const closeOverlay = useCallback(() => setOverlayCount((c) => Math.max(0, c - 1)), []);
+  const isAnyOverlayOpen = isCartOpen || overlayCount > 0;
 
   useEffect(() => {
     const initCart = async () => {
@@ -142,7 +150,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       addToCart,
       removeFromCart,
       goToCheckout,
-      isLoading
+      isLoading,
+      isAnyOverlayOpen,
+      openOverlay,
+      closeOverlay,
     }}>
       {children}
     </CartContext.Provider>

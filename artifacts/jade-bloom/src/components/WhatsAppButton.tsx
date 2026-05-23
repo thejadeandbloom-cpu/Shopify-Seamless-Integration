@@ -1,4 +1,10 @@
+import { useCart } from "@/context/CartContext";
+
 export default function WhatsAppButton() {
+  const { isAnyOverlayOpen } = useCart();
+
+  if (isAnyOverlayOpen) return null;
+
   return (
     <a
       href="/api/whatsapp"

@@ -1,4 +1,10 @@
+import { useCart } from "@/context/CartContext";
+
 export default function FaqButton() {
+  const { isAnyOverlayOpen } = useCart();
+
+  if (isAnyOverlayOpen) return null;
+
   const scrollToFaq = () => {
     document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
   };

@@ -64,12 +64,18 @@ interface ConcernBundleModalProps {
 }
 
 export default function ConcernBundleModal({ concern, onClose }: ConcernBundleModalProps) {
-  const { addToCart, isLoading } = useCart();
+  const { addToCart, isLoading, openOverlay, closeOverlay } = useCart();
   const [adding, setAdding] = useState(false);
   const [variantIds, setVariantIds] = useState<Record<string, string>>({});
   const [fetchingVariants, setFetchingVariants] = useState(false);
 
   const bundle = CONCERN_BUNDLES.find((b) => b.concern === concern);
+
+  // Register with global overlay counter so FAQ/WA buttons hide
+  useEffect(() => {
+    openOverlay();
+    return () => closeOverlay();
+  }, []);
 
   useEffect(() => {
     if (!bundle) return;
@@ -122,7 +128,7 @@ export default function ConcernBundleModal({ concern, onClose }: ConcernBundleMo
   const allVariantsLoaded = bundle.products.every((p) => !!variantIds[p.handle]);
 
   return (
-    <div className="fixed inset-0 z-[500] flex items-end sm:items-center justify-center">
+    <div className="fixed inset-0 z-[10001] flex items-end sm:items-center justify-center">
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-[2px]"
         onClick={onClose}
