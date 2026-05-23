@@ -125,11 +125,11 @@ export default function IngredientBars() {
             style={{ fontFamily: "'Playfair Display', serif" }}
             className="text-[clamp(28px,4vw,52px)] leading-[1.15] font-normal text-white mb-4"
           >
-            Most brands use 5% Vitamin C.{" "}
-            <span className="italic text-[#C65D3B]">We use 14%.</span>
+            Most brands use trace amounts.{" "}
+            <span className="italic text-[#C65D3B]">We use clinical doses.</span>
           </h2>
           <p className="text-white/50 text-[14px] leading-[1.7] max-w-[560px]">
-            Clinical concentrations aren't a selling point for us — they're the minimum. Every active is dosed at the level where the science says it actually works.
+            Across every product — from Vitamin C to Kojic Acid — each active is dosed at the concentration where the science says it actually works. Not trace amounts. Not marketing smoke.
           </p>
         </div>
 
