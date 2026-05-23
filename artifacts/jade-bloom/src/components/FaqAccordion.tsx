@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Minus } from "lucide-react";
 
 const FAQS = [
@@ -43,10 +43,22 @@ const FAQS = [
 export default function FaqAccordion() {
   const [open, setOpen] = useState<number | null>(null);
 
+  useEffect(() => {
+    const tryOpen = () => {
+      if (window.location.hash === "#faq-guarantee") {
+        setOpen(0);
+        document.getElementById("faq-guarantee")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    tryOpen();
+    window.addEventListener("hashchange", tryOpen);
+    return () => window.removeEventListener("hashchange", tryOpen);
+  }, []);
+
   return (
     <div className="divide-y divide-[#EBEBEB] border-t border-[#EBEBEB]">
       {FAQS.map((faq, i) => (
-        <div key={i}>
+        <div key={i} id={i === 0 ? "faq-guarantee" : undefined}>
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="w-full flex items-start justify-between gap-6 py-5 text-left group"

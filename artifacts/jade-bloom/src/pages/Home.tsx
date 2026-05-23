@@ -878,7 +878,20 @@ export default function Home() {
           </h1>
 
           <p className="text-[14px] leading-[1.6] text-white/85 mb-7 max-w-[400px]">
-            14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or your money back.
+            14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or{" "}
+            <a
+              href="#faq-guarantee"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                setTimeout(() => {
+                  window.location.hash = "faq-guarantee";
+                }, 400);
+              }}
+              className="inline-flex items-center gap-[3px] text-[#FFD580] underline underline-offset-2 decoration-[#FFD580]/60 hover:decoration-[#FFD580] transition-colors font-semibold whitespace-nowrap"
+            >
+              <span aria-hidden="true">★</span> your money back
+            </a>.
           </p>
 
           {/* Trust badge */}
