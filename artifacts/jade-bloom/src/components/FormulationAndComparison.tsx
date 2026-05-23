@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { useCart } from "@/context/CartContext";
+import { getProduct } from "@/lib/shopify";
 
 const INGREDIENTS = [
   {
@@ -93,7 +95,7 @@ function useCounter(target: number, decimals: number, trigger: boolean, duration
 
 function IngredientCard({ row, animate }: { row: typeof INGREDIENTS[0]; animate: boolean }) {
   const count = useCounter(row.jbValue, row.decimals, animate, 1200);
-  const jbWidth = (row.jb / row.max) * 100;
+  const jbWidth = (row.jbValue / row.max) * 100;
   const industryWidth = (row.industry / row.max) * 100;
 
   return (
@@ -145,8 +147,10 @@ function IngredientCard({ row, animate }: { row: typeof INGREDIENTS[0]; animate:
             <div
               className="h-full bg-[#C65D3B] rounded-full"
               style={{
-                width: animate ? `${jbWidth}%` : "0%",
-                transition: animate ? "width 1.2s cubic-bezier(.16,1,.3,1)" : "none",
+                width: `${jbWidth}%`,
+                transform: animate ? "scaleX(1)" : "scaleX(0)",
+                transformOrigin: "left",
+                transition: "transform 1.2s cubic-bezier(.16,1,.3,1)",
               }}
             />
           </div>
@@ -164,8 +168,10 @@ function IngredientCard({ row, animate }: { row: typeof INGREDIENTS[0]; animate:
             <div
               className="h-full bg-white/25 rounded-full"
               style={{
-                width: animate ? `${industryWidth}%` : "0%",
-                transition: animate ? "width 1.2s cubic-bezier(.16,1,.3,1) 200ms" : "none",
+                width: `${industryWidth}%`,
+                transform: animate ? "scaleX(1)" : "scaleX(0)",
+                transformOrigin: "left",
+                transition: "transform 1.2s cubic-bezier(.16,1,.3,1) 200ms",
               }}
             />
           </div>
@@ -180,9 +186,36 @@ function IngredientCard({ row, animate }: { row: typeof INGREDIENTS[0]; animate:
   );
 }
 
+const ROUTINE_HANDLES = [
+  "green-tea-face-wash",
+  "vitamin-c-serum",
+  "kojic-acid-moisturizer",
+  "fluid-sunscreen",
+];
+
+const BUNDLE_DISCOUNT_CODE = "BUNDLE15";
+
 export default function FormulationAndComparison() {
   const ref = useRef<HTMLDivElement>(null);
   const [animate, setAnimate] = useState(false);
+  const [addingRoutine, setAddingRoutine] = useState(false);
+  const { addRoutineToCart } = useCart();
+
+  const handleShopRoutine = async () => {
+    setAddingRoutine(true);
+    try {
+      const products = await Promise.all(ROUTINE_HANDLES.map((h) => getProduct(h)));
+      const variantIds = products
+        .filter(Boolean)
+        .map((p: any) => p.variants?.edges?.[0]?.node?.id)
+        .filter(Boolean) as string[];
+      await addRoutineToCart(variantIds, BUNDLE_DISCOUNT_CODE);
+    } catch {
+      // error toast handled inside addRoutineToCart
+    } finally {
+      setAddingRoutine(false);
+    }
+  };
 
   useEffect(() => {
     const el = ref.current;
@@ -279,16 +312,13 @@ export default function FormulationAndComparison() {
                 Save 10% more with code FIRST10
               </p>
             </div>
-            <a
-              href="#products"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="flex-none px-6 sm:px-8 py-3 sm:py-4 bg-[#C65D3B] text-white text-[10px] tracking-[.2em] uppercase font-bold rounded-[2px] hover:bg-[#A84828] active:bg-[#A84828] transition-colors text-center touch-manipulation"
+            <button
+              onClick={handleShopRoutine}
+              disabled={addingRoutine}
+              className="flex-none px-6 sm:px-8 py-3 sm:py-4 bg-[#C65D3B] text-white text-[10px] tracking-[.2em] uppercase font-bold rounded-[2px] hover:bg-[#A84828] active:bg-[#A84828] transition-colors text-center touch-manipulation disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              Shop the Routine
-            </a>
+              {addingRoutine ? "Adding…" : "Shop the Routine"}
+            </button>
           </div>
 
           <p className="text-white/20 text-[10px] mt-5 sm:mt-6 text-center">

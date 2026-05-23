@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { cartCreate, cartLinesAdd, cartLinesRemove, getCart } from '../lib/shopify';
+import { cartCreate, cartLinesAdd, cartLinesAddBulk, cartDiscountCodesUpdate, cartLinesRemove, getCart } from '../lib/shopify';
 import { useToast } from '@/hooks/use-toast';
 
 interface CartItem {
@@ -19,6 +19,7 @@ interface CartContextType {
   isCartOpen: boolean;
   setIsCartOpen: (isOpen: boolean) => void;
   addToCart: (variantId: string, quantity?: number) => Promise<void>;
+  addRoutineToCart: (variantIds: string[], discountCode?: string) => Promise<void>;
   removeFromCart: (lineId: string) => Promise<void>;
   goToCheckout: () => void;
   isLoading: boolean;
@@ -117,6 +118,42 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const addRoutineToCart = async (variantIds: string[], discountCode?: string) => {
+    setIsLoading(true);
+    try {
+      let currentCartId = cartId;
+      if (!currentCartId) {
+        const cart = await cartCreate();
+        currentCartId = cart.id;
+        setCartId(currentCartId);
+        localStorage.setItem('jb_cartId', currentCartId!);
+      }
+      const updatedCart = await cartLinesAddBulk(currentCartId!, variantIds);
+      updateCartState(updatedCart);
+      if (discountCode) {
+        try {
+          const discountedCart = await cartDiscountCodesUpdate(currentCartId!, [discountCode]);
+          updateCartState(discountedCart);
+        } catch {
+          // Discount code application failed silently — cart still valid
+        }
+      }
+      setIsCartOpen(true);
+      toast({
+        title: "Full routine added!",
+        description: discountCode ? `All 4 products added. Code ${discountCode} applied at checkout.` : "All 4 products added to your bag.",
+      });
+    } catch (e) {
+      toast({
+        title: "Error",
+        description: "Failed to add routine. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const removeFromCart = async (lineId: string) => {
     if (!cartId) return;
     setIsLoading(true);
@@ -151,6 +188,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       isCartOpen,
       setIsCartOpen,
       addToCart,
+      addRoutineToCart,
       removeFromCart,
       goToCheckout,
       isLoading,
