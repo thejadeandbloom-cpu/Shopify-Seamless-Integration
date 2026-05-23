@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { Instagram, Youtube, ExternalLink } from "lucide-react";
+import { Instagram, Youtube, ExternalLink, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useCustomerAuth } from "@/context/CustomerAuthContext";
 import { getProduct } from "@/lib/shopify";
 import ConcernBundleModal from "@/components/ConcernBundleModal";
 import FaqAccordion from "@/components/FaqAccordion";
@@ -697,9 +698,11 @@ const HERO_VIDEOS = [
 
 export default function Home() {
   const { setStickyBarVisible, stickyBarVisible } = useCart();
+  const { isLoggedIn } = useCustomerAuth();
   const [activeConcern, setActiveConcern] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState(0);
   const [showProductIngredients, setShowProductIngredients] = useState(false);
+  const [showReviewGate, setShowReviewGate] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -1114,13 +1117,19 @@ export default function Home() {
               <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] font-normal text-[#0D0D0D]">
                 What people are saying.
               </h2>
-              <a
-                href="/write-review"
+              <button
+                onClick={() => {
+                  if (isLoggedIn) {
+                    window.location.href = "/write-review";
+                  } else {
+                    setShowReviewGate(true);
+                  }
+                }}
                 className="inline-flex items-center gap-2 mt-4 px-4 py-2 border border-[#C65D3B] text-[#C65D3B] text-[11px] font-bold tracking-[.1em] uppercase rounded-[3px] hover:bg-[#C65D3B] hover:text-white transition-colors"
               >
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 Write a Review
-              </a>
+              </button>
             </div>
             <div className="flex items-center gap-5 flex-none pb-1">
               <div className="text-center">
@@ -1312,6 +1321,60 @@ export default function Home() {
         concern={activeConcern}
         onClose={() => setActiveConcern(null)}
       />
+
+      {/* Review Gate Modal — sign in required */}
+      {showReviewGate && (
+        <div
+          className="fixed inset-0 z-[300] flex items-center justify-center p-4"
+          style={{ background: "rgba(0,0,0,0.55)", backdropFilter: "blur(3px)" }}
+          onClick={() => setShowReviewGate(false)}
+        >
+          <div
+            className="relative bg-white rounded-[6px] shadow-2xl w-full max-w-[380px] p-8"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowReviewGate(false)}
+              className="absolute top-4 right-4 text-[#969696] hover:text-[#0D0D0D] transition-colors"
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+
+            {/* Icon */}
+            <div className="w-11 h-11 rounded-full bg-[#FDF0EB] flex items-center justify-center mb-5">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M16.5 2.5l1 1-11 11H4.5v-2l11-11zM14 1l3 3" stroke="#C65D3B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 17h14" stroke="#C65D3B" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+            </div>
+
+            <div className="text-[10px] tracking-[.2em] uppercase text-[#C65D3B] font-semibold mb-2">Sign In Required</div>
+            <h3
+              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-[22px] font-normal text-[#0D0D0D] leading-snug mb-3"
+            >
+              Sign in to write<br />a review
+            </h3>
+            <p className="text-[13px] text-[#696969] leading-relaxed mb-6">
+              We verify reviews so every rating is genuine. Sign in with your email — no password needed, just a 6-digit code.
+            </p>
+
+            <a
+              href="/my-orders"
+              className="block w-full text-center bg-[#C65D3B] text-white py-[13px] rounded-[3px] text-[11px] font-bold tracking-[.15em] uppercase hover:bg-[#A84828] transition-colors"
+            >
+              Sign In / Create Account
+            </a>
+            <button
+              onClick={() => setShowReviewGate(false)}
+              className="block w-full text-center mt-3 text-[11px] text-[#969696] hover:text-[#0D0D0D] transition-colors tracking-[.05em]"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Floating WhatsApp button */}
       <WhatsAppButton />
