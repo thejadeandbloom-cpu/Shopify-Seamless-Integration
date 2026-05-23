@@ -5,6 +5,7 @@ import { CartProvider } from "@/context/CartContext";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
 import LeadCapturePopup from "@/components/LeadCapturePopup";
+import FaqButton from "@/components/FaqButton";
 import Home from "@/pages/Home";
 import AdminRefunds from "@/pages/AdminRefunds";
 
@@ -20,6 +21,7 @@ function Router() {
       <Header />
       <CartDrawer />
       <LeadCapturePopup />
+      <FaqButton />
       <main>
         <Home />
       </main>
