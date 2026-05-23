@@ -16,7 +16,7 @@ async function sendOtpEmail(email: string, code: string): Promise<void> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: "Jade and Bloom <noreply@jadeandbloom.in>",
+      from: "Jade and Bloom <sales@thejadeandbloom.com>",
       to: [email],
       subject: `Your login code: ${code}`,
       html: `
