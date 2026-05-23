@@ -775,13 +775,13 @@ const HERO_VIDEOS = [
 ];
 
 export default function Home() {
-  const [stickyVisible, setStickyVisible] = useState(false);
+  const { setStickyBarVisible, stickyBarVisible } = useCart();
   const [activeConcern, setActiveConcern] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState(0);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
-    const onScroll = () => setStickyVisible(window.scrollY > 200);
+    const onScroll = () => setStickyBarVisible(window.scrollY > 200);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -1286,7 +1286,7 @@ export default function Home() {
       {/* Sticky Bar */}
       <div
         className="fixed bottom-0 left-0 right-0 z-[150] bg-[#0D0D0D] text-white px-5 py-3 flex items-center justify-between text-[13px] transition-transform duration-300"
-        style={{ transform: stickyVisible ? "translateY(0)" : "translateY(100%)", transitionTimingFunction: EASE }}
+        style={{ transform: stickyBarVisible ? "translateY(0)" : "translateY(100%)", transitionTimingFunction: EASE }}
         data-testid="sticky-shop-bar"
       >
         <span><strong>4 products.</strong> Built for Indian skin.</span>

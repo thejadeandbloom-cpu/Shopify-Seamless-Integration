@@ -25,6 +25,8 @@ interface CartContextType {
   isAnyOverlayOpen: boolean;
   openOverlay: () => void;
   closeOverlay: () => void;
+  stickyBarVisible: boolean;
+  setStickyBarVisible: (v: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -37,6 +39,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [overlayCount, setOverlayCount] = useState(0);
+  const [stickyBarVisible, setStickyBarVisible] = useState(false);
   const { toast } = useToast();
 
   const openOverlay = useCallback(() => setOverlayCount((c) => c + 1), []);
@@ -154,6 +157,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       isAnyOverlayOpen,
       openOverlay,
       closeOverlay,
+      stickyBarVisible,
+      setStickyBarVisible,
     }}>
       {children}
     </CartContext.Provider>

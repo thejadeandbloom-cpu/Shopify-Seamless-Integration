@@ -1,7 +1,7 @@
 import { useCart } from "@/context/CartContext";
 
 export default function WhatsAppButton() {
-  const { isAnyOverlayOpen } = useCart();
+  const { isAnyOverlayOpen, stickyBarVisible } = useCart();
 
   if (isAnyOverlayOpen) return null;
 
@@ -11,7 +11,7 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="fixed bottom-6 right-6 z-[9999] flex items-center gap-3 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"
+      className={`fixed right-6 z-[9999] flex items-center gap-3 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ${stickyBarVisible ? "bottom-[80px]" : "bottom-6"}`}
       style={{ padding: "12px 20px 12px 16px" }}
     >
       <svg
