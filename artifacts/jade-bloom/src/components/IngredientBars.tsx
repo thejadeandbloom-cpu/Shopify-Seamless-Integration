@@ -140,32 +140,45 @@ export default function IngredientBars() {
           ))}
         </div>
 
-        {/* Price punch line */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div>
-            <p
-              style={{ fontFamily: "'Playfair Display', serif" }}
-              className="text-white/70 text-[14px] leading-[1.7]"
-            >
-              All of this — in a face wash that costs
-            </p>
-            <p
-              style={{ fontFamily: "'Cinzel', serif" }}
-              className="text-white text-[28px] md:text-[36px] font-semibold mt-1"
-            >
-              ₹269.{" "}
-              <span className="text-white/35 text-[18px] md:text-[22px] line-through font-normal">
-                Competitors charge ₹349–₹399
-              </span>
-            </p>
+        {/* Per-product price breakdown */}
+        <div className="border-t border-white/10 pt-8">
+          <p className="text-white/40 text-[10px] tracking-[.2em] uppercase font-semibold mb-6">
+            Every product. Clinical dose. Fair price.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[
+              { product: "Face Wash", active: "2% Green Tea + 1.5% Salicylic", price: "₹269", competitor: "₹349" },
+              { product: "Vitamin C Serum", active: "14% Vitamin C (vs avg 5%)", price: "₹618", competitor: "₹899" },
+              { product: "Moisturizer", active: "1% Kojic Acid + 5% Vit C", price: "₹449", competitor: "₹599" },
+              { product: "Sunscreen SPF 50", active: "PA++++ · Reef-safe formula", price: "₹489", competitor: "₹650" },
+            ].map((item) => (
+              <div key={item.product} className="bg-white/5 border border-white/10 rounded-[6px] p-4">
+                <p className="text-white/50 text-[9px] tracking-[.14em] uppercase font-semibold mb-1">{item.product}</p>
+                <p className="text-white/40 text-[10px] leading-[1.5] mb-3">{item.active}</p>
+                <div>
+                  <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[#C65D3B] text-[20px] font-semibold">{item.price}</span>
+                  <span className="text-white/25 text-[11px] line-through ml-2">{item.competitor}</span>
+                </div>
+              </div>
+            ))}
           </div>
-          <a
-            href="#products"
-            onClick={(e) => { e.preventDefault(); document.getElementById("products")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="flex-none px-8 py-4 bg-[#C65D3B] text-white text-[10px] tracking-[.2em] uppercase font-bold rounded-[2px] hover:bg-[#A84828] transition-colors text-center"
-          >
-            Shop the Routine
-          </a>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <p className="text-white/50 text-[12px]">Full routine total</p>
+              <p style={{ fontFamily: "'Cinzel', serif" }} className="text-white text-[22px] font-semibold mt-[2px]">
+                ₹1,825{" "}
+                <span className="text-white/30 text-[13px] font-normal line-through">₹2,497</span>
+              </p>
+              <p className="text-[#C65D3B] text-[10px] font-semibold mt-[2px] tracking-[.06em]">Save 10% more with code FIRST10</p>
+            </div>
+            <a
+              href="#products"
+              onClick={(e) => { e.preventDefault(); document.getElementById("products")?.scrollIntoView({ behavior: "smooth" }); }}
+              className="flex-none px-8 py-4 bg-[#C65D3B] text-white text-[10px] tracking-[.2em] uppercase font-bold rounded-[2px] hover:bg-[#A84828] transition-colors text-center"
+            >
+              Shop the Routine
+            </a>
+          </div>
         </div>
       </div>
     </div>
