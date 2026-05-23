@@ -464,7 +464,7 @@ export default function Home() {
           </h1>
 
           <p className="text-[14px] leading-[1.6] text-white/85 mb-7 max-w-[400px]">
-            14% Vitamin C melts into skin. Kojic Acid blocks melanin. Results you can see in 4 weeks — or we'll help you find what works.
+            14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or your money back.
           </p>
 
           <div className="flex gap-3 flex-wrap mb-6">
