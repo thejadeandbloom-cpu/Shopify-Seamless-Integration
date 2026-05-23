@@ -132,18 +132,24 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
       const updatedCart = await cartLinesAddBulk(currentCartId!, variantIds);
       updateCartState(updatedCart);
+      let discountApplied = false;
       if (discountCode) {
         try {
           const discountedCart = await cartDiscountCodesUpdate(currentCartId!, [discountCode]);
           updateCartState(discountedCart);
+          discountApplied = true;
         } catch {
-          // Discount code application failed silently — cart still valid
+          // Discount update failed — cart items still added successfully
         }
       }
       setIsCartOpen(true);
       toast({
         title: "Full routine added!",
-        description: discountCode ? `All 4 products added. Code ${discountCode} applied at checkout.` : "All 4 products added to your bag.",
+        description: discountCode
+          ? discountApplied
+            ? `All 4 products added. Code ${discountCode} applied at checkout.`
+            : "All 4 products added. Apply code at checkout for your discount."
+          : "All 4 products added to your bag.",
       });
     } catch (e) {
       toast({
