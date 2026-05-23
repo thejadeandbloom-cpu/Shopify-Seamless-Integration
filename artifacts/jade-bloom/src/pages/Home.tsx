@@ -258,28 +258,28 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
 
   return (
     <RevealDiv delay={index * 80} className="rounded-[8px] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300" style={{ background: "#fff" }}>
-      {/* Image area — colored bg, tall */}
+      {/* Image area — colored bg, aspect-ratio driven so images always fully visible */}
       <div
-        className="relative flex items-center justify-center overflow-hidden"
-        style={{ background: product.imgBg, height: "clamp(160px, 38vw, 300px)" }}
+        className="relative w-full overflow-hidden"
+        style={{ background: product.imgBg, aspectRatio: "4/5" }}
       >
         {/* Skin concern tag — top left */}
-        <div className="absolute top-3 left-3 text-[8px] tracking-[.14em] uppercase font-bold text-[#484848] bg-white/80 backdrop-blur-sm px-2 py-[3px] rounded-full">
+        <div className="absolute top-2 left-2 z-10 text-[7.5px] tracking-[.12em] uppercase font-bold text-[#484848] bg-white/85 backdrop-blur-sm px-[6px] py-[3px] rounded-full leading-none">
           {product.tag}
         </div>
-        {/* Review count — top right */}
+        {/* Star rating — top right */}
         <button
           onClick={() => onReviewClick(product.reviewFilter)}
-          className="absolute top-3 right-3 flex items-center gap-[3px] bg-white/80 backdrop-blur-sm rounded-full px-2 py-[3px] hover:bg-white transition-colors"
+          className="absolute top-2 right-2 z-10 flex items-center gap-[3px] bg-white/85 backdrop-blur-sm rounded-full px-[7px] py-[3px] hover:bg-white transition-colors"
         >
-          <span className="text-[#C8902A] text-[9px]">★</span>
-          <span className="text-[9px] font-semibold text-[#0D0D0D]">{product.stars}</span>
-          <span className="text-[9px] text-[#969696]">({product.reviewsCount})</span>
+          <span className="text-[#C8902A] text-[9px] leading-none">★</span>
+          <span className="text-[9px] font-semibold text-[#0D0D0D] leading-none">{product.stars}</span>
+          <span className="text-[9px] text-[#969696] leading-none">({product.reviewsCount})</span>
         </button>
         <img
           src={product.img}
           alt={product.name}
-          className="h-full w-full object-contain p-3 md:p-5 group-hover:scale-105 transition-transform duration-500"
+          className="absolute inset-0 w-full h-full object-contain p-4"
           data-testid={`product-img-${product.handle}`}
         />
       </div>
