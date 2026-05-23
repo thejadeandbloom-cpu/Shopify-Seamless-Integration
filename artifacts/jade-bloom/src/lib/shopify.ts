@@ -65,7 +65,7 @@ export async function cartLinesAdd(cartId: string, variantId: string, quantity: 
             edges {
               node {
                 id quantity
-                merchandise { ... on ProductVariant { id title product { title } priceV2 { amount currencyCode } } }
+                merchandise { ... on ProductVariant { id title product { title featuredImage { url } } priceV2 { amount currencyCode } } }
               }
             }
           }
@@ -88,7 +88,7 @@ export async function cartLinesAddBulk(cartId: string, variantIds: string[]) {
             edges {
               node {
                 id quantity
-                merchandise { ... on ProductVariant { id title product { title } priceV2 { amount currencyCode } } }
+                merchandise { ... on ProductVariant { id title product { title featuredImage { url } } priceV2 { amount currencyCode } } }
               }
             }
           }
@@ -112,7 +112,7 @@ export async function cartDiscountCodesUpdate(cartId: string, discountCodes: str
             edges {
               node {
                 id quantity
-                merchandise { ... on ProductVariant { id title product { title } priceV2 { amount currencyCode } } }
+                merchandise { ... on ProductVariant { id title product { title featuredImage { url } } priceV2 { amount currencyCode } } }
               }
             }
           }
@@ -135,7 +135,7 @@ export async function cartLinesRemove(cartId: string, lineIds: string[]) {
             edges {
               node {
                 id quantity
-                merchandise { ... on ProductVariant { id title product { title } priceV2 { amount currencyCode } } }
+                merchandise { ... on ProductVariant { id title product { title featuredImage { url } } priceV2 { amount currencyCode } } }
               }
             }
           }
@@ -157,7 +157,7 @@ export async function getCart(cartId: string) {
           edges {
             node {
               id quantity
-              merchandise { ... on ProductVariant { id title product { title } priceV2 { amount currencyCode } } }
+              merchandise { ... on ProductVariant { id title product { title featuredImage { url } } priceV2 { amount currencyCode } } }
             }
           }
         }

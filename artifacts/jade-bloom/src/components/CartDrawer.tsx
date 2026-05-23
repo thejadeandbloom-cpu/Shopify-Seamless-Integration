@@ -101,14 +101,22 @@ export default function CartDrawer() {
             ) : (
               <ul className="divide-y divide-[#EBEBEB]">
                 {items.map((item) => (
-                  <li key={item.id} className="flex items-start gap-4 px-6 py-5" data-testid={`cart-item-${item.id}`}>
+                  <li key={item.id} className="flex items-start gap-3 px-6 py-5" data-testid={`cart-item-${item.id}`}>
+                    {/* Product image */}
+                    <div className="flex-none w-[68px] h-[68px] rounded-[6px] overflow-hidden bg-[#F2EDE8]">
+                      {item.image ? (
+                        <img src={item.image} alt={item.productTitle} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-[#F2EDE8]" />
+                      )}
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-[13px] font-semibold text-[#0D0D0D] mb-1 leading-tight">{item.productTitle}</p>
+                      <p className="text-[12px] font-semibold text-[#0D0D0D] mb-1 leading-snug">{item.productTitle}</p>
                       {item.title && item.title !== "Default Title" && (
-                        <p className="text-[11px] text-[#969696] mb-2">{item.title}</p>
+                        <p className="text-[11px] text-[#969696] mb-1">{item.title}</p>
                       )}
                       <p className="text-[13px] text-[#C65D3B] font-semibold">{fmt(item.price)}</p>
-                      <p className="text-[11px] text-[#969696] mt-1">Qty: {item.quantity}</p>
+                      <p className="text-[11px] text-[#969696] mt-[2px]">Qty: {item.quantity}</p>
                     </div>
                     <button
                       onClick={() => removeFromCart(item.id)}

@@ -9,6 +9,7 @@ interface CartItem {
   title: string;
   productTitle: string;
   price: string;
+  image?: string;
 }
 
 interface CartContextType {
@@ -84,7 +85,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       merchandiseId: e.node.merchandise.id,
       title: e.node.merchandise.title,
       productTitle: e.node.merchandise.product.title,
-      price: e.node.merchandise.priceV2.amount
+      price: e.node.merchandise.priceV2.amount,
+      image: e.node.merchandise.product.featuredImage?.url ?? undefined,
     }));
     setItems(parsedItems);
   };
