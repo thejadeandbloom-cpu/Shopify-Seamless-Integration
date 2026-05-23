@@ -4,7 +4,7 @@ import { Plus, Minus } from "lucide-react";
 const FAQS = [
   {
     q: "30-DAY RESULTS GUARANTEE — How does it work?",
-    a: "If you use Jade and Bloom consistently for 30 days and don't see any visible improvement in your skin concern, we'll refund 100% of your purchase price.\n\nConditions:\n• Product must be used as directed (once or twice daily) for the full 30 days\n• Daily usage log required — a simple photo or written diary showing 30 days of consistent use\n• Claim must be submitted within 30 days of your purchase date\n• Proof of purchase required — your order confirmation email\n• One claim per customer per 12 months\n• Excludes bulk and bundle purchases\n\nTo submit a claim, use the Refund Claim form in the footer below.",
+    a: "Our 30-day money-back guarantee applies exclusively to the 14% Vitamin C Serum and Kojic Acid Moisturizer when used together as a combination for the full 30 days.\n\nIf you use both products consistently as directed and don't see any visible improvement, we'll refund 100% of your purchase price.\n\nConditions:\n• Applies only to the Vitamin C Serum + Kojic Acid Moisturizer combination — not individual products\n• Both products must be used together, as directed (once or twice daily) for the full 30 days\n• Daily usage log required — a photo or written diary showing 30 days of consistent use\n• Claim must be submitted within 30 days of your purchase date\n• Proof of purchase required — your order confirmation email\n• One claim per customer per 12 months\n• Excludes bulk and bundle purchases\n\nTo submit a claim, use the Refund Claim form in the footer below.",
   },
   {
     q: "What skin types are your products suitable for?",
@@ -28,7 +28,7 @@ const FAQS = [
   },
   {
     q: "What is your return and refund policy?",
-    a: "We offer a 30-day results guarantee — if you use the product consistently for 30 days and don't see visible improvement, submit a claim with your daily usage log and we'll refund 100%.\n\nClaims must be submitted within 30 days of purchase. A daily usage log (photo diary or written record) is required as proof of consistent use.\n\nFor damaged or incorrect orders, share photos via WhatsApp or Instagram and we'll resolve it immediately.",
+    a: "We offer a 30-day results guarantee on the Vitamin C Serum + Kojic Acid Moisturizer combination. If you use both products consistently for 30 days and don't see visible improvement, submit a claim with your daily usage log and we'll refund 100%.\n\nThis guarantee does not apply to individual products purchased separately, or to the Face Wash and Sunscreen.\n\nClaims must be submitted within 30 days of purchase. A daily usage log is required.\n\nFor damaged or incorrect orders, share photos via WhatsApp or Instagram and we'll resolve it immediately.",
   },
   {
     q: "How long does shipping take?",
