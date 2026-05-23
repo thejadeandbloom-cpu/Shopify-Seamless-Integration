@@ -15,7 +15,7 @@ const AM_STEPS = [
     product: "14% Vitamin C Serum",
     instruction: "Take 3–4 drops on fingertips. Press gently into skin — forehead, cheeks, chin. Let absorb for 60 seconds before next step.",
     tip: "Don't rub. Press and hold for better absorption.",
-    color: "#F2A93B",
+    color: "#D93025",
   },
   {
     step: 3,
@@ -23,7 +23,7 @@ const AM_STEPS = [
     product: "Kojic Acid + Vitamin C Moisturizer",
     instruction: "Take a pea-sized amount. Apply in upward strokes across face and neck. Focus on dry patches and areas with dark spots.",
     tip: "Neck and jawline count too — don't stop at the chin.",
-    color: "#C65D3B",
+    color: "#2A6BBF",
   },
   {
     step: 4,
@@ -31,7 +31,7 @@ const AM_STEPS = [
     product: "Fluid Sunscreen SPF 50 PA++++",
     instruction: "Apply a generous, even layer as the final step. Cover face, neck, and ears. Reapply every 2–3 hours if outdoors.",
     tip: "SPF is only effective when applied generously. Don't skip.",
-    color: "#6B8FB5",
+    color: "#D4A017",
   },
 ];
 
@@ -50,7 +50,7 @@ const PM_STEPS = [
     product: "14% Vitamin C Serum",
     instruction: "Take 3–4 drops, press into skin. Night application of Vitamin C boosts its brightening effect while your skin regenerates.",
     tip: "Consistent night use accelerates dark spot fading.",
-    color: "#F2A93B",
+    color: "#D93025",
   },
   {
     step: 3,
@@ -58,7 +58,7 @@ const PM_STEPS = [
     product: "Kojic Acid + Vitamin C Moisturizer",
     instruction: "Apply a slightly larger amount than morning. Night is when your skin drinks in hydration. Massage in upward strokes.",
     tip: "No sunscreen needed at night — let the moisturizer do its job.",
-    color: "#C65D3B",
+    color: "#2A6BBF",
   },
 ];
 
