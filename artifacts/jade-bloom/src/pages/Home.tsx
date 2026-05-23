@@ -385,14 +385,24 @@ export default function Home() {
         &nbsp;at checkout
       </div>
 
-      {/* Trust signals bar */}
-      <div className="bg-[#F9F7F5] border-b border-[#EBEBEB] py-3 overflow-x-auto">
-        <div className="flex gap-8 min-w-max px-16 text-[11px] tracking-[.1em] text-[#484848]">
-          {["Cruelty-Free", "Paraben-Free", "pH Balanced (4.5–5.5)", "COD Available", "Dispatch in 24 hrs", "Science-Backed Formulas"].map((t) => (
-            <span key={t} className="whitespace-nowrap">
-              <b className="text-[#C65D3B]">✓</b> {t}
-            </span>
-          ))}
+      {/* Trust signals bar — auto-scrolling marquee */}
+      <div className="bg-[#F9F7F5] border-b border-[#EBEBEB] py-3 overflow-hidden">
+        <style>{`
+          @keyframes marquee {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-track { animation: marquee 22s linear infinite; }
+          .marquee-track:hover { animation-play-state: paused; }
+        `}</style>
+        <div className="flex marquee-track w-max text-[11px] tracking-[.1em] text-[#484848]">
+          {[...Array(2)].map((_, pass) =>
+            ["Cruelty-Free", "Paraben-Free", "pH Balanced (4.5–5.5)", "COD Available", "Dispatch in 24 hrs", "Science-Backed Formulas"].map((t) => (
+              <span key={`${pass}-${t}`} className="whitespace-nowrap mx-8">
+                <b className="text-[#C65D3B]">✓</b> {t}
+              </span>
+            ))
+          )}
         </div>
       </div>
 
