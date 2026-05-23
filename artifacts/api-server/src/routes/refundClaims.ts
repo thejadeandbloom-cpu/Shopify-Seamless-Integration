@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, type Request, type Response, type NextFunction } from "express";
 import { db, refundClaimsTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 
@@ -6,7 +6,7 @@ const router = Router();
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "jade2024admin";
 
-function adminAuth(req: Parameters<Parameters<typeof router.use>[0]>[0], res: Parameters<Parameters<typeof router.use>[0]>[1], next: Parameters<Parameters<typeof router.use>[0]>[2]) {
+function adminAuth(req: Request, res: Response, next: NextFunction) {
   const auth = req.headers.authorization;
   if (!auth || !auth.startsWith("Bearer ")) {
     res.status(401).json({ error: "Unauthorized" });
@@ -91,7 +91,7 @@ router.get("/refund-claims", adminAuth, async (req, res) => {
 
 router.patch("/refund-claims/:id", adminAuth, async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(String(req.params.id), 10);
     if (isNaN(id)) {
       res.status(400).json({ error: "Invalid id" });
       return;
