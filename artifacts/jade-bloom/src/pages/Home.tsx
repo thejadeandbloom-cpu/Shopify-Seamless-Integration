@@ -586,6 +586,7 @@ export default function Home() {
           autoPlay
           muted
           playsInline
+          loop
           onEnded={handleVideoEnd}
           className="absolute inset-0 w-full h-full object-cover"
         >

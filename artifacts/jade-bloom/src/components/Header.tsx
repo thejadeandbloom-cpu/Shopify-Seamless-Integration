@@ -37,14 +37,14 @@ export default function Header() {
   return (
     <>
       <header
-        className="sticky top-0 z-[200] bg-white/97 border-b border-[#EBEBEB] h-[70px] flex items-center justify-between px-16 transition-shadow duration-300"
+        className="sticky top-0 z-[200] bg-white/97 border-b border-[#EBEBEB] h-[80px] flex items-center justify-between px-16 transition-shadow duration-300"
         style={{ boxShadow: scrolled ? "0 1px 16px rgba(0,0,0,.06)" : "none" }}
         data-testid="header"
       >
         <img
           src="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/Logo_Final_jpg.jpg?v=1775928161"
           alt="Jade and Bloom"
-          className="h-14 w-auto object-contain"
+          className="h-[60px] w-auto object-contain"
         />
 
         <nav className="hidden md:block">
