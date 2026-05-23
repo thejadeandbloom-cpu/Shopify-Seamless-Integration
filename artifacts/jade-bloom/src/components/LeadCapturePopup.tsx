@@ -55,7 +55,7 @@ export default function LeadCapturePopup() {
 
     const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER ?? "918750557322";
     const msg = encodeURIComponent(
-      `Hi! I visited the Jade and Bloom website and would like my 10% welcome discount. My number is +91${cleaned.slice(-10)}.`
+      `Hi! I visited the Jade and Bloom website and would like my 15% bundle discount (BUNDLE15) for the complete 4-product routine. My number is +91${cleaned.slice(-10)}.`
     );
     window.open(`https://wa.me/${waNumber}?text=${msg}`, "_blank", "noopener");
 
@@ -95,16 +95,16 @@ export default function LeadCapturePopup() {
           {!submitted ? (
             <>
               <div className="text-[9px] tracking-[.22em] uppercase text-[#C65D3B] font-semibold mb-2">
-                Welcome Offer
+                Exclusive Offer
               </div>
               <h2
                 style={{ fontFamily: "'Playfair Display', serif" }}
                 className="text-[24px] leading-[1.25] font-normal text-[#0D0D0D] mb-2"
               >
-                Get 10% off your first order
+                Save 15% on the complete routine
               </h2>
               <p className="text-[13px] text-[#484848] leading-[1.6] mb-6">
-                Drop your WhatsApp number — we'll send the code directly. No spam, ever.
+                All 4 products together. Drop your WhatsApp number and we'll send the exclusive bundle code directly.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-3">
@@ -127,7 +127,7 @@ export default function LeadCapturePopup() {
                   disabled={loading}
                   className="w-full bg-[#C65D3B] text-white py-[13px] text-[10px] font-bold tracking-[.18em] uppercase rounded-[3px] hover:bg-[#A84828] transition-colors disabled:opacity-60"
                 >
-                  {loading ? "Saving..." : "Send My 10% Code"}
+                  {loading ? "Saving..." : "Send My 15% Bundle Code"}
                 </button>
               </form>
 
@@ -144,7 +144,7 @@ export default function LeadCapturePopup() {
                 Number saved!
               </h3>
               <p className="text-[13px] text-[#484848]">
-                Your WhatsApp is opening — send the message to get your <strong>FIRST10</strong> code.
+                Your WhatsApp is opening — send the message to get your <strong>BUNDLE15</strong> code.
               </p>
             </div>
           )}

@@ -254,6 +254,7 @@ function getInitials(name: string): string {
 }
 
 type Review = { stars: number; title?: string; text: string; name: string; city: string; product: string };
+type ApiReview = { id: number; productLabel: string; customerName: string; city: string; rating: number; title: string; body: string };
 
 const ALL_REVIEWS: Review[] = [
   { stars: 5, title: "Actually stops breakouts", text: "My skin cleared up significantly in 2 weeks. Use it every morning and night — it's now non-negotiable in my routine.", name: "Rohan G.", city: "Pune", product: "Green Tea Face Wash" },
@@ -298,7 +299,7 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-function ProductCard({ product, index, onReviewClick, showIngredients }: { product: typeof PRODUCTS[0]; index: number; onReviewClick: (filter: string) => void; showIngredients: boolean }) {
+function ProductCard({ product, index, onReviewClick, showIngredients, extraReviewCount = 0 }: { product: typeof PRODUCTS[0]; index: number; onReviewClick: (filter: string) => void; showIngredients: boolean; extraReviewCount?: number }) {
   const { addToCart, isLoading } = useCart();
   const [variantId, setVariantId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
@@ -358,7 +359,7 @@ function ProductCard({ product, index, onReviewClick, showIngredients }: { produ
         >
           <span className="text-[#C8902A] text-[11px] leading-none">★</span>
           <span className="text-[11px] font-semibold text-[#0D0D0D] leading-none">{product.stars}</span>
-          <span className="text-[11px] text-[#969696] leading-none">({product.reviewsCount})</span>
+          <span className="text-[11px] text-[#969696] leading-none">({product.reviewsCount + extraReviewCount})</span>
         </button>
 
         {/* Before/after stat */}
@@ -718,6 +719,28 @@ export default function Home() {
 
   const scrollTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   const [reviewFilter, setReviewFilter] = useState("All");
+  const [dynamicReviews, setDynamicReviews] = useState<ApiReview[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE}/reviews`)
+      .then((r) => r.ok ? r.json() : [])
+      .then((data: ApiReview[]) => setDynamicReviews(data))
+      .catch(() => {});
+  }, []);
+
+  const mergedReviews: Review[] = [
+    ...ALL_REVIEWS,
+    ...dynamicReviews.map((r) => ({
+      stars: r.rating,
+      title: r.title || undefined,
+      text: r.body,
+      name: r.customerName,
+      city: r.city || "India",
+      product: r.productLabel,
+    })),
+  ];
+
+  const getDynamicCount = (filter: string) => dynamicReviews.filter((r) => r.productLabel === filter).length;
 
   const handleReviewClick = (filter: string) => {
     setReviewFilter(filter);
@@ -877,7 +900,7 @@ export default function Home() {
             </button>
           </RevealDiv>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 mt-6">
-            {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} showIngredients={showProductIngredients} />)}
+            {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} showIngredients={showProductIngredients} extraReviewCount={getDynamicCount(p.reviewFilter)} />)}
           </div>
         </div>
       </section>
@@ -1060,14 +1083,11 @@ export default function Home() {
 
           {/* Header */}
           {(() => {
-            const RATING_STATS: Record<string, { rating: string; count: number; bars: [string, number][] }> = {
-              "All":                    { rating: "4.8", count: 203, bars: [["5 ★", 87], ["4 ★", 10], ["3 ★", 3]] },
-              "Green Tea Face Wash":    { rating: "4.9", count: 58,  bars: [["5 ★", 93], ["4 ★", 5],  ["3 ★", 2]] },
-              "Vitamin C Serum":        { rating: "4.8", count: 52,  bars: [["5 ★", 87], ["4 ★", 10], ["3 ★", 3]] },
-              "Kojic Acid Moisturizer": { rating: "4.8", count: 48,  bars: [["5 ★", 85], ["4 ★", 12], ["3 ★", 3]] },
-              "Fluid Sunscreen":        { rating: "4.7", count: 45,  bars: [["5 ★", 80], ["4 ★", 15], ["3 ★", 5]] },
-            };
-            const stats = RATING_STATS[reviewFilter] ?? RATING_STATS["All"];
+            const reviewSet = reviewFilter === "All" ? mergedReviews : mergedReviews.filter((r) => r.product === reviewFilter);
+            const totalCount = reviewSet.length;
+            const avg = totalCount > 0 ? (reviewSet.reduce((s, r) => s + r.stars, 0) / totalCount).toFixed(1) : "4.8";
+            const pct = (n: number) => totalCount > 0 ? Math.round(reviewSet.filter((r) => r.stars === n).length / totalCount * 100) : 0;
+            const stats = { rating: avg, count: totalCount, bars: [["5 ★", pct(5)], ["4 ★", pct(4)], ["3 ★", pct(3)]] as [string, number][] };
             return (
           <RevealDiv className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
@@ -1075,6 +1095,13 @@ export default function Home() {
               <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] font-normal text-[#0D0D0D]">
                 What people are saying.
               </h2>
+              <a
+                href="/write-review"
+                className="inline-flex items-center gap-2 mt-4 px-4 py-2 border border-[#C65D3B] text-[#C65D3B] text-[11px] font-bold tracking-[.1em] uppercase rounded-[3px] hover:bg-[#C65D3B] hover:text-white transition-colors"
+              >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8.5 1.5l2 2-7 7H1.5v-2l7-7z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                Write a Review
+              </a>
             </div>
             <div className="flex items-center gap-5 flex-none pb-1">
               <div className="text-center">
@@ -1111,14 +1138,14 @@ export default function Home() {
                     : { background: "transparent", color: "#484848", borderColor: "#EBEBEB" }
                 }
               >
-                {tab === "All" ? `All (${ALL_REVIEWS.length})` : tab}
+                {tab === "All" ? `All (${mergedReviews.length})` : tab}
               </button>
             ))}
           </div>
 
           {/* Masonry grid */}
           {(() => {
-            const filtered = ALL_REVIEWS.filter((r) => reviewFilter === "All" || r.product === reviewFilter);
+            const filtered = mergedReviews.filter((r) => reviewFilter === "All" || r.product === reviewFilter);
             return <>
           <div
             className="columns-1 sm:columns-2 lg:columns-3 gap-4"
@@ -1164,7 +1191,7 @@ export default function Home() {
 
           <div className="text-center mt-8">
             <p className="text-[11px] text-[#969696] tracking-[.08em]">
-              Showing {filtered.length} of 203 verified reviews
+              Showing {filtered.length} of {mergedReviews.length} verified reviews
               {reviewFilter !== "All" && ` for ${reviewFilter}`}
             </p>
           </div>

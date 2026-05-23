@@ -8,6 +8,7 @@ import LeadCapturePopup from "@/components/LeadCapturePopup";
 import FaqButton from "@/components/FaqButton";
 import Home from "@/pages/Home";
 import AdminRefunds from "@/pages/AdminRefunds";
+import WriteReview from "@/pages/WriteReview";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,9 @@ function Router() {
   const path = window.location.pathname;
   if (path === "/admin/refunds" || path.endsWith("/admin/refunds")) {
     return <AdminRefunds />;
+  }
+  if (path === "/write-review" || path.endsWith("/write-review")) {
+    return <WriteReview />;
   }
   return (
     <>

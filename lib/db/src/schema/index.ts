@@ -19,3 +19,4 @@
 
 export * from "./refundClaims";
 export * from "./leads";
+export * from "./reviews";

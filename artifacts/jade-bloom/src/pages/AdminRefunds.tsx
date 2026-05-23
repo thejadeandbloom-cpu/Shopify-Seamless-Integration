@@ -29,6 +29,21 @@ type Lead = {
   createdAt: string;
 };
 
+type ReviewItem = {
+  id: number;
+  productLabel: string;
+  customerName: string;
+  customerEmail: string;
+  city: string;
+  orderId: string;
+  rating: number;
+  title: string;
+  body: string;
+  isApproved: boolean;
+  createdAt: string;
+  visibleAfter: string;
+};
+
 const STATUS_OPTIONS = ["pending", "approved", "denied"];
 
 const STATUS_STYLES: Record<string, string> = {
@@ -80,10 +95,12 @@ function LoginGate({ onLogin }: { onLogin: (pw: string) => void }) {
 export default function AdminRefunds() {
   const [token, setToken] = useState(() => sessionStorage.getItem("admin_token") || "");
   const [authed, setAuthed] = useState(false);
-  const [activeTab, setActiveTab] = useState<"refunds" | "leads">("refunds");
+  const [activeTab, setActiveTab] = useState<"refunds" | "leads" | "reviews">("refunds");
 
   const [claims, setClaims] = useState<Claim[]>([]);
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [reviews, setReviews] = useState<ReviewItem[]>([]);
+  const [reviewSaving, setReviewSaving] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [editing, setEditing] = useState<Record<number, { notes: string }>>({});
@@ -94,9 +111,10 @@ export default function AdminRefunds() {
     setLoading(true);
     setError("");
     try {
-      const [claimsRes, leadsRes] = await Promise.all([
+      const [claimsRes, leadsRes, reviewsRes] = await Promise.all([
         fetch(`${API}/refund-claims`, { headers: { Authorization: `Bearer ${pw}` } }),
         fetch(`${API}/leads`, { headers: { Authorization: `Bearer ${pw}` } }),
+        fetch(`${API}/admin/reviews`, { headers: { Authorization: `Bearer ${pw}` } }),
       ]);
       if (claimsRes.status === 401) {
         setAuthed(false);
@@ -104,9 +122,10 @@ export default function AdminRefunds() {
         return;
       }
       if (!claimsRes.ok || !leadsRes.ok) throw new Error("Failed to fetch");
-      const [claimsData, leadsData] = await Promise.all([claimsRes.json(), leadsRes.json()]) as [Claim[], Lead[]];
+      const [claimsData, leadsData, reviewsData] = await Promise.all([claimsRes.json(), leadsRes.json(), reviewsRes.ok ? reviewsRes.json() : Promise.resolve([])]) as [Claim[], Lead[], ReviewItem[]];
       setClaims(claimsData);
       setLeads(leadsData);
+      setReviews(reviewsData);
       setAuthed(true);
     } catch {
       setError("Could not load data. Try again.");
@@ -143,12 +162,31 @@ export default function AdminRefunds() {
     }
   };
 
+  const patchReview = async (id: number, isApproved: boolean) => {
+    setReviewSaving(id);
+    try {
+      const res = await fetch(`${API}/admin/reviews/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ isApproved }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      const updated = await res.json() as ReviewItem;
+      setReviews((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+    } catch {
+      alert("Failed to update review. Try again.");
+    } finally {
+      setReviewSaving(null);
+    }
+  };
+
   const logout = () => {
     sessionStorage.removeItem("admin_token");
     setToken("");
     setAuthed(false);
     setClaims([]);
     setLeads([]);
+    setReviews([]);
   };
 
   if (!authed) return <LoginGate onLogin={handleLogin} />;
@@ -187,6 +225,7 @@ export default function AdminRefunds() {
           {([
             { key: "refunds", label: "Refund Claims", icon: <FileText size={14} />, count: claims.length },
             { key: "leads", label: "WhatsApp Leads", icon: <Users size={14} />, count: leads.length },
+            { key: "reviews", label: "Reviews", icon: <span className="text-[13px] leading-none">★</span>, count: reviews.length },
           ] as const).map((tab) => (
             <button
               key={tab.key}
@@ -430,6 +469,89 @@ export default function AdminRefunds() {
                           >
                             {saving === claim.id ? "..." : "Save"}
                           </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+
+        {/* ── REVIEWS TAB ── */}
+        {activeTab === "reviews" && (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+              {[
+                { label: "Total", val: reviews.length, color: "#0D0D0D" },
+                { label: "Pending", val: reviews.filter((r) => !r.isApproved).length, color: "#D97706" },
+                { label: "Approved", val: reviews.filter((r) => r.isApproved).length, color: "#059669" },
+                { label: "Visible Now", val: reviews.filter((r) => r.isApproved && new Date(r.visibleAfter) <= new Date()).length, color: "#C65D3B" },
+              ].map((s) => (
+                <div key={s.label} className="bg-white border border-[#EBEBEB] rounded-[6px] p-4 text-center">
+                  <div className="text-[28px] font-bold" style={{ color: s.color }}>{s.val}</div>
+                  <div className="text-[10px] tracking-[.1em] uppercase text-[#969696] mt-1">{s.label}</div>
+                </div>
+              ))}
+            </div>
+
+            {reviews.length === 0 ? (
+              <div className="bg-white border border-[#EBEBEB] rounded-[8px] py-16 text-center text-[14px] text-[#969696]">
+                {loading ? "Loading reviews..." : "No reviews yet. Customers can submit at /write-review."}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {reviews.map((r) => {
+                  const isVisible = r.isApproved && new Date(r.visibleAfter) <= new Date();
+                  const visibleDate = new Date(r.visibleAfter).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+                  return (
+                    <div key={r.id} className={`bg-white border rounded-[8px] p-5 ${r.isApproved ? "border-green-200" : "border-[#EBEBEB]"}`}>
+                      <div className="flex items-start justify-between gap-4 flex-wrap">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-3 mb-2 flex-wrap">
+                            <span className="text-[#C8902A] text-[13px] tracking-[1px]">
+                              {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+                            </span>
+                            <span className="text-[10px] bg-[#FFF5F2] text-[#C65D3B] border border-[#F2D4C8] px-2 py-[2px] rounded-full font-semibold">{r.productLabel}</span>
+                            {r.isApproved ? (
+                              <span className="text-[10px] bg-green-50 text-green-700 border border-green-200 px-2 py-[2px] rounded-full font-semibold flex items-center gap-1">
+                                <CheckCircle size={10} /> Approved {isVisible ? "· Live" : `· Goes live ${visibleDate}`}
+                              </span>
+                            ) : (
+                              <span className="text-[10px] bg-amber-50 text-amber-700 border border-amber-200 px-2 py-[2px] rounded-full font-semibold flex items-center gap-1">
+                                <Clock size={10} /> Pending approval
+                              </span>
+                            )}
+                          </div>
+                          {r.title && <p className="text-[13px] font-semibold text-[#0D0D0D] mb-1">{r.title}</p>}
+                          <p className="text-[13px] text-[#484848] leading-[1.6] mb-3">"{r.body}"</p>
+                          <div className="flex flex-wrap gap-x-5 gap-y-1 text-[11px] text-[#969696]">
+                            <span><strong className="text-[#0D0D0D]">{r.customerName}</strong>{r.city ? `, ${r.city}` : ""}</span>
+                            <span>{r.customerEmail}</span>
+                            <span>Order: <strong className="text-[#0D0D0D]">{r.orderId}</strong></span>
+                            <span>Submitted: {new Date(r.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</span>
+                            <span>Live after: {visibleDate}</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2 flex-none">
+                          {!r.isApproved ? (
+                            <button
+                              onClick={() => patchReview(r.id, true)}
+                              disabled={reviewSaving === r.id}
+                              className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white text-[11px] font-bold tracking-[.08em] uppercase rounded-[4px] hover:bg-green-700 transition-colors disabled:opacity-50"
+                            >
+                              <CheckCircle size={12} />{reviewSaving === r.id ? "..." : "Approve"}
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => patchReview(r.id, false)}
+                              disabled={reviewSaving === r.id}
+                              className="flex items-center gap-1 px-4 py-2 border border-[#EBEBEB] text-[#969696] text-[11px] font-bold tracking-[.08em] uppercase rounded-[4px] hover:border-red-300 hover:text-red-500 transition-colors disabled:opacity-50"
+                            >
+                              <XCircle size={12} />{reviewSaving === r.id ? "..." : "Revoke"}
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
