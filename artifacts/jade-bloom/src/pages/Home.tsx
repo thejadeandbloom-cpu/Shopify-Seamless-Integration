@@ -48,6 +48,8 @@ const PRODUCTS = [
     handle: "green-tea-face-wash",
     tag: "Acne · Oily Skin",
     badge: "Clearer skin in 2–3 weeks",
+    stat: "89% saw fewer breakouts in 3 weeks",
+    stock: 14,
     name: "2% Green Tea Face Wash",
     desc: "1.5% Salicylic Acid clears pores and prevents breakouts. pH-balanced. Won't strip your skin.",
     price: "269",
@@ -64,6 +66,8 @@ const PRODUCTS = [
     handle: "vitamin-c-serum",
     tag: "Dark Spots · Dullness",
     badge: "Visible glow in 4 weeks",
+    stat: "91% noticed brighter skin in 4 weeks",
+    stock: 9,
     name: "14% Vitamin C Serum",
     desc: "Brightens. Boosts collagen. Fades dark spots. Lightweight. Won't oxidize.",
     price: "618",
@@ -80,6 +84,8 @@ const PRODUCTS = [
     handle: "kojic-acid-moisturizer",
     tag: "Dryness · Sensitivity",
     badge: "Hydrated within minutes",
+    stat: "94% felt skin hydrated all day",
+    stock: 22,
     name: "Kojic Acid Moisturizer",
     desc: "Locks hydration. Balances pH. Strengthens skin barrier. Non-comedogenic.",
     price: "449",
@@ -96,6 +102,8 @@ const PRODUCTS = [
     handle: "fluid-sunscreen",
     tag: "UV Protection · Aging",
     badge: "Reef-safe & sweat-proof",
+    stat: "96% reported zero white cast",
+    stock: 18,
     name: "Fluid Sunscreen SPF 50",
     desc: "Invisible. Weightless. Won't clog pores. Reef-safe.",
     price: "489",
@@ -257,7 +265,7 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
   };
 
   return (
-    <RevealDiv delay={index * 80} className="rounded-[8px] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300" style={{ background: "#fff" }}>
+    <RevealDiv delay={index * 80} className="rounded-[8px] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300 bg-white">
       {/* Image area — colored bg, aspect-ratio driven so images always fully visible */}
       <div
         className="relative w-full overflow-hidden"
@@ -296,8 +304,21 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
           {product.name}
         </div>
 
+        {/* Before/after stat */}
+        <div className="text-[9.5px] text-[#484848] leading-snug bg-[#F9F7F5] rounded px-2 py-[5px] border-l-2 border-[#C65D3B]">
+          {product.stat}
+        </div>
+
+        {/* Urgency — low stock warning */}
+        {product.stock <= 15 && (
+          <div className="flex items-center gap-1">
+            <span className="w-[6px] h-[6px] rounded-full bg-[#E05C2A] animate-pulse flex-shrink-0" />
+            <span className="text-[9px] font-semibold text-[#E05C2A] tracking-[.04em]">Only {product.stock} left</span>
+          </div>
+        )}
+
         {/* Price row */}
-        <div className="flex items-baseline gap-[5px] mt-auto pt-2">
+        <div className="flex items-baseline gap-[5px] mt-auto pt-1">
           <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[17px] md:text-[19px] text-[#0D0D0D] font-semibold leading-none">
             ₹{product.price}
           </span>
@@ -657,6 +678,7 @@ export default function Home() {
           playsInline
           loop
           onEnded={handleVideoEnd}
+          poster="https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760"
           className="absolute inset-0 w-full h-full object-cover"
         >
           <source src={HERO_VIDEOS[activeVideo]} type="video/mp4" />
@@ -689,6 +711,12 @@ export default function Home() {
             14% Vitamin C melts into skin. Kojic Acid blocks melanin. See the difference in 4 weeks — or your money back.
           </p>
 
+          {/* Trust badge */}
+          <div className="flex items-center gap-2 mb-5">
+            <span className="text-[#F5C842] text-[12px] tracking-[1px]">★★★★★</span>
+            <span className="text-[11px] text-white/90 font-semibold">4.8 &nbsp;·&nbsp; 200+ Reviews</span>
+          </div>
+
           <div className="flex gap-3 flex-wrap mb-6">
             <button
               onClick={() => scrollTo("products")}
@@ -699,7 +727,7 @@ export default function Home() {
             </button>
             <button
               onClick={() => scrollTo("concerns")}
-              className="border border-white/70 text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-white/10 transition-colors duration-200"
+              className="border border-white/70 text-white px-7 py-[13px] rounded-[3px] text-[10px] font-bold tracking-[.18em] uppercase hover:bg-white/10 transition-colors duration-200 hidden sm:inline-flex"
               data-testid="hero-cta-secondary"
             >
               Shop by Concern

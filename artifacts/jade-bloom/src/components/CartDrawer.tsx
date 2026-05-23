@@ -1,8 +1,37 @@
-import { X, Trash2, ShoppingBag } from "lucide-react";
+import { X, Trash2, ShoppingBag, Sparkles } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { getProduct } from "@/lib/shopify";
+import { useState } from "react";
+
+const BUNDLE_UPSELL = {
+  label: "Complete the routine & save 15%",
+  handles: ["green-tea-face-wash", "vitamin-c-serum", "kojic-acid-moisturizer", "fluid-sunscreen"],
+  names: ["Face Wash", "Vitamin C Serum", "Moisturizer", "Sunscreen SPF 50"],
+};
 
 export default function CartDrawer() {
-  const { isCartOpen, setIsCartOpen, items, totalAmount, totalQuantity, removeFromCart, goToCheckout, isLoading } = useCart();
+  const { isCartOpen, setIsCartOpen, items, totalAmount, totalQuantity, removeFromCart, goToCheckout, isLoading, addToCart } = useCart();
+  const [addingBundle, setAddingBundle] = useState(false);
+
+  const itemHandles = items.map((i) => i.productTitle?.toLowerCase().replace(/[^a-z0-9]+/g, "-"));
+  const hasAllProducts = BUNDLE_UPSELL.handles.every((h) =>
+    itemHandles.some((ih) => ih && h.includes(ih.split("-")[0]))
+  );
+
+  const handleAddBundle = async () => {
+    setAddingBundle(true);
+    try {
+      for (const handle of BUNDLE_UPSELL.handles) {
+        const alreadyIn = itemHandles.some((ih) => ih && handle.includes(ih.split("-")[0]));
+        if (alreadyIn) continue;
+        const p = await getProduct(handle);
+        const vid = p?.variants?.edges?.[0]?.node?.id;
+        if (vid) await addToCart(vid, 1);
+      }
+    } finally {
+      setAddingBundle(false);
+    }
+  };
 
   const fmt = (amt: string) => {
     const n = parseFloat(amt);
@@ -93,6 +122,35 @@ export default function CartDrawer() {
               </ul>
             )}
           </div>
+
+          {/* Bundle upsell — shown when cart has items but not all 4 */}
+          {items.length > 0 && !hasAllProducts && (
+            <div className="mx-4 my-3 rounded-[6px] bg-[#FFF9F5] border border-[#F2E0D6] p-4">
+              <div className="flex items-start gap-2 mb-3">
+                <Sparkles size={14} className="text-[#C65D3B] mt-[1px] flex-shrink-0" />
+                <div>
+                  <p className="text-[11px] font-bold text-[#0D0D0D] tracking-[.04em] leading-tight mb-[2px]">
+                    Complete the 4-step routine
+                  </p>
+                  <p className="text-[10px] text-[#969696]">Save 15% vs. buying individually</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-1 mb-3">
+                {BUNDLE_UPSELL.names.map((name) => (
+                  <span key={name} className="text-[9px] bg-white border border-[#EBEBEB] text-[#484848] px-2 py-[3px] rounded-full">
+                    {name}
+                  </span>
+                ))}
+              </div>
+              <button
+                onClick={handleAddBundle}
+                disabled={addingBundle}
+                className="w-full py-[9px] bg-[#C65D3B] text-white text-[9px] tracking-[.16em] uppercase font-bold rounded-[3px] hover:bg-[#A84828] transition-colors disabled:opacity-60"
+              >
+                {addingBundle ? "Adding..." : "Add Missing Items"}
+              </button>
+            </div>
+          )}
 
           {/* Footer */}
           {items.length > 0 && (

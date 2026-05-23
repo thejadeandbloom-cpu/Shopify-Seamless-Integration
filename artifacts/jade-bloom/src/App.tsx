@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/context/CartContext";
 import Header from "@/components/Header";
 import CartDrawer from "@/components/CartDrawer";
+import LeadCapturePopup from "@/components/LeadCapturePopup";
 import Home from "@/pages/Home";
 import AdminRefunds from "@/pages/AdminRefunds";
 
@@ -18,6 +19,7 @@ function Router() {
     <>
       <Header />
       <CartDrawer />
+      <LeadCapturePopup />
       <main>
         <Home />
       </main>
