@@ -62,12 +62,14 @@ const PRODUCTS = [
     imgBg: "#E3F0E8",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_4a417ad0-216e-4d69-973a-667118fc1af8.jpg?v=1779168775",
     ingredients: [
-      { n: "Green Tea Extract", v: "2.0%" },
+      { n: "Camellia Sinensis (Green Tea) Extract", v: "2.0%" },
       { n: "Salicylic Acid", v: "1.5%" },
-      { n: "Aloe Vera", v: "2.0%" },
-      { n: "Niacinamide", v: "1%" },
-      { n: "Glycerin", v: "—" },
+      { n: "Aloe Barbadensis (Aloe Vera) Extract", v: "2.0%" },
+      { n: "Betaine", v: "1.0%" },
+      { n: "Allantoin", v: "0.5%" },
+      { n: "Tocopheryl Acetate (Vitamin E)", v: "0.5%" },
     ],
+    fullInci: "Aqua, Cocamidopropyl Betaine, Sodium Lauroyl Sarcosinate, Propylene Glycol, Glycerin, Aloe Barbadensis Leaf Extract, Camellia Sinensis Leaf Extract, Salicylic Acid, Betaine, Allantoin, Tocopheryl Acetate, Citric Acid, Phenoxyethanol, Ethylhexylglycerin, Trisodium Ethylenediamine Disuccinate, Fragrance",
   },
   {
     handle: "vitamin-c-serum",
@@ -87,12 +89,14 @@ const PRODUCTS = [
     imgBg: "#FEF0DE",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_dc6610da-ef7f-4601-a220-9a39070ba226.jpg?v=1779168760",
     ingredients: [
-      { n: "Vitamin C (3-O-Ethyl)", v: "14%" },
-      { n: "Hyaluronic Acid", v: "5%" },
-      { n: "Niacinamide", v: "2%" },
-      { n: "Panthenol (B5)", v: "—" },
-      { n: "Ferulic Acid", v: "—" },
+      { n: "3-O-Ethyl Ascorbic Acid (Vitamin C)", v: "14%" },
+      { n: "Sodium Hyaluronate (Hyaluronic Acid)", v: "5%" },
+      { n: "Niacinamide (Vitamin B3)", v: "2%" },
+      { n: "Panthenol (Provitamin B5)", v: "1.5%" },
+      { n: "Dipotassium Glycyrrhizate (Licorice Root)", v: "1.0%" },
+      { n: "Tocopherol (Vitamin E)", v: "0.5%" },
     ],
+    fullInci: "Aqua, 3-O-Ethyl Ascorbic Acid, Propanediol, Butylene Glycol, Glycerin, Sodium Hyaluronate, Niacinamide, Betaine, Panthenol, Dipotassium Glycyrrhizate, Allantoin, Tocopherol, Acrylates/C10-30 Alkyl Acrylate Crosspolymer, Phenoxyethanol, Ethylhexylglycerin, Triethanolamine, Sodium Gluconate",
   },
   {
     handle: "kojic-acid-moisturizer",
@@ -112,12 +116,14 @@ const PRODUCTS = [
     imgBg: "#E2ECF8",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_e3eac689-1807-47d8-8b98-279a4b3d09a1.png?v=1779168826",
     ingredients: [
-      { n: "Kojic Acid", v: "1%" },
-      { n: "Vitamin C", v: "5%" },
-      { n: "Hyaluronic Acid", v: "2%" },
-      { n: "Niacinamide", v: "5%" },
-      { n: "Vitamin E", v: "0.5%" },
+      { n: "Niacinamide (Vitamin B3)", v: "5.0%" },
+      { n: "3-O-Ethyl Ascorbic Acid (Vitamin C)", v: "5.0%" },
+      { n: "Sodium Hyaluronate (Hyaluronic Acid)", v: "2.0%" },
+      { n: "Kojic Acid", v: "1.0%" },
+      { n: "Panthenol (Provitamin B5)", v: "1.0%" },
+      { n: "Tocopherol (Vitamin E)", v: "0.5%" },
     ],
+    fullInci: "Aqua, Glycerin, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Niacinamide, Butylene Glycol, 3-O-Ethyl Ascorbic Acid, Glyceryl Stearate, PEG-100 Stearate, Dimethicone, Sodium Hyaluronate, Kojic Acid, Panthenol, Tocopherol, Allantoin, Carbomer, Triethanolamine, Phenoxyethanol, Ethylhexylglycerin, Trisodium Ethylenediamine Disuccinate, Fragrance",
   },
   {
     handle: "fluid-sunscreen",
@@ -137,12 +143,14 @@ const PRODUCTS = [
     imgBg: "#FBF5DF",
     img: "https://cdn.shopify.com/s/files/1/0971/5757/9042/files/rn-image_picker_lib_temp_56d282bc-cec2-41e4-a230-e932af58ffc3.jpg?v=1779168858",
     ingredients: [
-      { n: "Zinc Oxide", v: "8%" },
+      { n: "Ethylhexyl Methoxycinnamate (Octinoxate)", v: "10%" },
+      { n: "Zinc Oxide (Nano)", v: "8%" },
       { n: "Titanium Dioxide", v: "6%" },
       { n: "Avobenzone", v: "5%" },
-      { n: "Sea Buckthorn Oil", v: "0.8%" },
-      { n: "Niacinamide", v: "—" },
+      { n: "Sodium Hyaluronate (Hyaluronic Acid)", v: "2%" },
+      { n: "Hippophae Rhamnoides (Sea Buckthorn)", v: "0.8%" },
     ],
+    fullInci: "Aqua, Ethylhexyl Methoxycinnamate, Zinc Oxide, Titanium Dioxide, Butyl Methoxydibenzoylmethane, Caprylic/Capric Triglyceride, Cetearyl Alcohol, Glyceryl Stearate, Ceteareth-20, Glycerin, Aloe Barbadensis Leaf Juice, Sodium Hyaluronate, Hippophae Rhamnoides Fruit Extract, Tocopherol, Phenoxyethanol, Ethylhexylglycerin, Carbomer, Triethanolamine, Trisodium Ethylenediamine Disuccinate, Fragrance",
   },
 ];
 
@@ -290,11 +298,11 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUCTS[0]; index: number; onReviewClick: (filter: string) => void }) {
+function ProductCard({ product, index, onReviewClick, showIngredients }: { product: typeof PRODUCTS[0]; index: number; onReviewClick: (filter: string) => void; showIngredients: boolean }) {
   const { addToCart, isLoading } = useCart();
   const [variantId, setVariantId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
-  const [showIngredients, setShowIngredients] = useState(false);
+  const [showFullInci, setShowFullInci] = useState(false);
 
   const handleAddToCart = async () => {
     setAdding(true);
@@ -393,23 +401,25 @@ function ProductCard({ product, index, onReviewClick }: { product: typeof PRODUC
           ))}
         </div>
 
-        {/* Key Ingredients toggle */}
-        <button
-          onClick={() => setShowIngredients((v) => !v)}
-          className="mt-2 w-full flex items-center justify-between text-[10px] font-semibold text-[#484848] hover:text-[#C65D3B] transition-colors py-[5px] border-t border-[#EBEBEB]"
-        >
-          <span>Key Ingredients</span>
-          <span className="text-[12px] leading-none" style={{ transform: showIngredients ? "rotate(180deg)" : "none", display: "inline-block", transition: "transform 0.2s" }}>▾</span>
-        </button>
+        {/* Key Ingredients panel — controlled globally */}
         {showIngredients && (
-          <div className="pb-1">
+          <div className="mt-2 border-t border-[#EBEBEB] pt-2">
+            <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[9px] tracking-[.12em] uppercase text-[#969696] mb-[6px]">Key Actives</p>
             {product.ingredients.map(({ n, v }) => (
-              <div key={n} className="flex items-center justify-between py-[3px] border-b border-[#F4F4F4] last:border-0">
-                <span className="text-[10px] text-[#484848]">{n}</span>
-                <span className="text-[10px] font-semibold text-[#C65D3B]">{v}</span>
+              <div key={n} className="flex items-start justify-between gap-2 py-[3px] border-b border-[#F4F4F4] last:border-0">
+                <span className="text-[10px] text-[#484848] leading-snug">{n}</span>
+                <span className="text-[10px] font-semibold text-[#C65D3B] flex-none">{v}</span>
               </div>
             ))}
-            <p className="text-[9px] text-[#ABABAB] mt-[5px]">Full INCI list available on request</p>
+            <button
+              onClick={() => setShowFullInci((v) => !v)}
+              className="mt-2 text-[9px] text-[#969696] hover:text-[#C65D3B] transition-colors underline underline-offset-2 w-full text-left"
+            >
+              {showFullInci ? "Hide full ingredient list" : "View full ingredient list (INCI)"}
+            </button>
+            {showFullInci && (
+              <p className="text-[9px] text-[#969696] leading-[1.7] mt-1">{product.fullInci}</p>
+            )}
           </div>
         )}
       </div>
@@ -427,8 +437,8 @@ function PincodeChecker() {
     if (!/^\d{6}$/.test(pincode)) { setError("Enter a valid 6-digit pincode"); return; }
     setLoading(true); setError(""); setResult(null);
     try {
-      const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
-      const res = await fetch(`${base}/api/pincode/check?pincode=${pincode}`);
+      const apiBase = `${import.meta.env.BASE_URL ?? "/"}api`.replace(/\/+/g, "/");
+      const res = await fetch(`${apiBase}/pincode/check?pincode=${pincode}`);
       const data = await res.json() as { available?: boolean; message?: string; error?: string };
       if (data.error) { setError(data.error); } else { setResult({ available: !!data.available, message: data.message ?? "" }); }
     } catch { setError("Could not check. Please try again."); }
@@ -740,6 +750,7 @@ export default function Home() {
   const { setStickyBarVisible, stickyBarVisible } = useCart();
   const [activeConcern, setActiveConcern] = useState<string | null>(null);
   const [activeVideo, setActiveVideo] = useState(0);
+  const [showProductIngredients, setShowProductIngredients] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -899,18 +910,27 @@ export default function Home() {
       {/* Products */}
       <section id="products" className="bg-[#F9F7F5] px-4 md:px-16 py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto">
-          <RevealDiv className="mb-12">
-            <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">The Collection</div>
-            <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] mb-3 font-normal text-[#0D0D0D]">
-              Four products. Your complete routine.
-            </h2>
-            <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[16px] leading-[1.6] text-[#484848]">
-              Formulated together. Used in order. Designed for Indian skin.
-            </p>
+          <RevealDiv className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+              <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">The Collection</div>
+              <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(28px,4vw,54px)] leading-[1.2] mb-3 font-normal text-[#0D0D0D]">
+                Four products. Your complete routine.
+              </h2>
+              <p style={{ fontFamily: "'Playfair Display', serif" }} className="text-[16px] leading-[1.6] text-[#484848]">
+                Formulated together. Used in order. Designed for Indian skin.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowProductIngredients((v) => !v)}
+              className="flex-none flex items-center gap-2 px-4 py-[9px] border border-[#EBEBEB] rounded-full text-[10px] font-semibold tracking-[.08em] text-[#484848] hover:border-[#C65D3B] hover:text-[#C65D3B] transition-colors bg-white whitespace-nowrap"
+            >
+              <span>{showProductIngredients ? "▴" : "▾"}</span>
+              {showProductIngredients ? "Hide Ingredients" : "See Ingredients"}
+            </button>
           </RevealDiv>
           <PincodeChecker />
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-6 mt-6">
-            {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} />)}
+            {PRODUCTS.map((p, i) => <ProductCard key={p.handle} product={p} index={i} onReviewClick={handleReviewClick} showIngredients={showProductIngredients} />)}
           </div>
         </div>
       </section>
@@ -1006,20 +1026,17 @@ export default function Home() {
               Before &amp; After
             </span>
           </RevealDiv>
-          <div
-            className="flex gap-3 overflow-x-auto pb-2 mb-10"
-            style={{ scrollbarWidth: "none" }}
-          >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
             {RESULTS.map((r, i) => (
               <RevealDiv
                 key={`result-${i}`}
                 delay={i * 60}
-                className="flex-none w-[220px] md:w-[260px] h-[320px] rounded-[10px] overflow-hidden"
+                className="rounded-[10px] overflow-hidden bg-[#1A1A1A]"
               >
                 <img
                   src={r.img}
                   alt="Before and after result"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-auto block"
                 />
               </RevealDiv>
             ))}
@@ -1032,20 +1049,17 @@ export default function Home() {
               Customer Messages
             </span>
           </RevealDiv>
-          <div
-            className="flex gap-3 overflow-x-auto pb-2"
-            style={{ scrollbarWidth: "none" }}
-          >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {WHATSAPP_REVIEWS.map((r, i) => (
               <RevealDiv
                 key={`wa-${i}`}
                 delay={i * 60}
-                className="flex-none w-[220px] md:w-[260px] h-[320px] rounded-[10px] overflow-hidden ring-1 ring-white/[0.07]"
+                className="rounded-[10px] overflow-hidden ring-1 ring-white/[0.07] bg-[#1A1A1A]"
               >
                 <img
                   src={r.img}
                   alt="Customer message"
-                  className="w-full h-full object-cover object-top"
+                  className="w-full h-auto block"
                 />
               </RevealDiv>
             ))}
