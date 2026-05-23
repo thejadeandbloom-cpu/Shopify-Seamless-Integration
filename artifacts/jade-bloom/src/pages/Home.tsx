@@ -600,6 +600,176 @@ function InstagramReels() {
   );
 }
 
+const COMPARISON_ROWS = [
+  {
+    label: "Vitamin C Strength",
+    sub: "Higher = faster brightening",
+    jb: "14%",
+    brands: ["10%", "12%", "2%", "10%"],
+    jbWins: true,
+  },
+  {
+    label: "Kojic Acid Moisturizer",
+    sub: "Targets melanin in skin barrier",
+    jb: "✓",
+    brands: ["✗", "✗", "✗", "✗"],
+    jbWins: true,
+  },
+  {
+    label: "Fragrance-Free",
+    sub: "No irritants for sensitive skin",
+    jb: "✓",
+    brands: ["✓", "✗", "✗", "✗"],
+    jbWins: true,
+  },
+  {
+    label: "pH Balanced (4.5–5.5)",
+    sub: "Protects your skin barrier",
+    jb: "✓",
+    brands: ["✓", "~", "✗", "~"],
+    jbWins: true,
+  },
+  {
+    label: "30-Day Results Guarantee",
+    sub: "Full refund if it doesn't work",
+    jb: "✓",
+    brands: ["✗", "✗", "✗", "✗"],
+    jbWins: true,
+  },
+  {
+    label: "Built for Indian Skin",
+    sub: "Melanin-rich skin, Indian climate",
+    jb: "✓",
+    brands: ["✗", "✓", "✓", "✗"],
+    jbWins: true,
+  },
+  {
+    label: "COD Available",
+    sub: "Pay on delivery",
+    jb: "✓",
+    brands: ["✓", "✓", "✓", "✗"],
+    jbWins: false,
+  },
+  {
+    label: "Complete Matched Routine",
+    sub: "4 products formulated together",
+    jb: "✓",
+    brands: ["✗", "✗", "✗", "✗"],
+    jbWins: true,
+  },
+];
+
+const COMPARISON_BRANDS = ["Minimalist", "Plum", "Mamaearth", "Dot & Key"];
+
+function BrandComparison() {
+  const Check = () => (
+    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#E8F5EC]">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#22863A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    </span>
+  );
+  const Cross = () => (
+    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#F5F5F5]">
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 2l6 6M8 2l-6 6" stroke="#ABABAB" strokeWidth="1.6" strokeLinecap="round"/></svg>
+    </span>
+  );
+  const Partial = () => (
+    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#FFF8E7]">
+      <span className="text-[10px] font-bold text-[#B7860B]">~</span>
+    </span>
+  );
+
+  const renderCell = (val: string) => {
+    if (val === "✓") return <Check />;
+    if (val === "✗") return <Cross />;
+    if (val === "~") return <Partial />;
+    return <span className="text-[12px] font-semibold text-[#484848]">{val}</span>;
+  };
+
+  return (
+    <section className="bg-white px-4 md:px-16 py-12 md:py-20 border-t border-[#EBEBEB]">
+      <div className="max-w-[1200px] mx-auto">
+        <RevealDiv className="mb-10">
+          <div className="text-[10px] tracking-[.25em] uppercase text-[#C65D3B] font-semibold mb-3">How We Compare</div>
+          <h2 style={{ fontFamily: "'Playfair Display', serif" }} className="text-[clamp(26px,4vw,48px)] leading-[1.2] font-normal text-[#0D0D0D] mb-3">
+            Why customers switch to Jade and Bloom.
+          </h2>
+          <p className="text-[14px] text-[#484848] max-w-[520px]">
+            Same price point. More actives. Built specifically for Indian skin.
+          </p>
+        </RevealDiv>
+
+        <RevealDiv>
+          <div className="overflow-x-auto -mx-4 px-4">
+            <table className="w-full min-w-[580px] border-collapse">
+              <thead>
+                <tr>
+                  {/* Row label column */}
+                  <th className="text-left pb-4 pr-4 w-[38%]" />
+                  {/* J&B column — highlighted */}
+                  <th className="pb-4 px-3 w-[15%]">
+                    <div className="bg-[#C65D3B] rounded-t-[8px] px-2 pt-3 pb-2 text-center">
+                      <div style={{ fontFamily: "'Cinzel', serif" }} className="text-[10px] tracking-[.1em] text-white font-semibold leading-tight">
+                        JADE<br />& BLOOM
+                      </div>
+                    </div>
+                  </th>
+                  {COMPARISON_BRANDS.map((b) => (
+                    <th key={b} className="pb-4 px-2 w-[12%]">
+                      <div className="bg-[#F9F7F5] rounded-t-[8px] px-2 pt-3 pb-2 text-center">
+                        <div className="text-[10px] tracking-[.04em] text-[#969696] font-semibold leading-tight whitespace-nowrap">{b}</div>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON_ROWS.map((row, i) => (
+                  <tr key={row.label} className={i % 2 === 0 ? "bg-[#FAFAFA]" : "bg-white"}>
+                    {/* Label */}
+                    <td className="py-3 pr-4 pl-2 rounded-l-[4px]">
+                      <div className="text-[12px] font-semibold text-[#0D0D0D] leading-tight">{row.label}</div>
+                      <div className="text-[10px] text-[#969696] mt-[2px]">{row.sub}</div>
+                    </td>
+                    {/* J&B cell */}
+                    <td className="py-3 px-3 bg-[#FFF5F2] text-center border-x border-[#F2D4C8]">
+                      {renderCell(row.jb)}
+                    </td>
+                    {/* Competitor cells */}
+                    {row.brands.map((val, j) => (
+                      <td key={j} className="py-3 px-2 text-center">
+                        {renderCell(val)}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                {/* Footer row — price */}
+                <tr className="bg-white border-t-2 border-[#EBEBEB]">
+                  <td className="py-4 pr-4 pl-2">
+                    <div className="text-[12px] font-semibold text-[#0D0D0D]">Vitamin C Serum Price</div>
+                    <div className="text-[10px] text-[#969696] mt-[2px]">Same category, same size</div>
+                  </td>
+                  <td className="py-4 px-3 bg-[#FFF5F2] text-center border-x border-[#F2D4C8] rounded-b-[4px]">
+                    <span style={{ fontFamily: "'Cinzel', serif" }} className="text-[13px] font-bold text-[#C65D3B]">₹618</span>
+                  </td>
+                  {["₹599", "₹895", "₹449", "₹795"].map((p, j) => (
+                    <td key={j} className="py-4 px-2 text-center">
+                      <span className="text-[12px] font-semibold text-[#969696]">{p}</span>
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-[10px] text-[#ABABAB] mt-4 text-center">
+            Data based on publicly available product information. Competitor claims are approximate.
+          </p>
+        </RevealDiv>
+      </div>
+    </section>
+  );
+}
+
 const HERO_VIDEOS = [
   "https://cdn.shopify.com/videos/c/o/v/c1c44399d9654bfa93ae10f6a6d9e774.mp4",
 ];
@@ -769,6 +939,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Brand Comparison */}
+      <BrandComparison />
 
       {/* Concerns → Bundle Modal */}
       <section id="concerns" className="bg-white px-4 md:px-16 py-12 md:py-20">
