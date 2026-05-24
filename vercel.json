@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npm i -g pnpm && pnpm install && pnpm run build",
-  "installCommand": "npm i -g pnpm && pnpm install",
+  "buildCommand": "yarn install && yarn build",
+  "installCommand": "yarn install",
   "outputDirectory": "artifacts/jade-bloom/dist/public"
 }
