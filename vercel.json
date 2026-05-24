@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd artifacts/jade-bloom && npm run build",
-  "installCommand": "cd artifacts/jade-bloom && npm install",
-  "outputDirectory": "artifacts/jade-bloom/dist/public",
-  "framework": "vite"
+  "buildCommand": "npm i -g pnpm && pnpm install && pnpm run build",
+  "installCommand": "npm i -g pnpm && pnpm install",
+  "outputDirectory": "artifacts/jade-bloom/dist/public"
 }
