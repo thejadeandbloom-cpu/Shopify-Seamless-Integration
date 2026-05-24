@@ -1282,7 +1282,7 @@ export default function Home() {
               <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] tracking-[.1em] uppercase text-white/30 mb-2">Email</p>
               <a href="mailto:support@thejadeandbloom.com" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">support@thejadeandbloom.com</a>
               <p style={{ fontFamily: "'Cinzel', serif" }} className="text-[11px] tracking-[.1em] uppercase text-white/30 mb-2">WhatsApp</p>
-              <a href="https://wa.me/918750557322" target="_blank" rel="noopener noreferrer" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">+91 87505 57322</a>
+              <a href="https://wa.me/918750557332" target="_blank" rel="noopener noreferrer" className="block text-[13px] text-white/65 mb-[14px] hover:text-white transition-colors">+91 87505 57332</a>
               <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Shipping Info</button>
               <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Damage Policy</button>
               <button onClick={() => scrollTo("faq")} className="block text-[13px] text-white/65 mb-[10px] hover:text-white transition-colors text-left">Privacy Policy</button>

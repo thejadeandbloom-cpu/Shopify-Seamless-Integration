@@ -48,7 +48,7 @@ export default function LeadCapturePopup() {
       });
     } catch { /* silent */ } finally { setLoading(false); }
 
-    const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER ?? "918750557322";
+    const waNumber = import.meta.env.VITE_WHATSAPP_NUMBER ?? "918750557332";
     const msg = encodeURIComponent(
       `Hi! I visited the Jade and Bloom website and would like my 15% bundle discount (BUNDLE15). My number is +91${cleaned.slice(-10)}.`
     );
