@@ -1,6 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "pnpm install && pnpm run build",
-  "installCommand": "pnpm install --frozen-lockfile=false",
-  "outputDirectory": "artifacts/jade-bloom/dist/public"
+  "buildCommand": "cd artifacts/jade-bloom && npm run build",
+  "installCommand": "cd artifacts/jade-bloom && npm install",
+  "outputDirectory": "artifacts/jade-bloom/dist/public",
+  "framework": "vite"
 }
