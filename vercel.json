@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm run build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "artifacts/jade-bloom/dist/public",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "envPrefix": [
+    "SHOPIFY_",
+    "DATABASE_",
+    "RESEND_",
+    "INSTAGRAM_",
+    "WHATSAPP_"
+  ],
+  "functions": {
+    "artifacts/api-server/dist/**/*.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/_api/:path*"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+.git
+.gitignore
+README.md
+.DS_Store
+node_modules
+.env.local
+.env.*.local
+pnpm-lock.yaml
+.replit
+.replitignore
+replit.md
+attached_assets
